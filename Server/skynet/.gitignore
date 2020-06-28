@@ -1,0 +1,7 @@
+*.o
+*.a
+/skynet.pid
+3rd/lua/lua
+3rd/lua/luac
+*.dSYM
+.DS_Store

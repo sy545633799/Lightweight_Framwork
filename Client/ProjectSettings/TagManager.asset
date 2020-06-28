@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Wall
+  - Exit
+  - Food
+  - Enemy
+  - Soda
+  - ship
+  - asteroid
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - BlockingLayer
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Scene
+    uniqueID: 360382087
+    locked: 0
+  - name: Damage
+    uniqueID: 3379209305
+    locked: 0
+  - name: Base
+    uniqueID: 3971916991
+    locked: 0
+  - name: Pop
+    uniqueID: 3614321351
+    locked: 0
+  - name: Guide
+    uniqueID: 129393311
+    locked: 0
+  - name: Lock
+    uniqueID: 2779774083
+    locked: 0
+  - name: Network
+    uniqueID: 667574541
+    locked: 0
+  - name: Loading
+    uniqueID: 2049241827
+    locked: 0

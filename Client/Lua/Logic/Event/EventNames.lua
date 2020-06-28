@@ -1,0 +1,4 @@
+
+EventNames.CS = {
+    Test = "Test"
+}

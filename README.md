@@ -1,2 +1,2 @@
-# Lightweight_Framwork
-Unity_Xlua_Skynet_Framework
+1. 运行服务器, Server目录下 ./rungame.sh
+2. Unity侧入口:LaunchScene

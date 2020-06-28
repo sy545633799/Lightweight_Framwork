@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e90e18dd4a044ff4394833216e6bf4d2, type: 3}
+  m_Name: GrayToYellow-Vertical
+  m_EditorClassIdentifier: 
+  m_Name: GrayToYellow-Vertical
+  m_EditorClassIdentifier: 
+  topLeft:
+    r: 1
+    g: 0.9843137
+    b: 0.94509804
+    a: 1
+  topRight:
+    r: 1
+    g: 0.9843137
+    b: 0.94509804
+    a: 1
+  bottomLeft:
+    r: 0.45490196
+    g: 0.4392157
+    b: 0.34901962
+    a: 1
+  bottomRight:
+    r: 0.45490196
+    g: 0.4392157
+    b: 0.34901962
+    a: 1
