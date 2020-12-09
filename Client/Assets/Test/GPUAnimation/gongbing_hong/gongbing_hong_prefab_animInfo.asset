@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ed756a3af2e1946b44364ea5b59d5c, type: 3}
+  m_Name: gongbing_hong_prefab_animInfo
+  m_EditorClassIdentifier: 
+  AnimClips:
+  - clipName: run
+    animLength: 0.70000005
+    startFrame: 1
+    frameCount: 19
+  - clipName: idle
+    animLength: 1.0333333
+    startFrame: 22
+    frameCount: 28
+  - clipName: hit
+    animLength: 0.5
+    startFrame: 52
+    frameCount: 13
+  - clipName: die
+    animLength: 0.8333334
+    startFrame: 67
+    frameCount: 23
+  - clipName: attack
+    animLength: 0.8333334
+    startFrame: 92
+    frameCount: 23
