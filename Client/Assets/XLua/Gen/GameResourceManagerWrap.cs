@@ -154,11 +154,12 @@ namespace XLua.CSObjectWrap
                 {
                     UnityEngine.GameObject _object = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
                     
-                    Game.ResourceManager.UnloadPrefab( _object );
+                        bool gen_ret = Game.ResourceManager.UnloadPrefab( _object );
+                        LuaAPI.lua_pushboolean(L, gen_ret);
                     
                     
                     
-                    return 0;
+                    return 1;
                 }
                 if(gen_param_count == 1&& translator.Assignable<UnityEngine.Transform>(L, 1)) 
                 {

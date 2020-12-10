@@ -10,8 +10,7 @@ function MainScene:OnCreate()
 end
 
 function MainScene:OnPrepare(map_id)
-
-    MapManager.LoadMap("Demo_1", nil)
+    coroutine.Do(MapManager.LoadMap, nil, "Demo_1")
     --UIManager:LoadView(UIConfig.HomeUI)
     --UIManager:LoadView(UIConfig.BattleUI)
 end
