@@ -20,13 +20,8 @@ SceneConfig = {
         Type = require "Framework.Scene.LoginScene"
     },
     -- 主页场景
-    HomeScene = {
-        Name = "HomeScene",
-        Type = require "Framework.Scene.HomeScene"
-    },
-    -- 战斗场景
-    BattleScene = {
-        Name = "BattleScene",
-        Type = require "Framework.Scene.BattleScene"
+    MainScene = {
+        Name = "Demo_1",
+        Type = require "Framework.Scene.MainScene"
     },
 }

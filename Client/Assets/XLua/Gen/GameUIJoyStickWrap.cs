@@ -21,15 +21,12 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(Game.UIJoyStick);
-			Utils.BeginObjectRegister(type, L, translator, 0, 6, 3, 2);
+			Utils.BeginObjectRegister(type, L, translator, 0, 3, 3, 2);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnPointerDown", _m_OnPointerDown);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnPointerUp", _m_OnPointerUp);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnDrag", _m_OnDrag);
 			
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnJoyStickTouchBegin", _e_OnJoyStickTouchBegin);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnJoyStickTouchMove", _e_OnJoyStickTouchMove);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnJoyStickTouchEnd", _e_OnJoyStickTouchEnd);
 			
 			Utils.RegisterFunc(L, Utils.GETTER_IDX, "TouchedAxis", _g_get_TouchedAxis);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "JoyStickRadius", _g_get_JoyStickRadius);
@@ -42,8 +39,11 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 1, 1, 0);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 4, 1, 0);
 			
+			Utils.RegisterFunc(L, Utils.CLS_IDX, "OnJoyStickTouchBegin", _e_OnJoyStickTouchBegin);
+			Utils.RegisterFunc(L, Utils.CLS_IDX, "OnJoyStickTouchMove", _e_OnJoyStickTouchMove);
+			Utils.RegisterFunc(L, Utils.CLS_IDX, "OnJoyStickTouchEnd", _e_OnJoyStickTouchEnd);
 			
             
 			Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "Instance", _g_get_Instance);
@@ -258,38 +258,35 @@ namespace XLua.CSObjectWrap
         
 		
 		
+		
+		
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _e_OnJoyStickTouchBegin(RealStatePtr L)
         {
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			    int gen_param_count = LuaAPI.lua_gettop(L);
-			Game.UIJoyStick gen_to_be_invoked = (Game.UIJoyStick)translator.FastGetCSObj(L, 1);
-                Game.UIJoyStick.JoyStickTouchBegin gen_delegate = translator.GetDelegate<Game.UIJoyStick.JoyStickTouchBegin>(L, 3);
+                Game.UIJoyStick.JoyStickTouchBegin gen_delegate = translator.GetDelegate<Game.UIJoyStick.JoyStickTouchBegin>(L, 2);
                 if (gen_delegate == null) {
-                    return LuaAPI.luaL_error(L, "#3 need Game.UIJoyStick.JoyStickTouchBegin!");
+                    return LuaAPI.luaL_error(L, "#2 need Game.UIJoyStick.JoyStickTouchBegin!");
                 }
+                
 				
-				if (gen_param_count == 3)
-				{
-					
-					if (LuaAPI.xlua_is_eq_str(L, 2, "+")) {
-						gen_to_be_invoked.OnJoyStickTouchBegin += gen_delegate;
-						return 0;
-					} 
-					
-					
-					if (LuaAPI.xlua_is_eq_str(L, 2, "-")) {
-						gen_to_be_invoked.OnJoyStickTouchBegin -= gen_delegate;
-						return 0;
-					} 
-					
-				}
+				if (gen_param_count == 2 && LuaAPI.xlua_is_eq_str(L, 1, "+")) {
+					Game.UIJoyStick.OnJoyStickTouchBegin += gen_delegate;
+					return 0;
+				} 
+				
+				
+				if (gen_param_count == 2 && LuaAPI.xlua_is_eq_str(L, 1, "-")) {
+					Game.UIJoyStick.OnJoyStickTouchBegin -= gen_delegate;
+					return 0;
+				} 
+				
 			} catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
             }
-			LuaAPI.luaL_error(L, "invalid arguments to Game.UIJoyStick.OnJoyStickTouchBegin!");
-            return 0;
+			return LuaAPI.luaL_error(L, "invalid arguments to Game.UIJoyStick.OnJoyStickTouchBegin!");
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -298,32 +295,27 @@ namespace XLua.CSObjectWrap
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			    int gen_param_count = LuaAPI.lua_gettop(L);
-			Game.UIJoyStick gen_to_be_invoked = (Game.UIJoyStick)translator.FastGetCSObj(L, 1);
-                Game.UIJoyStick.JoyStickTouchMove gen_delegate = translator.GetDelegate<Game.UIJoyStick.JoyStickTouchMove>(L, 3);
+                Game.UIJoyStick.JoyStickTouchMove gen_delegate = translator.GetDelegate<Game.UIJoyStick.JoyStickTouchMove>(L, 2);
                 if (gen_delegate == null) {
-                    return LuaAPI.luaL_error(L, "#3 need Game.UIJoyStick.JoyStickTouchMove!");
+                    return LuaAPI.luaL_error(L, "#2 need Game.UIJoyStick.JoyStickTouchMove!");
                 }
+                
 				
-				if (gen_param_count == 3)
-				{
-					
-					if (LuaAPI.xlua_is_eq_str(L, 2, "+")) {
-						gen_to_be_invoked.OnJoyStickTouchMove += gen_delegate;
-						return 0;
-					} 
-					
-					
-					if (LuaAPI.xlua_is_eq_str(L, 2, "-")) {
-						gen_to_be_invoked.OnJoyStickTouchMove -= gen_delegate;
-						return 0;
-					} 
-					
-				}
+				if (gen_param_count == 2 && LuaAPI.xlua_is_eq_str(L, 1, "+")) {
+					Game.UIJoyStick.OnJoyStickTouchMove += gen_delegate;
+					return 0;
+				} 
+				
+				
+				if (gen_param_count == 2 && LuaAPI.xlua_is_eq_str(L, 1, "-")) {
+					Game.UIJoyStick.OnJoyStickTouchMove -= gen_delegate;
+					return 0;
+				} 
+				
 			} catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
             }
-			LuaAPI.luaL_error(L, "invalid arguments to Game.UIJoyStick.OnJoyStickTouchMove!");
-            return 0;
+			return LuaAPI.luaL_error(L, "invalid arguments to Game.UIJoyStick.OnJoyStickTouchMove!");
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -332,35 +324,28 @@ namespace XLua.CSObjectWrap
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			    int gen_param_count = LuaAPI.lua_gettop(L);
-			Game.UIJoyStick gen_to_be_invoked = (Game.UIJoyStick)translator.FastGetCSObj(L, 1);
-                Game.UIJoyStick.JoyStickTouchEnd gen_delegate = translator.GetDelegate<Game.UIJoyStick.JoyStickTouchEnd>(L, 3);
+                Game.UIJoyStick.JoyStickTouchEnd gen_delegate = translator.GetDelegate<Game.UIJoyStick.JoyStickTouchEnd>(L, 2);
                 if (gen_delegate == null) {
-                    return LuaAPI.luaL_error(L, "#3 need Game.UIJoyStick.JoyStickTouchEnd!");
+                    return LuaAPI.luaL_error(L, "#2 need Game.UIJoyStick.JoyStickTouchEnd!");
                 }
+                
 				
-				if (gen_param_count == 3)
-				{
-					
-					if (LuaAPI.xlua_is_eq_str(L, 2, "+")) {
-						gen_to_be_invoked.OnJoyStickTouchEnd += gen_delegate;
-						return 0;
-					} 
-					
-					
-					if (LuaAPI.xlua_is_eq_str(L, 2, "-")) {
-						gen_to_be_invoked.OnJoyStickTouchEnd -= gen_delegate;
-						return 0;
-					} 
-					
-				}
+				if (gen_param_count == 2 && LuaAPI.xlua_is_eq_str(L, 1, "+")) {
+					Game.UIJoyStick.OnJoyStickTouchEnd += gen_delegate;
+					return 0;
+				} 
+				
+				
+				if (gen_param_count == 2 && LuaAPI.xlua_is_eq_str(L, 1, "-")) {
+					Game.UIJoyStick.OnJoyStickTouchEnd -= gen_delegate;
+					return 0;
+				} 
+				
 			} catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
             }
-			LuaAPI.luaL_error(L, "invalid arguments to Game.UIJoyStick.OnJoyStickTouchEnd!");
-            return 0;
+			return LuaAPI.luaL_error(L, "invalid arguments to Game.UIJoyStick.OnJoyStickTouchEnd!");
         }
         
-		
-		
     }
 }

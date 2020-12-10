@@ -68,17 +68,17 @@ namespace Game
 		/// <summary>
 		/// 注册触摸开始事件
 		/// </summary>
-		public event JoyStickTouchBegin OnJoyStickTouchBegin;
+		public static event JoyStickTouchBegin OnJoyStickTouchBegin;
 
 		/// <summary>
 		/// 注册触摸过程事件
 		/// </summary>
-		public event JoyStickTouchMove OnJoyStickTouchMove;
+		public static event JoyStickTouchMove OnJoyStickTouchMove;
 
 		/// <summary>
 		/// 注册触摸结束事件
 		/// </summary>
-		public event JoyStickTouchEnd OnJoyStickTouchEnd;
+		public static event JoyStickTouchEnd OnJoyStickTouchEnd;
 
 		void Start()
 		{
@@ -93,8 +93,8 @@ namespace Game
 		{
 			isTouched = true;
 			touchedAxis = GetJoyStickAxis(eventData);
-			if (this.OnJoyStickTouchBegin != null)
-				this.OnJoyStickTouchBegin(TouchedAxis);
+			if (OnJoyStickTouchBegin != null)
+				OnJoyStickTouchBegin(TouchedAxis);
 		}
 
 		public void OnPointerUp(PointerEventData eventData)
@@ -102,15 +102,15 @@ namespace Game
 			isTouched = false;
 			selfTransform.anchoredPosition = originPosition;
 			touchedAxis = Vector2.zero;
-			if (this.OnJoyStickTouchEnd != null)
-				this.OnJoyStickTouchEnd();
+			if (OnJoyStickTouchEnd != null)
+				OnJoyStickTouchEnd();
 		}
 
 		public void OnDrag(PointerEventData eventData)
 		{
 			touchedAxis = GetJoyStickAxis(eventData);
-			if (this.OnJoyStickTouchMove != null)
-				this.OnJoyStickTouchMove(TouchedAxis);
+			if (OnJoyStickTouchMove != null)
+				OnJoyStickTouchMove(TouchedAxis);
 		}
 
 
@@ -121,8 +121,8 @@ namespace Game
 			//在这里手动触发OnJoyStickTouchMove事件
 			if (isTouched && touchedAxis.magnitude >= JoyStickRadius)
 			{
-				if (this.OnJoyStickTouchMove != null)
-					this.OnJoyStickTouchMove(TouchedAxis);
+				if (OnJoyStickTouchMove != null)
+					OnJoyStickTouchMove(TouchedAxis);
 			}
 
 			//松开虚拟摇杆后让虚拟摇杆回到默认位置

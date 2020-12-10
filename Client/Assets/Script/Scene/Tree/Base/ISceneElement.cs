@@ -5,7 +5,8 @@ using UnityEngine;
 /// <summary>
 /// 场景元素
 /// </summary>
-public interface ISceneElement : IIDHandler{
+public interface ISceneElement
+{
 
 	/// <summary>
 	/// 该物体的包围盒

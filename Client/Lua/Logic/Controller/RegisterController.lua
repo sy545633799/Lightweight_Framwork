@@ -13,7 +13,7 @@ function RegisterController:Register(name)
     else
         Model:Login(roleInfo)
         Controller:Login()
-        SceneManager:SwitchScene(SceneConfig.HomeScene)
+        SceneManager:SwitchScene(SceneConfig.MainScene)
     end
 end
 

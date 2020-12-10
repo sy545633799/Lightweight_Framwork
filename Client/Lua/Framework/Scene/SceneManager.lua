@@ -32,13 +32,9 @@ function SceneManager:GetSceneConfig()
     return self.scene_config
 end
 
----@return table<number, common_scene_scene>
-function SceneManager:GetSceneInfo()
-    return self.scene_info
-end
-
 ---@param scene_info common_scene_scene
-function SceneManager:SwitchScene(scene_config, scene_info, ...)
+---@param ... number 如果是主场景，第一个参数是map_id
+function SceneManager:SwitchScene(scene_config, ...)
     if self.isLoading then return end
     self.isLoading = true
     local inLaunchScene = false
@@ -60,9 +56,8 @@ function SceneManager:SwitchScene(scene_config, scene_info, ...)
     end
     coroutine.Do(loadManager.Load,  scene_config.ShowLoading and ShowLoadProcess or nil, sceneName, nil)
     self.scene_config = scene_config
-    self.scene_info = scene_info
     self.current_scene = self.scenes[sceneName]
-    self.current_scene:Prepare(self.scene_info, ...)
+    self.current_scene:Prepare(...)
     if inLaunchScene then
         launchUI.Dispose()
     else
@@ -71,6 +66,7 @@ function SceneManager:SwitchScene(scene_config, scene_info, ...)
     self.current_scene:Enter()
     self.isLoading = false
 end
+
 
 -- 析构函数
 function SceneManager:dtor()

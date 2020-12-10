@@ -13,7 +13,7 @@ function LoginController:HandSucess()
     else
         Model:Login(roleInfo)
         Controller:Login()
-        SceneManager:SwitchScene(SceneConfig.HomeScene)
+        SceneManager:SwitchScene(SceneConfig.MainScene)
     end
 end
 

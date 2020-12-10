@@ -15,11 +15,11 @@ EditorBuildSettings:
     path: Assets/Scene/LoginScene.unity
     guid: a627ceb19784ff1429d83daa5f6d625f
   - enabled: 1
-    path: Assets/Scene/HomeScene.unity
+    path: Assets/Scene/MainScene.unity
     guid: 83455425404c4b2499fd6f3aac06800e
   - enabled: 1
-    path: Assets/Scene/BattleScene.unity
-    guid: ad3dc525980da9b449bbccb98ce9a43c
+    path: Assets/Art/Scenes/Demo_1/Demo_1.unity
+    guid: 09c4497ea0fea9c4ca4eb7f3a49eaef3
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: af90ab64e452e424eae9007286db1a97,
       type: 2}
