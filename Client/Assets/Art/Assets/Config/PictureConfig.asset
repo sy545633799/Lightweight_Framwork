@@ -25,3 +25,11 @@ MonoBehaviour:
     Resource: 005
   - ID: 10006
     Resource: 006
+  - ID: 200001
+    Resource: res_cgold
+  - ID: 200002
+    Resource: res_charge
+  - ID: 200003
+    Resource: res_exp
+  - ID: 200004
+    Resource: default

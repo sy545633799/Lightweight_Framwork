@@ -24,6 +24,7 @@
 		<type fullname="Game.AtlasManager" preserve="all"/>
 		<type fullname="Game.TcpManager" preserve="all"/>
 		<type fullname="Game.MapManager" preserve="all"/>
+		<type fullname="Game.EntityBehaviorManager" preserve="all"/>
 		<type fullname="Game.UIUtil" preserve="all"/>
 		<type fullname="Game.UIListener" preserve="all"/>
 		<type fullname="Game.CommonUtil" preserve="all"/>

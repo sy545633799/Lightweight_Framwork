@@ -106,6 +106,7 @@ using Game;
 		typeof(AtlasManager),
 		typeof(TcpManager),
         typeof(MapManager),
+		typeof(EntityBehaviorManager),
 		//adapt
 		typeof(UIUtil),
         typeof(UIListener),
@@ -132,7 +133,6 @@ using Game;
         typeof(Action<bool>),
         typeof(Action<float>),
         typeof(Action<float, float>),
-        typeof(Action<WWW>),
         typeof(Action<byte[]>),
 
         typeof(UnityEngine.Event),

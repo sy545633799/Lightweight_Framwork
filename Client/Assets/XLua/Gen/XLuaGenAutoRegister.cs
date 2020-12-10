@@ -284,6 +284,9 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(Game.MapManager), GameMapManagerWrap.__Register);
         
         
+            translator.DelayWrapLoader(typeof(Game.EntityBehaviorManager), GameEntityBehaviorManagerWrap.__Register);
+        
+        
             translator.DelayWrapLoader(typeof(Game.UIUtil), GameUIUtilWrap.__Register);
         
         

@@ -14,7 +14,6 @@ namespace Game {
 
     public interface IMonoPoolObject<T> where T :  MonoBehaviour, IMonoPoolObject<T>
     {
-        void InitPool(MonoObjectPool<T> pool);
         T Downcast();
     }
 
@@ -32,19 +31,6 @@ namespace Game {
 
         private Queue<T> m_UnusedObjects = new Queue<T>();
 
-
-        //public void Init(int initPoolSize)
-        //{
-        //    for(int  i = 0; i < initPoolSize; ++i)
-        //    {
-        //        UnityEngine.GameObject go = new GameObject();
-        //        T t = go.AddComponent<T>();
-        //        t.InitPool(this);
-        //        m_UnusedObjects.Enqueue(t);
-        //    }
-        //}
-
-
         public T Alloc()
         {
             if (m_UnusedObjects.Count > 0)
@@ -55,10 +41,6 @@ namespace Game {
             {
                 UnityEngine.GameObject go = new GameObject("Entity");
                 T t = go.AddComponent<T>();
-                if (null != t)
-                {
-                    t.InitPool(this);
-                }
                 return t;
             }
         }

@@ -14,14 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Configs:
   - ID: 10001
-    Resource: 001
+    Resource: Assets/Art/Models/chan/Prefabs/unitychan.prefab
   - ID: 10002
-    Resource: 002
+    Resource: Assets/Art/Models/chan/Prefabs/unitychan_hw.prefab
   - ID: 10003
-    Resource: 003
-  - ID: 10004
-    Resource: 004
-  - ID: 10005
-    Resource: 005
-  - ID: 10006
-    Resource: 006
+    Resource: Assets/Art/Models/chan/Prefabs/UnityChanSSU_DynCol.prefab

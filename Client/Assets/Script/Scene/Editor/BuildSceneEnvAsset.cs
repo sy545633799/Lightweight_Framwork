@@ -73,7 +73,7 @@ namespace Game.Editor {
 					holder.CameraInfo.FieldOfView = camera.fieldOfView;
 					holder.CameraInfo.Position = camera.transform.position;
 					holder.CameraInfo.Rotation = camera.transform.eulerAngles;
-					CameraController defaultCameraController = camera.GetComponent<CameraController>();
+					MainCamera defaultCameraController = camera.GetComponent<MainCamera>();
 					if (defaultCameraController)
 					{
 						holder.CameraInfo.PivotOffset = defaultCameraController.pivotOffset;

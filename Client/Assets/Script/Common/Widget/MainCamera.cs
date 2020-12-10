@@ -14,7 +14,7 @@ using UnityEngine.EventSystems;
 namespace Game {
 
 	[System.Serializable]
-	public class CameraController : MonoSingleton<CameraController>
+	public class MainCamera : MonoSingleton<MainCamera>
 	{
 		private Camera m_Camera;
 		private Transform m_Target;
@@ -90,7 +90,6 @@ namespace Game {
 			{
 	            hadOnDown = true;
 	            lastPos = pos;
-                SetInputing(true);
             });
 	
 			InputManager.onDragScene.AddListener(pos =>
@@ -116,7 +115,6 @@ namespace Game {
 				}
 	
 				lastPos = pos;
-                SetInputing(true);
             });
 	
 			InputManager.onUpScene.AddListener(pos =>
@@ -128,8 +126,10 @@ namespace Game {
 	                hadOnDrag = false;
 	            }
 	            lastPos = Vector2.zero;
-                SetInputing(false);
             });
+
+
+			DontDestroyOnLoad(this);
 		}
 	
 		private float ClampAngle(float angle, float min, float max)
@@ -155,8 +155,6 @@ namespace Game {
 	        //y = targetY;
 	
 	        SetPosByTarget(m_Target.transform.position);
-
-            CheckCameraFloat();
 
         }
 
@@ -209,35 +207,6 @@ namespace Game {
             this.transform.rotation = rotation;
         }
 
-		#region 【设置模块接口】
-		//X轴计算数据设置
-		public void SetXPos(int Xpos)
-	    {
-	        targetX = Xpos;
-	    }
-	    //镜头距离
-	    public void SetDistance(float CurDistance)
-	    {
-	        distance = CurDistance;
-	    }
-	    //X灵敏度
-	    public void SetXSensitivity(float Speed)
-	    {
-	        xSpeed = Speed;
-	    }
-	    //Y灵敏度
-	    public void SetYSensitivity(float Speed)
-	    {
-	        ySpeed = Speed;
-	    }
-	    //复位灵敏度
-	    public void SetResetSensitivity(int Speed)
-	    {
-	        float RealSpeed = Speed * 1.0f / 100;
-	        resetSpeed = Mathf.Clamp(RealSpeed, 0.05f, 0.5f);
-	    }
-	
-	    #endregion
 	    public void LockToPos(Vector3 position, Vector3 angle)
 		{
 			isLock = true;
@@ -249,37 +218,6 @@ namespace Game {
 		{
 			isLock = false;
 	    }
-	    public void Reset(bool _initial = true)
-		{
-			#region 注释
-			//if (null == target_)
-			//{
-			//    return;
-			//}
-	
-			//if (Followparent)
-			//{
-			//    Movingtransform = cacheCamera.transform.parent.transform;
-			//    cacheCamera.transform.localPosition = Vector3.zero;
-			//}
-			//else
-			//    Movingtransform = cacheCamera.transform;
-	
-			//if (mesh != null) {
-			//    mesh = null;
-			//}
-			//offsetDistance = 0;
-			//offsetRotateX = 0;
-			//if(_initial)
-			//{
-			//    initial = false;
-			//    initialTime = false;
-			//}
-			//bReset = true;
-			//Movingtransform.position = GetDestination(target_);
-			//smooth = true;
-			#endregion
-		}
 	
 		public Vector3 ConvertDirByCam(Vector2 joysticDir)
 		{
@@ -310,116 +248,5 @@ namespace Game {
 	    {
 	        //SwitchUIState = null;
 	    }
-
-
-        #region 相机飘浮
-        [Serializable]
-        private class CameraFloatAnimationAttribute
-        {
-            public enum Status
-            {
-                Wait,
-                Playing,
-                Over,
-            }
-
-            [Header("相机左右漂浮的动画曲线")]
-            public AnimationCurve m_curve;
-            [Header("相机左右漂浮总时长"), Range(0.1f, 1000)]
-            public float m_duration = 10f;
-            [Header("自动进入相机左右漂浮的等待秒数")]
-            public float m_waitForSecond;
-            [HideInInspector]
-            public float m_tick = 0f;
-            [HideInInspector]
-            public Status m_status = Status.Wait;
-        }
-        [SerializeField, Header("相机缓动相关参数")]
-        private CameraFloatAnimationAttribute m_cameraFloatAnimationAttribute;
-        [SerializeField, Header("相机缓动的一些值(仅保留查看, 不要改)")]
-        private CameraFloatField m_currentCameraFloatField = new CameraFloatField();
-
-        [Serializable]
-        private class CameraFloatField
-        {
-            public float m_targetAngle_X;
-            public float m_startAngle_X;
-            public float m_duration;
-            public float m_length;
-            public float GetValue(float tick, AnimationCurve curve)
-            {
-                var _normalTick = Mathf.Clamp01(tick / m_duration);
-                var _normalValue = Mathf.Clamp01(curve.Evaluate(_normalTick));
-                var _increment = m_length * _normalValue;
-                return _normalTick >= 1 ? -1 : m_startAngle_X + _increment;
-            }
-        }
-
-        public void CheckCameraFloat()
-        {
-            if (!IsBattleModel || m_pause)
-            {
-                return;
-            }
-            if (m_inputing)
-            {
-                m_cameraFloatAnimationAttribute.m_tick = 0f;
-                m_cameraFloatAnimationAttribute.m_status = CameraFloatAnimationAttribute.Status.Wait;
-                return;
-            }
-            if (m_cameraFloatAnimationAttribute.m_status == CameraFloatAnimationAttribute.Status.Wait)
-            {
-                if (m_cameraFloatAnimationAttribute.m_tick >= m_cameraFloatAnimationAttribute.m_waitForSecond)
-                {
-                    m_cameraFloatAnimationAttribute.m_status = CameraFloatAnimationAttribute.Status.Playing;
-                    m_cameraFloatAnimationAttribute.m_tick = 0f;
-                    InitializeCurrentCameraFloatField();
-                }
-            }
-            if (m_cameraFloatAnimationAttribute.m_status == CameraFloatAnimationAttribute.Status.Playing)
-            {
-                var _angleX = m_currentCameraFloatField.GetValue(m_cameraFloatAnimationAttribute.m_tick, m_cameraFloatAnimationAttribute.m_curve);
-                if (_angleX > 0)
-                    targetX = _angleX;
-                else
-                    m_cameraFloatAnimationAttribute.m_status = CameraFloatAnimationAttribute.Status.Over;
-            }
-            if (m_cameraFloatAnimationAttribute.m_status == CameraFloatAnimationAttribute.Status.Over)
-            {
-                m_cameraFloatAnimationAttribute.m_tick = 0f;
-                m_cameraFloatAnimationAttribute.m_status = CameraFloatAnimationAttribute.Status.Wait;
-            }
-            m_cameraFloatAnimationAttribute.m_tick += Time.deltaTime;
-        }
-
-        public void InitializeCurrentCameraFloatField()
-        {
-            var _min = targetX - xMinLimit;
-            var _max = xMaxLimit - targetX;
-            var _difference = xMaxLimit - xMinLimit;
-            float _curValue = _min < _max ? _min : _max;
-            var _normal = Mathf.Clamp01(_curValue / _difference);
-            float _targetAngle_X = _min > _max ? xMinLimit : xMaxLimit;
-            m_currentCameraFloatField.m_startAngle_X = targetX;
-            m_currentCameraFloatField.m_targetAngle_X = _targetAngle_X;
-            m_currentCameraFloatField.m_duration = m_cameraFloatAnimationAttribute.m_duration * (1 - _normal);
-            m_currentCameraFloatField.m_length = _targetAngle_X - targetX;
-        }
-
-        private bool m_inputing = false;
-        public bool m_pause = false;
-        public void SetInputing(bool isDown)
-        {
-            if (m_inputing != isDown)
-                m_cameraFloatAnimationAttribute.m_tick = 0f;
-            m_inputing = isDown;
-        }
-
-        internal void ClearCameraFloatField()
-        {
-            m_currentCameraFloatField = new CameraFloatField();
-        }
-
-        #endregion
     }
 }
