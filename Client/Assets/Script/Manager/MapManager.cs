@@ -67,7 +67,8 @@ namespace Game {
 
 		}
 
-		public static async void LoadMap(string mapName, Action callback)
+
+		public static async void LoadMapInternal(XLua.LuaTable precess,string mapName, Action callback = null)
 		{
 			m_Env = GameObject.Find("Env");
 			m_Light = GameObject.Find("Sun").GetComponent<Light>();
@@ -78,7 +79,7 @@ namespace Game {
 			//2.加载地形
 			SceneElementAsset sceneElements = await ResourceManager.LoadAsset(ElementPath) as SceneElementAsset;
 			List<GameObject> list = await MapManager.LoadPreElement(sceneElements);
-			
+
 			m_CurrentEnv = env;
 			m_CurrentElements = sceneElements;
 			m_LoadedObjectList.AddRange(list);
@@ -89,6 +90,7 @@ namespace Game {
 			//5.最后去异步加载出来场景中的元素
 			AddSceneElements();
 
+
 			////3.如果是野外场景需要动态生成导航网格，战斗场景和UI场景不需要
 			//if (env.sceneType == SceneType.Wild)
 			//{
@@ -96,6 +98,19 @@ namespace Game {
 			//	Debug.Log($"[C#] SceneTree.cs ::load({mapName}) 展示基本灯光、草后开启异步加载场景元素并开始异步烘焙导航网格");
 			//}
 
+			callback?.Invoke();
+			//加载完成, 通知lua
+			precess.Set("IsDone", true);
+			precess.Set("proess", 1);
+		}
+
+		public static XLua.LuaTable LoadMap(string mapName, Action callback = null)
+		{
+			XLua.LuaTable table = (XLua.LuaTable)XLuaManager.OperationTablePool.Alloc();
+			table.Set("IsDone", false);
+			table.Set("proess", 0);
+			LoadMapInternal(table, mapName, callback);
+			return table;
 		}
 
 		public static void Show(bool active)
