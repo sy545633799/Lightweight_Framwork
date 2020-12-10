@@ -33,7 +33,7 @@ namespace XLua.CSObjectWrap
 
 		    Utils.BeginClassRegister(type, L, __CreateInstance, 3, 0, 0);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "LoadMap", _m_LoadMap_xlua_st_);
-            Utils.RegisterFunc(L, Utils.CLS_IDX, "ReleaseMap", _m_ReleaseMap_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "Cleanup", _m_Cleanup_xlua_st_);
             
 			
             
@@ -85,10 +85,9 @@ namespace XLua.CSObjectWrap
                 
                 {
                     string _path = LuaAPI.lua_tostring(L, 1);
-                    int _tagetIndex = LuaAPI.xlua_tointeger(L, 2);
-                    System.Action<int> _callback = translator.GetDelegate<System.Action<int>>(L, 3);
+                    System.Action _callback = translator.GetDelegate<System.Action>(L, 2);
                     
-                    Game.MapManager.LoadMap( _path, _tagetIndex, _callback );
+                    Game.MapManager.LoadMap( _path, _callback );
                     
                     
                     
@@ -102,7 +101,7 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_ReleaseMap_xlua_st_(RealStatePtr L)
+        static int _m_Cleanup_xlua_st_(RealStatePtr L)
         {
 		    try {
             
@@ -111,7 +110,7 @@ namespace XLua.CSObjectWrap
                 
                 {
                     
-                    Game.MapManager.ReleaseMap(  );
+                    Game.MapManager.Cleanup(  );
                     
                     
                     

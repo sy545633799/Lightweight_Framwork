@@ -10,7 +10,8 @@ function MainScene:OnCreate()
 end
 
 function MainScene:OnPrepare(map_id)
-    
+
+    MapManager.LoadMap("Demo_1", nil)
     --UIManager:LoadView(UIConfig.HomeUI)
     --UIManager:LoadView(UIConfig.BattleUI)
 end
@@ -21,7 +22,7 @@ function MainScene:OnEnter()
 end
 
 function MainScene:OnLeave()
-    MapManager.ReleaseMap()
+    MapManager.Cleanup()
 end
 
 return MainScene

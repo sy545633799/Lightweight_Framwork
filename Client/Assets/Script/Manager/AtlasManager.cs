@@ -17,7 +17,7 @@ namespace Game
 	{
 		private static Dictionary<string, SpriteAtlas> SpriteAtlasMap = new Dictionary<string, SpriteAtlas>();
 		private static Dictionary<string, List<Action<SpriteAtlas>>> SpriteAltasActions = new Dictionary<string, List<Action<SpriteAtlas>>>();
-		private static string m_RootPath = "Atlas/";
+		private static string m_RootPath = "Assets/Art/Atlas/";
 
 		public static void Init()
 		{

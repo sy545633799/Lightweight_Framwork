@@ -55,5 +55,59 @@ namespace Game {
 		public float haloStrength;
 		public float flareFadeSpeed;
 		public float flareStrength;
+
+		public void SetEnv()
+		{
+			////灯光烘焙信息
+			//LightmapSettings.lightProbes = sceneInfo.lightProbes;
+			////设置光照贴图
+			//int l1 = (sceneInfo.lightmapDir == null) ? 0 : sceneInfo.lightmapDir.Length;
+			//int l2 = (sceneInfo.lightmapColor == null) ? 0 : sceneInfo.lightmapColor.Length;
+			//int l3 = (sceneInfo.shadowMask == null) ? 0 : sceneInfo.shadowMask.Length;
+			//int l = (l1 < l2) ? l2 : l1;
+			//l = (l < l3) ? l3 : l;
+			//LightmapData[] lightmaps = null;
+			//if (l > 0)
+			//{
+			//	lightmaps = new LightmapData[l];
+			//	for (int i = 0; i < l; i++)
+			//	{
+			//		lightmaps[i] = new LightmapData();
+			//		if (i < l1)
+			//			lightmaps[i].lightmapDir = sceneInfo.lightmapDir[i];
+			//		if (i < l2)
+			//			lightmaps[i].lightmapColor = sceneInfo.lightmapColor[i];
+			//		if (i < l3)
+			//			lightmaps[i].shadowMask = sceneInfo.shadowMask[i];
+			//	}
+			//	LightmapSettings.lightmaps = lightmaps;
+			//}
+
+			//设置环境光
+			RenderSettings.ambientMode = ambientMode;
+			RenderSettings.ambientIntensity = ambientIntensity;
+			RenderSettings.ambientLight = ambientLight;
+			RenderSettings.ambientSkyColor = ambientSkyColor;
+			RenderSettings.ambientGroundColor = ambientGroundColor;
+			RenderSettings.ambientEquatorColor = ambientEquatorColor;
+
+			//设置环境反射
+			RenderSettings.skybox = skyBox;
+			RenderSettings.defaultReflectionMode = reflectionMode;
+			RenderSettings.customReflection = customReflection;
+			RenderSettings.reflectionIntensity = reflectionIntensity;
+			RenderSettings.reflectionBounces = reflectionBounces;
+
+			//雾效
+			RenderSettings.fog = fog;
+			RenderSettings.fogColor = fogColor;
+			RenderSettings.fogMode = fogMode;
+			RenderSettings.fogStartDistance = fogStartDistance;
+			RenderSettings.fogEndDistance = fogEndDistance;
+			RenderSettings.haloStrength = haloStrength;
+			RenderSettings.flareFadeSpeed = flareFadeSpeed;
+			RenderSettings.flareStrength = flareStrength;
+		}
+
 	}
 }

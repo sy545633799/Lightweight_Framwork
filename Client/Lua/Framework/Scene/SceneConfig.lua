@@ -21,7 +21,7 @@ SceneConfig = {
     },
     -- 主页场景
     MainScene = {
-        Name = "Demo_1",
+        Name = "MainScene",
         Type = require "Framework.Scene.MainScene"
     },
 }

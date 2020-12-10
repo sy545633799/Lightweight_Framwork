@@ -64,7 +64,7 @@ namespace Game
 			m_BackMusicSource = m_MainCameraTrans.AddComponent<AudioSource>();
 			m_SoundSource = m_MainCameraTrans.AddComponent<AudioSource>();
 
-			AudioConfigAsset audioConfig = await ResourceManager.LoadAsset("Assets/Config/AudioConfig.asset") as AudioConfigAsset;
+			AudioConfigAsset audioConfig = await ResourceManager.LoadAsset("Assets/Art/Assets/Config/AudioConfig.asset") as AudioConfigAsset;
 			AudioConfig[] configs = audioConfig.Configs;
 			for (int i = 0; i < configs.Length; i++)
 			{
@@ -152,7 +152,7 @@ namespace Game
 			AudioClip ac = Get(path);
 			if (ac == null)
 			{
-				ac = await ResourceManager.LoadAsset($"Audio/{path}") as AudioClip;
+				ac = await ResourceManager.LoadAsset($"Assets/Art/Audio/{path}") as AudioClip;
 				Add(path, ac);
 			}
 			return ac;

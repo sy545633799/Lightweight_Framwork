@@ -25,19 +25,18 @@ namespace Game
     {
         public static Dictionary<string, Queue<UObject>> m_Pools = new Dictionary<string, Queue<UObject>>();
         public static Dictionary<int, string> m_Id2PoolDic = new Dictionary<int, string>();
-        private static string m_RootPath = "Assets/Art/";
         private static GameObject m_PoolParent;
         //为了保证连续异步加载不出现顺序问题
         private static Dictionary<Image, string> m_img2SpriteName = new Dictionary<Image, string>();
 
         public static async Task<GameObject> LoadPrefab(string path)
-            => await Addressables.InstantiateAsync(m_RootPath + path).Task;
+            => await Addressables.InstantiateAsync(path).Task;
 
         public static AsyncOperationHandle<GameObject> LuaLoadPrefab(string path)
-            => Addressables.InstantiateAsync(m_RootPath + path);
+            => Addressables.InstantiateAsync(path);
 
 
-        public static void UnloadPrefab(GameObject @object)
+        public static bool UnloadPrefab(GameObject @object)
             => Addressables.ReleaseInstance(@object);
 
 		public static void UnloadPrefab(Transform transform)
@@ -79,7 +78,7 @@ namespace Game
         }
         public static async Task<UObject> LoadAsset(string path)
         {
-            UObject @object = await Addressables.LoadAssetAsync<UObject>(m_RootPath + path).Task;
+            UObject @object = await Addressables.LoadAssetAsync<UObject>(path).Task;
 			
 			if (@object ==null)
 			{

@@ -30,9 +30,7 @@ namespace Game
 			Screen.SetResolution(Screen.width, Screen.height, true);
 			Debug.Log(Screen.width + ":" + Screen.height);
 #endif
-			TaskInfo info = TimeManager.AddTaskYearly(11, 4, 5, 0, 0, 0, null);
-			Debug.LogError(info.Date);
-			Debug.LogError(info.TimeInZone);
+			//TaskInfo info = TimeManager.AddTaskYearly(11, 4, 5, 0, 0, 0, null);
 		}
 
 		public async void Start()
@@ -51,6 +49,7 @@ namespace Game
 			//manager
 			initFunctions.Add(SoundManager.Init);
 			initFunctions.Add(TcpManager.Init);
+			initFunctions.Add(MapManager.Init);
 			for (int i = 0; i < initFunctions.Count; i++)
 			{
 				await initFunctions[i].Invoke();
@@ -63,24 +62,6 @@ namespace Game
 			LuaLoadedTime = DateTime.UtcNow.Ticks;
 			
 		}
-
-		private string GetColor(int arg)
-		{
-			switch (arg)
-			{
-				case 0:
-					return "红色";
-				case 1:
-					return "橙色";
-				case 2:
-					return "紫色";
-				case 3:
-					return "蓝色";
-				default:
-					return "";
-			}
-		}
-
 
 		private void OnEnable()
 		{
@@ -144,6 +125,7 @@ namespace Game
 			XLuaManager.OnApplicationQuit();
 			TcpManager.Dispose();
 			TimeManager.Dispose();
+			MapManager.Release();
 			//why
 			await Task.Delay(1);
 		}
