@@ -46,12 +46,7 @@ namespace Game
 		{
 			get
 			{
-				if (m_EntityContainer == null)
-				{
-					m_EntityContainer = new GameObject("Models");
-					//m_EntityContainer.AddComponent()
-				}
-
+				if (m_EntityContainer == null) m_EntityContainer = new GameObject("Models");
 				m_EntityContainer.transform.localScale = Vector3.one;
 				return m_EntityContainer;
 			}
@@ -78,11 +73,9 @@ namespace Game
 				return;
 			var obj = await ResourceManager.LoadPrefabFromePool(config.Resource);
 			if (!obj) return;
-			// || proxyid != entity.proxyId 感觉这里逻辑id不同时 没必要回收body
-			// 先这样改一下
 			if (entity == null || uid != entity.uid || entity.bodyLoading == false)
 			{
-				ResourceManager.RecyclePrefab(obj); // 只回收Body
+				ResourceManager.RecyclePrefab(obj);
 				return;
 			}
 
@@ -90,7 +83,7 @@ namespace Game
 			if (p != null && p != entity)
 			{
 				Debug.LogError("这个错误可以无视 保留查看而已 entity create error");
-				ResourceManager.RecyclePrefab(obj); // 只回收Body
+				ResourceManager.RecyclePrefab(obj);
 				return;
 			}
 
@@ -104,11 +97,7 @@ namespace Game
 				go.transform.localPosition = Vector3.zero;
 				go.transform.localRotation = Quaternion.identity;
 				LayerMask defaultLayer = go.layer;
-
-				if (p.entityType == 101)
-				{
-					ModelUtils.SetLayerWithChildren(p.Body, "Hero");
-				}
+			
 				p.InitComp(true);
 				entity.bodyLoading = false;
 			}
@@ -151,6 +140,10 @@ namespace Game
 					}
 					if (entity.onBodyCreate != null && entity.Body != null && (CeateDelay > 0 || entity.isHero == true))
 					{
+						entity.onBodyCreate(new EntityComp[] {
+							entity.GetEntityComp<AnimComp>(),
+							entity.GetEntityComp<RotateComp>(),
+						});
 						entity.onBodyCreate = null;
 						CeateDelay--;
 					}
@@ -220,7 +213,7 @@ namespace Game
 			entity.transform.rotation = Quaternion.Euler(0, orientation, 0);
 			entity.onBodyCreate = onBodyCreated;
 			//entity.onBodyCreate = null;
-			entity.InitComp(false);
+			//entity.InitComp(false);
 
 			return entity;
 		}
@@ -248,7 +241,6 @@ namespace Game
 				else
 					entitiesPool.Recycle(entity);
 			}
-
 
 		}
 

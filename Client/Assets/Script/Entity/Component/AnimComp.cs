@@ -24,7 +24,7 @@ namespace Game
 		private MoveComp moveComp {
 			get {
 				if (m_MoveComp == null) {
-					m_MoveComp = behavior.GetEntityComp(typeof(MoveComp)) as MoveComp;
+					m_MoveComp = behavior.GetEntityComp<MoveComp>() as MoveComp;
 				}
 				return m_MoveComp;
 			}

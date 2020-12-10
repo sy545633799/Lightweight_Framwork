@@ -1,8 +1,3 @@
-// ========================================================
-// xuzheng
-// time：2020-08-05 17:28:25
-// ========================================================
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -32,7 +32,7 @@ namespace Game {
 		private AnimComp animComp {
 			get {
 				if (m_AnimComp == null)
-					m_AnimComp = (AnimComp)behavior.GetEntityComp(typeof(AnimComp));
+					m_AnimComp = (AnimComp)behavior.GetEntityComp<AnimComp>();
 				return m_AnimComp;
 			}
 			set {
@@ -287,7 +287,7 @@ namespace Game {
 				// }
 
 				// 修改朝向  
-				RotateComp rotateComp = (RotateComp)behavior.GetEntityComp(typeof(RotateComp));
+				RotateComp rotateComp = (RotateComp)behavior.GetEntityComp<RotateComp>();
 				if (rotateComp != null)
 					rotateComp.SetLookAt (nextCorner, true);
 
@@ -321,7 +321,7 @@ namespace Game {
 				//需要修改朝向
 				Vector3 dirAfter = behavior.transform.position + m_SelfMovingDirByJoyStick * deltaTime;
 				dirAfter.y = 0;
-				RotateComp rotateComp = (RotateComp)behavior.GetEntityComp(typeof(RotateComp));
+				RotateComp rotateComp = (RotateComp)behavior.GetEntityComp<RotateComp>();
 				rotateComp.SetLookAt (dirAfter, true);
 				if (behavior.characterController != null) 
 					behavior.characterController.Move (m_SelfMovingSpeedByStick * deltaTime);

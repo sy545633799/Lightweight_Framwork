@@ -6,6 +6,8 @@ local registerGlobalModule = RegisterGlobalModule
 registerModule "Logic/Global/PropertyNames"
 registerModule("Logic/Common/LogicUtil")
 registerModule("Logic/Common/ConfigUtil")
+registerModule("Logic/Entity/EntityType")
+registerModule("Logic/Entity/Entity")
 
 ---Model
 ---@type TestModel
@@ -22,3 +24,5 @@ TestController = registerGlobalModule("Logic/Controller/TestController")
 LoginController = registerGlobalModule("Logic/Controller/LoginController")
 ---@type RegisterController
 RegisterController = registerGlobalModule("Logic/Controller/RegisterController")
+---@type AOIController
+AOIController = registerGlobalModule("Logic/Controller/AOIController")

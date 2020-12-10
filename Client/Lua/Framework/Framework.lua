@@ -5,6 +5,8 @@ RuntimePlatform = CS.UnityEngine.RuntimePlatform
 ---@type UnityEngine.PlayerPrefs
 PlayerPrefs = CS.UnityEngine.PlayerPrefs
 
+---@type Game.MainCamera
+MainCamera = CS.Game.MainCamera.Instance
 ---@type Game.CommonUtil
 CommonUtil = CS.Game.CommonUtil
 ---@type Game.UIUtil
@@ -21,6 +23,8 @@ ResourceManager = CS.Game.ResourceManager
 TcpManager = CS.Game.TcpManager
 ---@type  Game.MapManager
 MapManager = CS.Game.MapManager
+---@type  Game.EntityBehaviorManager
+EntityBehaviorManager = CS.Game.EntityBehaviorManager
 ---------------------------------------------------------------------------------------------
 local modules = {}
 

@@ -100,6 +100,7 @@ using Game;
         typeof(UIJoyStick),
 
 		//manager
+		typeof(MainCamera),
 		typeof(InputManager),
         typeof(LoadManager),
         typeof(ResourceManager),

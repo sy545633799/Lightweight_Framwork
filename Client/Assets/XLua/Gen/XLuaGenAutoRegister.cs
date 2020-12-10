@@ -266,6 +266,9 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(Game.UIJoyStick), GameUIJoyStickWrap.__Register);
         
         
+            translator.DelayWrapLoader(typeof(Game.MainCamera), GameMainCameraWrap.__Register);
+        
+        
             translator.DelayWrapLoader(typeof(Game.InputManager), GameInputManagerWrap.__Register);
         
         
