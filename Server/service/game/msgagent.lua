@@ -6,15 +6,17 @@ local sproto = require "sproto"
 local c2s = require "proto.protoc2s"
 local s2c = require "proto.protos2c"
 local handlers = {
-    "handler.login_handler",
-    "handler.chat_handler",
-    "handler.role_handler",
+    "handler.login",
+    "handler.chat",
+    "handler.role",
 }
 
 local cs = queue()
 local gate
 local user_info
+---@class CMD
 local CMD = {}
+---@class RPC
 local RPC = {}
 local sproto_host, sproto_request
 
@@ -29,7 +31,8 @@ function CMD.login(source, uid, sid, secret, platform, server_id)
         server_id = server_id,
         RPC = RPC,
         CMD = CMD,
-        agent = skynet.self()
+        agent = skynet.self(),
+        sendmessage = function(ret) skynet.send(gate, "lua", "send", user_info.uid, user_info.subid, ret) end
     }
     for _,v in ipairs(handlers) do
         local handler = require(v)
@@ -37,21 +40,26 @@ function CMD.login(source, uid, sid, secret, platform, server_id)
     end
 end
 
-local function logout()
-    if gate then
-        skynet.call(gate, "lua", "logout", user_info.uid, user_info.sid)
-    end
-    skynet.exit()
-end
-
+---玩家主动登出
 function CMD.logout(source)
-    skynet.error(string.format("%s is logout", user_info.uid))
-    logout()
+    for _,v in ipairs(handlers) do
+        local handler = require(v)
+        handler:unregister(user_info)
+    end
+    if gate then
+        skynet.call(gate, "lua", "logout", user_info.uid, user_info.subid)
+    end
 end
 
+---将玩家踢出登录
 function CMD.afk(source)
-
+    for _,v in ipairs(handlers) do
+        local handler = require(v)
+        handler:unregister(user_info)
+    end
+    skynet.error("玩家被踢离线")
 end
+
 
 local function dorequest(data)
     local ok, type, session, args, response = pcall(sproto_host.dispatch, sproto_host, data)
@@ -64,7 +72,9 @@ local function dorequest(data)
         local r = f(args)
         if r and response then
             local ret = response(r)
-            skynet.send(gate, "lua", "send", user_info.uid, user_info.subid, ret)
+            if ret then
+                skynet.send(gate, "lua", "send", user_info.uid, user_info.subid, ret)
+            end
         end
     else
         LOG_ERROR("request whith nil type : %s", session)
@@ -82,7 +92,7 @@ skynet.start(function()
     sproto_request = sproto_host:attach(sproto.new(sprotoparser.parse(s2c)))
     skynet.dispatch("lua", function(session, source, command, ...)
         local f = assert(CMD[command])
-        skynet.ret(skynet.pack(f(source, ...)))
+        cs(skynet.ret, skynet.pack(f(source, ...)))
     end)
 
     skynet.dispatch("client", function(session, source, data)

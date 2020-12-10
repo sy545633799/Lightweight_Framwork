@@ -21,32 +21,27 @@ function server.login_handler(uid, secret)
     end
 
     internal_id = internal_id + 1
-    local id = internal_id	-- don't use internal_id directly
+    local id = internal_id
     local username = msgserver.username(uid, id, servername)
-
-    local agent
-    if #pool == 0 then
-        agent = skynet.newservice "game/msgagent"
-    else
-        agent = table.remove(pool, 1)
+    if username_map[username] then
+        error(string.format("%s is already login", username))
     end
 
-    local u = {
+    users[uid] = {
         username = username,
-        agent = agent,
         uid = uid,
         subid = id,
     }
 
-    -- trash subid (no used)
-    skynet.call(agent, "lua", "login", uid, id, secret, platform, server_id)
+    if #pool == 0 then
+        users[uid].agent = skynet.newservice "game/msgagent"
+    else
+        users[uid].agent = table.remove(pool, 1)
+    end
 
-    users[uid] = u
-    username_map[username] = u
-
+    skynet.call(users[uid].agent, "lua", "login", uid, id, secret, platform, server_id)
+    username_map[username] = users[uid]
     msgserver.login(username, secret)
-
-    -- you should return unique subid
     return id
 end
 
@@ -58,11 +53,11 @@ function server.logout_handler(uid, subid)
         assert(u.username == username)
         msgserver.logout(u.username)
         users[uid] = nil
-        -- if username_map[u.username] and username_map[u.username].agent then
-        -- table.insert(pool, username_map[u.username].agent)
-        -- end
-        username_map[u.username] = nil
         skynet.call(loginservice, "lua", "logout", uid, subid)
+        if username_map[u.username] and username_map[u.username].agent then
+            table.insert(pool, username_map[u.username].agent)
+        end
+        username_map[u.username] = nil
     end
 end
 
@@ -72,8 +67,13 @@ function server.kick_handler(uid, subid)
     if u then
         local username = msgserver.username(uid, subid, servername)
         assert(u.username == username)
-        -- NOTICE: logout may call skynet.exit, so you should use pcall.
-        pcall(skynet.call, u.agent, "lua", "logout")
+        msgserver.logout(u.username)
+        users[uid] = nil
+        pcall(skynet.call, u.agent, "lua", "afk")
+        if username_map[u.username] and username_map[u.username].agent then
+            table.insert(pool, username_map[u.username].agent)
+        end
+        username_map[u.username] = nil
     end
 end
 
@@ -81,7 +81,13 @@ end
 function server.disconnect_handler(username)
     local u = username_map[username]
     if u then
+        msgserver.logout(u.username)
+        users[u.uid] = nil
         skynet.call(u.agent, "lua", "afk")
+        if username_map[u.username] and username_map[u.username].agent then
+            table.insert(pool, username_map[u.username].agent)
+        end
+        username_map[u.username] = nil
     end
 end
 
@@ -97,7 +103,9 @@ end
 -- call by self (when recv a request from client)
 function server.request_handler(username, msg)
     local u = username_map[username]
-    pcall(skynet.rawsend, u.agent, "client", skynet.pack(msg))
+    if u and users[u.uid] then
+        pcall(skynet.rawsend, u.agent, "client", skynet.pack(msg))
+    end
 end
 
 -- call by self (when gate open)
@@ -106,7 +114,7 @@ function server.register_handler(name)
     skynet.call(loginservice, "lua", "register_gate", servername, skynet.self())
 
     local n = 10
-    for i = 1, n do
+    for _ = 1, n do
         table.insert (pool, skynet.newservice "game/msgagent")
     end
 end

@@ -4,17 +4,27 @@
 ]]
 
 -- node1 节点配置
-return {
-
+---@class gameconfig
+local config = {
+    --调试模式
+    debug = true,
     nodename = "game001",
-	--日志端口
 	consoleport = 5001,
-    --gate服务配置
+    platform_id = 1,
+    server_id = 1,
+
+    loginconfig = {
+        host = "0.0.0.0",
+        port = 8003,
+        multilogin = false,	-- disallow multilogin
+        name = "login_master",
+    },
+
+    ---gate服务配置
     gateconfig = {
-        port = 8002,
-        maxclient = 64,
-        serverid = 1,
-        servername = "game001"
+        port = 8890,
+        maxclient = 512,
+        servername = "DevelopServer",
     },
 
     db = {
@@ -27,3 +37,5 @@ return {
 
     consoleport = 8802 ,
 }
+
+return config

@@ -117,13 +117,21 @@ function response.find( tableName, tbl, sort, skip, limit, selector )
 end
 
 function response.findOne( tableName, tbl, selector )
-	return db[db_name][tableName]:findOne(tbl, selector)
+	local info = db[db_name][tableName]:findOne(tbl, selector)
+	if info then
+		info._id = nil
+	end
+	return info
 end
 
 function response.findMulti( tableNameList, tbl )
 	local result = {}
 	for k, tableName in ipairs(tableNameList) do
-		result[k] = db[db_name][tableName]:findOne(tbl)
+		local info = db[db_name][tableName]:findOne(tbl)
+		if info then
+			info._id = nil
+		end
+		result[k] = info
 	end
 
 	return result

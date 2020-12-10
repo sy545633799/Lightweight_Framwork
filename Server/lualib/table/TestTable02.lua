@@ -1,5 +1,4 @@
 local TestTable02 = {
-	XlsxMap = "test",
 		Value0 = "测试数据",
 		Value2 = {1,2,5},
 		Value3 = {
