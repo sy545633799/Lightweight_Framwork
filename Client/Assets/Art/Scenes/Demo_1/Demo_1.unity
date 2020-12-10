@@ -920,7 +920,7 @@ PrefabInstance:
     - target: {fileID: 9116946110560067713, guid: 2e17a42f5799b6b418668ef63687989c,
         type: 3}
       propertyPath: m_Name
-      value: Terrain
+      value: Terrain01
       objectReference: {fileID: 0}
     - target: {fileID: 9116946110560067713, guid: 2e17a42f5799b6b418668ef63687989c,
         type: 3}
@@ -987,5 +987,6 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 301358392}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9116946110560067712, guid: 2e17a42f5799b6b418668ef63687989c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2e17a42f5799b6b418668ef63687989c, type: 3}

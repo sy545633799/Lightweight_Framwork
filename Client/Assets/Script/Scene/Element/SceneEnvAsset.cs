@@ -23,9 +23,9 @@ namespace Game {
 		/// <summary>
 		/// 光照贴图相关
 		/// </summary>
-		//public Texture2D[] lightmapColor;
-		//public Texture2D[] lightmapDir;
-		//public Texture2D[] shadowMask;
+		public Texture2D[] lightmapColor;
+		public Texture2D[] lightmapDir;
+		public Texture2D[] shadowMask;
 		public CameraInfo CameraInfo;
 		/// <summary>
 		/// 环境光相关

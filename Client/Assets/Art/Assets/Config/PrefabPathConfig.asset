@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85596f55c08113e4bb1e047a4aa6552d, type: 3}
+  m_Name: PrefabPathConfig
+  m_EditorClassIdentifier: 
+  Configs:
+  - ID: 1
+    Path: Assets/Art/SceneRes/Buildings/Prefabs/Garage.prefab
+  - ID: 2
+    Path: Assets/Art/SceneRes/Buildings/Prefabs/Gas_station.prefab
+  - ID: 3
+    Path: Assets/Art/SceneRes/Buildings/Prefabs/Station.prefab
+  - ID: 4
+    Path: Assets/Art/SceneRes/Station/Prefabs/Barrel_1F.prefab
+  - ID: 5
+    Path: Assets/Art/SceneRes/Station/Prefabs/Barrel_1G.prefab
+  - ID: 6
+    Path: Assets/Art/SceneRes/Station/Prefabs/Barrel_3B.prefab
+  - ID: 7
+    Path: Assets/Art/SceneRes/Station/Prefabs/Bilboard_1E.prefab
+  - ID: 8
+    Path: Assets/Art/SceneRes/Station/Prefabs/Building_17E.prefab
+  - ID: 9
+    Path: Assets/Art/SceneRes/Station/Prefabs/Building_7B.prefab
+  - ID: 10
+    Path: Assets/Art/SceneRes/Station/Prefabs/Building_7C.prefab
+  - ID: 11
+    Path: Assets/Art/SceneRes/Station/Prefabs/Car_14I.prefab
+  - ID: 12
+    Path: Assets/Art/SceneRes/Station/Prefabs/Car_18C.prefab
+  - ID: 13
+    Path: Assets/Art/SceneRes/Station/Prefabs/Car_21A.prefab
+  - ID: 14
+    Path: Assets/Art/SceneRes/Station/Prefabs/Car_6G.prefab
+  - ID: 15
+    Path: Assets/Art/SceneRes/Station/Prefabs/Gas_Pump_1A.prefab
+  - ID: 16
+    Path: Assets/Art/SceneRes/Station/Prefabs/Gas_Station_1A.prefab
+  - ID: 17
+    Path: Assets/Art/SceneRes/Station/Prefabs/Gas_Station_2A.prefab
+  - ID: 18
+    Path: Assets/Art/SceneRes/Station/Prefabs/Gas_Tank_1A.prefab
+  - ID: 19
+    Path: Assets/Art/SceneRes/Station/Prefabs/Gas_Tank_1B.prefab
+  - ID: 20
+    Path: Assets/Art/SceneRes/Station/Prefabs/Gas_Tank_2A.prefab
+  - ID: 21
+    Path: Assets/Art/SceneRes/Station/Prefabs/Parking_1B.prefab
+  - ID: 22
+    Path: Assets/Art/SceneRes/Station/Prefabs/Pavement_2J_2X2.prefab
+  - ID: 23
+    Path: Assets/Art/SceneRes/Station/Prefabs/Pavement_2J_4X4.prefab
+  - ID: 24
+    Path: Assets/Art/SceneRes/Station/Prefabs/Pavement_Rounded_2E_8X8.prefab
+  - ID: 25
+    Path: Assets/Art/SceneRes/Station/Prefabs/Pavement_Special_1A_12X12.prefab
+  - ID: 26
+    Path: Assets/Art/SceneRes/Station/Prefabs/Road_1A.prefab
+  - ID: 27
+    Path: Assets/Art/SceneRes/Station/Prefabs/Road_1Z.prefab
+  - ID: 28
+    Path: Assets/Art/SceneRes/Station/Prefabs/Road_3W.prefab
+  - ID: 29
+    Path: Assets/Art/SceneRes/Station/Prefabs/Road_3X.prefab
+  - ID: 30
+    Path: Assets/Art/SceneRes/Station/Prefabs/Road_3Y.prefab
+  - ID: 31
+    Path: Assets/Art/SceneRes/Station/Prefabs/Rock_Cluster_1A.prefab
+  - ID: 32
+    Path: Assets/Art/SceneRes/Station/Prefabs/Rock_Cluster_1B.prefab
+  - ID: 33
+    Path: Assets/Art/SceneRes/Station/Prefabs/Rock_Cluster_1C.prefab
+  - ID: 34
+    Path: Assets/Art/SceneRes/Station/Prefabs/Roundabout_2D.prefab
+  - ID: 35
+    Path: Assets/Art/SceneRes/Station/Prefabs/Streetlight_1C.prefab
+  - ID: 36
+    Path: Assets/Art/SceneRes/Station/Prefabs/Streetsign_2J.prefab
+  - ID: 37
+    Path: Assets/Art/SceneRes/Station/Prefabs/Streetsign_3D.prefab
+  - ID: 38
+    Path: Assets/Art/SceneRes/Station/Prefabs/Streetsign_3E.prefab
+  - ID: 39
+    Path: Assets/Art/SceneRes/Station/Prefabs/Trees_6A.prefab
+  - ID: 40
+    Path: Assets/Art/SceneRes/Station/Prefabs/Tree_6A.prefab
+  - ID: 41
+    Path: Assets/Art/SceneRes/Station/Prefabs/Tree_6B.prefab
+  - ID: 42
+    Path: Assets/Art/SceneRes/Station/Prefabs/Tree_6C.prefab
+  - ID: 43
+    Path: Assets/Art/SceneRes/Station/Prefabs/Tree_6D.prefab
+  - ID: 44
+    Path: Assets/Art/SceneRes/Station/Prefabs/Tree_7A.prefab
+  - ID: 45
+    Path: Assets/Art/SceneRes/Station/Prefabs/Tree_7B.prefab
+  - ID: 46
+    Path: Assets/Art/SceneRes/Station/Prefabs/Tree_7C.prefab
+  - ID: 47
+    Path: Assets/Art/SceneRes/Station/Prefabs/Tree_7D.prefab
+  - ID: 48
+    Path: Assets/Art/SceneRes/Station/Prefabs/Tree_7E.prefab
+  - ID: 49
+    Path: Assets/Art/SceneRes/Station/Prefabs/Tree_7F.prefab
+  - ID: 50
+    Path: Assets/Art/SceneRes/Station/Prefabs/Tree_7G.prefab
+  - ID: 51
+    Path: Assets/Art/SceneRes/Stone/prefab/login_stone_02.prefab
+  - ID: 52
+    Path: Assets/Art/SceneRes/Terrain/Terrain.prefab

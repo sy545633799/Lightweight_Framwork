@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0bbcfede54f63d4a9839146ea89ef88, type: 3}
+  m_Name: Demo_1
+  m_EditorClassIdentifier: 
+  SceneName: Demo_1
+  Bounds:
+    m_Center: {x: 1.425765, y: 3.1433368, z: 4.2049828}
+    m_Extent: {x: 4.5537596, y: 5.7754445, z: 5.053171}
+  preload:
+  - ResId: 53
+    position: {x: -0.76732445, y: -1.17, z: -5.308254}
+    rotation: {x: -0, y: 90, z: -0}
+    scale: {x: 5, y: 5, z: 5}
+  grass: []
+  content:
+  - ID: 3
+    order: 2
+    ResId: 51
+    position: {x: 1.4257649, y: -2.747733, z: 4.204985}
+    rotation: {x: -0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    lightmapIndex: ffffffff
+    lightmapOffset:
+    - {x: 1, y: 1, z: 0, w: 0}
+    m_Bounds:
+      m_Center: {x: 1.425765, y: 3.1433368, z: 4.2049828}
+      m_Extent: {x: 4.5537596, y: 5.7754445, z: 5.053171}
+  pathList: []
