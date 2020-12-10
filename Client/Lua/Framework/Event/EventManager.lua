@@ -7,6 +7,7 @@
 -- 3、游戏UI模块各Model层监听数据中心消息提取各个Window关注的模型数据
 --]]
 
+require "Framework/Event/EventNames"
 local Event = require "Framework.Event.Event"
 ---@class EventManager
 local EventManager = BaseClass("EventManager");

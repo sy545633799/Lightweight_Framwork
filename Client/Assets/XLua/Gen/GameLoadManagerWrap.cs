@@ -31,17 +31,18 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 2, 2, 2);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 5, 2, 0);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "Load", _m_Load_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "LoadEmptyComplete", _m_LoadEmptyComplete_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "LoadTargetComplete", _m_LoadTargetComplete_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "Update", _m_Update_xlua_st_);
             
 			
             
-			Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "StartLoadEvent", _g_get_StartLoadEvent);
-            Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "EndLoadEvent", _g_get_EndLoadEvent);
+			Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "CurrenScene", _g_get_CurrenScene);
+            Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "IsLoading", _g_get_IsLoading);
             
-			Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "StartLoadEvent", _s_set_StartLoadEvent);
-            Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "EndLoadEvent", _s_set_EndLoadEvent);
-            
+			
 			
 			Utils.EndClassRegister(type, L, translator);
         }
@@ -85,26 +86,39 @@ namespace XLua.CSObjectWrap
             
             
             
-			    int gen_param_count = LuaAPI.lua_gettop(L);
-            
-                if(gen_param_count == 3&& (LuaAPI.lua_isnil(L, 1) || LuaAPI.lua_type(L, 1) == LuaTypes.LUA_TSTRING)&& translator.Assignable<System.Action>(L, 2)&& translator.Assignable<System.Action<float>>(L, 3)) 
+                
                 {
                     string _sceneName = LuaAPI.lua_tostring(L, 1);
                     System.Action _loadCompleteCallback = translator.GetDelegate<System.Action>(L, 2);
-                    System.Action<float> _processCallback = translator.GetDelegate<System.Action<float>>(L, 3);
                     
-                    Game.LoadManager.Load( _sceneName, _loadCompleteCallback, _processCallback );
+                        XLua.LuaTable gen_ret = Game.LoadManager.Load( _sceneName, _loadCompleteCallback );
+                        translator.Push(L, gen_ret);
                     
                     
                     
-                    return 0;
+                    return 1;
                 }
-                if(gen_param_count == 2&& (LuaAPI.lua_isnil(L, 1) || LuaAPI.lua_type(L, 1) == LuaTypes.LUA_TSTRING)&& translator.Assignable<System.Action>(L, 2)) 
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_LoadEmptyComplete_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+            
+                
                 {
-                    string _sceneName = LuaAPI.lua_tostring(L, 1);
-                    System.Action _loadCompleteCallback = translator.GetDelegate<System.Action>(L, 2);
+                    UnityEngine.AsyncOperation _operation = (UnityEngine.AsyncOperation)translator.GetObject(L, 1, typeof(UnityEngine.AsyncOperation));
                     
-                    Game.LoadManager.Load( _sceneName, _loadCompleteCallback );
+                    Game.LoadManager.LoadEmptyComplete( _operation );
                     
                     
                     
@@ -115,7 +129,54 @@ namespace XLua.CSObjectWrap
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
             }
             
-            return LuaAPI.luaL_error(L, "invalid arguments to Game.LoadManager.Load!");
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_LoadTargetComplete_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+            
+                
+                {
+                    UnityEngine.AsyncOperation _operation = (UnityEngine.AsyncOperation)translator.GetObject(L, 1, typeof(UnityEngine.AsyncOperation));
+                    
+                    Game.LoadManager.LoadTargetComplete( _operation );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_Update_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+            
+            
+                
+                {
+                    
+                    Game.LoadManager.Update(  );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
             
         }
         
@@ -123,11 +184,11 @@ namespace XLua.CSObjectWrap
         
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _g_get_StartLoadEvent(RealStatePtr L)
+        static int _g_get_CurrenScene(RealStatePtr L)
         {
 		    try {
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			    translator.Push(L, Game.LoadManager.StartLoadEvent);
+            
+			    LuaAPI.lua_pushstring(L, Game.LoadManager.CurrenScene);
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
             }
@@ -135,11 +196,11 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _g_get_EndLoadEvent(RealStatePtr L)
+        static int _g_get_IsLoading(RealStatePtr L)
         {
 		    try {
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			    translator.Push(L, Game.LoadManager.EndLoadEvent);
+            
+			    LuaAPI.lua_pushboolean(L, Game.LoadManager.IsLoading);
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
             }
@@ -147,32 +208,6 @@ namespace XLua.CSObjectWrap
         }
         
         
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _s_set_StartLoadEvent(RealStatePtr L)
-        {
-		    try {
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			    Game.LoadManager.StartLoadEvent = translator.GetDelegate<System.Action<string>>(L, 1);
-            
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            return 0;
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _s_set_EndLoadEvent(RealStatePtr L)
-        {
-		    try {
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			    Game.LoadManager.EndLoadEvent = translator.GetDelegate<System.Action<string>>(L, 1);
-            
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            return 0;
-        }
         
 		
 		

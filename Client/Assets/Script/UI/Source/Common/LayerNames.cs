@@ -12,12 +12,29 @@ using UnityEngine;
 namespace Game {
 	public class LayerNames
 	{
-        public const string Scene = "Scene";
+		public const string Default = "Default";
+		public const string Scene = "Scene";
         public const string Damage = "Damage";
         public const string Base = "Base";
         public const string Pop = "Pop";
-        public const string Guide = "Guide";
-        public const string Network = "Network";
+		public const string Notice = "Notice";
+		public const string Guide = "Guide";
+		public const string Lock = "Lock";
+		public const string Network = "Network";
         public const string Loading = "Loading";
+	}
+
+	public class LayerIndex
+	{
+		public const int Default = 0;
+		public const int Scene = 1;
+		public const int Damage = 2;
+		public const int Base = 3;
+		public const int Pop = 4;
+		public const int Notice = 5;
+		public const int Guide = 6;
+		public const int Lock = 7;
+		public const int Network = 8;
+		public const int Loading = 9;
 	}
 }

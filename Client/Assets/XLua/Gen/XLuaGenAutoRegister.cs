@@ -22,19 +22,13 @@ namespace XLua.CSObjectWrap
         static void wrapInit0(LuaEnv luaenv, ObjectTranslator translator)
         {
         
+            translator.DelayWrapLoader(typeof(XluaTest), XluaTestWrap.__Register);
+        
+        
             translator.DelayWrapLoader(typeof(System.IO.BinaryWriter), SystemIOBinaryWriterWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(XLua.BinaryWriterExtentions), XLuaBinaryWriterExtentionsWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityEngine.WaitForSeconds), UnityEngineWaitForSecondsWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityEngine.WaitForEndOfFrame), UnityEngineWaitForEndOfFrameWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityEngine.WaitForFixedUpdate), UnityEngineWaitForFixedUpdateWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(XLua.UnityEngineObjectExtention), XLuaUnityEngineObjectExtentionWrap.__Register);
@@ -74,6 +68,9 @@ namespace XLua.CSObjectWrap
         
         
             translator.DelayWrapLoader(typeof(Game.XLuaManager), GameXLuaManagerWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Game.LuaBehaviour), GameLuaBehaviourWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(object), SystemObjectWrap.__Register);
@@ -174,13 +171,13 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(UnityEngine.Canvas), UnityEngineCanvasWrap.__Register);
         
+        
+            translator.DelayWrapLoader(typeof(UnityEngine.Rect), UnityEngineRectWrap.__Register);
+        
         }
         
         static void wrapInit1(LuaEnv luaenv, ObjectTranslator translator)
         {
-        
-            translator.DelayWrapLoader(typeof(UnityEngine.Rect), UnityEngineRectWrap.__Register);
-        
         
             translator.DelayWrapLoader(typeof(UnityEngine.RectTransform), UnityEngineRectTransformWrap.__Register);
         
@@ -236,6 +233,12 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(UnityEngine.SceneManagement.SceneManager), UnityEngineSceneManagementSceneManagerWrap.__Register);
         
         
+            translator.DelayWrapLoader(typeof(UnityEngine.Application), UnityEngineApplicationWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(UnityEngine.RuntimePlatform), UnityEngineRuntimePlatformWrap.__Register);
+        
+        
             translator.DelayWrapLoader(typeof(UnityEngine.PlayerPrefs), UnityEnginePlayerPrefsWrap.__Register);
         
         
@@ -257,6 +260,12 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(Game.UIDropDown), GameUIDropDownWrap.__Register);
         
         
+            translator.DelayWrapLoader(typeof(Game.UIImage), GameUIImageWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Game.UIJoyStick), GameUIJoyStickWrap.__Register);
+        
+        
             translator.DelayWrapLoader(typeof(Game.InputManager), GameInputManagerWrap.__Register);
         
         
@@ -266,7 +275,13 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(Game.ResourceManager), GameResourceManagerWrap.__Register);
         
         
+            translator.DelayWrapLoader(typeof(Game.AtlasManager), GameAtlasManagerWrap.__Register);
+        
+        
             translator.DelayWrapLoader(typeof(Game.TcpManager), GameTcpManagerWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Game.MapManager), GameMapManagerWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(Game.UIUtil), GameUIUtilWrap.__Register);
@@ -278,7 +293,19 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(Game.CommonUtil), GameCommonUtilWrap.__Register);
         
         
-            translator.DelayWrapLoader(typeof(Game.GameUtil), GameGameUtilWrap.__Register);
+            translator.DelayWrapLoader(typeof(Game.GameSettings), GameGameSettingsWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Game.CameraDrag), GameCameraDragWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Game.EventExtension), GameEventExtensionWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Game.UIExtensions), GameUIExtensionsWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Game.TransformExtension), GameTransformExtensionWrap.__Register);
         
         
         

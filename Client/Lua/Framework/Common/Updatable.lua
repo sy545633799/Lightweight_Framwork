@@ -3,100 +3,199 @@
 --- DateTime: 2019.6.7
 
 ---@public
----@class Updatable
+---@class Updatable:BaseClass
 Updatable = BaseClass("Updatable")
+local eventManager = EventManager
 
 function Updatable:ctor()
     self.timer_callback = {}
+    ---@type table<DG.Tweening.Tweener, table>
     self.tweener_callabck = {}
     self.event_callback = {}
-
-    if self.Update then
-        self.__update_handle = UpdateBeat:CreateListener(self.Update, self)
-        UpdateBeat:AddListener(self.__update_handle)
-    end
-
-    if self.LateUpdate then
-        self.__lateupdate_handle = LateUpdateBeat:CreateListener(self.LateUpdate, self)
-        LateUpdateBeat:AddListener(self.__lateupdate_handle)
-    end
-
-    if self.FixedUpdate then
-        self.__fixedupdate_handle = FixedUpdateBeat:CreateListener(self.FixedUpdate, self)
-        FixedUpdateBeat:AddListener(self.__fixedupdate_handle)
-    end
 end
 
 ---------------------------------------------------------计时器---------------------------------------------------
-function Updatable:CallDelay(delay, callback, ...)
-    --local timer_map = {}
-    --local delayFunc = function()
-    --    self.timer_callback[timer_map] = nil
-    --    callback(timer_map.param)
-    --end
-    --local timer = Timer.Delay(delay, delayFunc, ...)
-    --timer_map.timer = timer
-    --timer_map.param = {...}
-    --self.timer_callback[timer_map] = true
-    --return timer_map
+
+---CallDelay 一次性延迟函数
+---@param delay number 延迟几秒
+---@param callback function 延迟回调
+---@param handle table 持有者
+function Updatable:CallDelay(delay, callback, handle)
+    local timer_map = {}
+    local delayFunc = function()
+        self.timer_callback[timer_map] = nil
+        coroutine.start(function ()
+            if handle then
+                callback(handle)
+            else
+                callback()
+            end
+        end)
+    end
+    local timer = TimerUtil.Delay(delay, delayFunc, handle)
+    timer_map.timer = timer
+    self.timer_callback[timer_map] = true
+    return timer_map
 end
 
-function Updatable:CallRepeat(delay, callback, ...)
-    --local timer_map = {}
-    --local timer = Timer.Repeat(delay, callback, ...)
-    --timer_map.timer = timer
-    --timer_map.param = {...}
-    --self.timer_callback[timer_map] = true
-    --return timer_map
+---CallRepeat 重复性延迟函数
+---@param delay number 延迟几秒
+---@param callback function 延迟回调
+---@param handle table 持有者
+---@param excuteImmediately boolean 是否立即执行
+function Updatable:CallRepeat(delay, callback, handle, excuteImmediately)
+    if excuteImmediately then callback(handle) end
+    local timer_map = {}
+    local delayFunc = function()
+        ---repeat里不要开协程
+        --coroutine.start(function ()
+        if handle then
+            callback(handle)
+        else
+            callback()
+        end
+        --end)
+    end
+    local timer = TimerUtil.Repeat(delay, delayFunc, handle)
+    timer_map.timer = timer
+    self.timer_callback[timer_map] = true
+    return timer_map
+end
+
+function Updatable:CallUntil(delay, condition, callback, handle)
+    local timer_map = {}
+    local delayFunc = function()
+        if condition() then
+            self:RemoveTimer(timer_map)
+            coroutine.start(function()
+                if handle then
+                    callback(handle)
+                else
+                    callback()
+                end
+            end)
+        end
+    end
+    local timer = TimerUtil.Repeat(delay, delayFunc)
+    timer_map.timer = timer
+    self.timer_callback[timer_map] = true
+    return timer_map
+end
+
+---CallDelay 一次性延迟函数
+---@param delay number 延迟几秒
+---@param callback function 延迟回调
+---@param handle table 持有者
+function Updatable:CallDelayFrame(delay, callback, handle)
+    local timer_map = {}
+    local delayFunc = function()
+        self.timer_callback[timer_map] = nil
+        coroutine.start(function ()
+            if handle then
+                callback(handle)
+            else
+                callback()
+            end
+        end)
+    end
+    local timer = TimerUtil.DelayFrame(delay, delayFunc, handle)
+    timer_map.timer = timer
+    self.timer_callback[timer_map] = true
+    return timer_map
+end
+
+---CallRepeat 重复性延迟函数
+---@param delay number 延迟几秒
+---@param callback function 延迟回调
+---@param handle table 持有者
+---@param excuteImmediately boolean 是否立即执行
+function Updatable:CallRepeatFrame(delay, callback, handle, excuteImmediately)
+    if excuteImmediately then callback(handle) end
+    local timer_map = {}
+    local delayFunc = function()
+        ---repeat里不要开协程
+        --coroutine.start(function ()
+        if handle then
+            callback(handle)
+        else
+            callback()
+        end
+        --end)
+    end
+    local timer = TimerUtil.RepeatFrame(delay, delayFunc, handle)
+    timer_map.timer = timer
+    self.timer_callback[timer_map] = true
+    return timer_map
 end
 
 function Updatable:RemoveTimer(timer_map)
-    --timer_map.timer:Stop()
-    --self.timer_callback[timer_map] = nil
+    timer_map.timer:Stop()
+    self.timer_callback[timer_map] = nil
 end
 
 function Updatable:RemoveAllTimer()
-    --if not self.timer_callback then return end
-    --for timer_map, _ in pairs(self.timer_callback) do
-    --    timer_map.timer:Stop()
-    --end
-    --self.timer_callback = {}
+    if not self.timer_callback then return end
+    for timer_map, _ in pairs(self.timer_callback) do
+        timer_map.timer:Stop()
+    end
+    self.timer_callback = {}
 end
 --------------------------------------------------------动画部分(dotween)-----------------------------------------------------------
-function Updatable:AddTweener(tweener, callback)
-    --local onComplete = function()
-    --    if callback then
-    --        callback()
-    --    end
-    --
-    --    self.tweener_callabck[tweener] = nil
-    --end
-    --if callback then
-    --    tweener.onComplete = onComplete
-    --end
+---@protected
+---@param tweener DG.Tweening.Tweener
+function Updatable:AddTweener(tweener, ease, callback, handle)
+    if not tweener then
+        return
+    end
+    local onComplete = function()
+        if callback then
+            callback(self.tweener_callabck[tweener].handle)
+        end
+        self.tweener_callabck[tweener] = nil
+    end
+    if ease then tweener:SetEase(ease) end
+    if callback then tweener.onComplete = onComplete end
+
+    self.tweener_callabck[tweener] = { callback = callback , handle = handle }
 end
 
+---@param tweener DG.Tweening.Tweener
 function Updatable:RemoveTweener(tweener)
-    --tweener:Kill()
-    --self.tweener_callabck[tweener] = nil
+    if tweener then
+        tweener:Kill()
+        self.tweener_callabck[tweener] = nil
+    end
+end
+
+function Updatable:PauseAllTweener()
+    if not self.tweener_callabck then return end
+    for tweener, _ in pairs(self.tweener_callabck) do
+        tweener:Pause()
+    end
+end
+
+function Updatable:ResumeAllTweener()
+    if not self.tweener_callabck then return end
+    for tweener, _ in pairs(self.tweener_callabck) do
+        tweener:Play()
+    end
 end
 
 function Updatable:RemoveAllTweener()
-    --if not self.tweener_callabck then return end
-    --for tweener, _ in pairs(self.tweener_callabck) do
-    --    tweener:Kill()
-    --end
-    --self.tweener_callabck = {}
+    if not self.tweener_callabck then return end
+    for tweener, _ in pairs(self.tweener_callabck) do
+        tweener:Kill()
+    end
+    self.tweener_callabck = {}
 end
 
 ------------------------------------------------------事件部分-------------------------------------------------------------
 function Updatable:AddEventListener(key_name, listener, handle)
     if self.event_callback[key_name] then
-        print("重复添加事件名:", key_name)
+        logError("重复添加事件名:", key_name)
         return
     end
-
-    EventManager:AddListener(key_name, listener, handle)
+    eventManager:AddListener(key_name, listener, handle)
 
     self.event_callback[key_name] = listener
 end
@@ -108,20 +207,20 @@ function Updatable:RemoveEventListener(key_name)
         return
     end
 
-    EventManager:RemoveListener(key_name, self.event_callback[key_name])
+    eventManager:RemoveListener(key_name, self.event_callback[key_name])
     self.event_callback[key_name] = nil
 end
 
 function Updatable:RemoveAllEventListener()
     if not self.event_callback then return end
     for key_name, listener in pairs(self.event_callback) do
-        EventManager:RemoveListener(key_name, listener)
+        eventManager:RemoveListener(key_name, listener)
     end
     self.event_callback = {}
 end
 
 function Updatable:Broadcast(key_name, ...)
-    EventManager:Broadcast(key_name, ...)
+    eventManager:Broadcast(key_name, ...)
 end
 
 ---暴力清空(个人辨别使用)
@@ -130,6 +229,8 @@ function Updatable:Clear()
         self[k] = nil;
     end
     setmetatable(self, nil)
+    --log(tostring(self))
+    self.release = true
 end
 ---------------------------------------------------------------------------------------------------------------------------
 function Updatable:dtor()
@@ -139,16 +240,5 @@ function Updatable:dtor()
     self.tweener_callabck = nil
     self:RemoveAllEventListener()
     self.event_callback = nil
-    if self.__update_handle then
-        if self.__update_handle then
-            UpdateBeat:RemoveListener(self.__update_handle)
-        end
-        if self.__lateupdate_handle then
-            LateUpdateBeat:RemoveListener(self.__lateupdate_handle)
-        end
-        if self.__fixedupdate_handle then
-            FixedUpdateBeat:RemoveListener(self.__fixedupdate_handle)
-        end
-    end
     self:Clear()
 end

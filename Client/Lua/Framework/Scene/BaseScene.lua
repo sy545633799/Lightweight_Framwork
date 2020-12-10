@@ -13,14 +13,14 @@ function BaseScene:ctor(scene_config)
 end
 
 ---预加载资源，预加载结束之后再关闭loadingui
-function BaseScene:OnPrepare(co) end
-function BaseScene:Prepare(co)
-	self:OnPrepare(co)
+function BaseScene:OnPrepare(...) end
+function BaseScene:Prepare(...)
+	self:OnPrepare(...)
 end
 
-function BaseScene:OnEnter(co) end
-function BaseScene:Enter(co)
-	self:OnEnter(co)
+function BaseScene:OnEnter() end
+function BaseScene:Enter()
+	self:OnEnter()
 end
 
 function BaseScene:OnLeave() end

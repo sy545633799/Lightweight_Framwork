@@ -1,5 +1,8 @@
 EventNames =
 {
+    CS = {
+        Test = "Test"
+    },
     UI = {
         LoadUI = "LoadUI",
         UnloadUI = "UnloadUI"

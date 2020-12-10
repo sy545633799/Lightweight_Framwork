@@ -31,10 +31,11 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 18, 2, 0);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 19, 3, 0);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "Init", _m_Init_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "GetLuaEnv", _m_GetLuaEnv_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "OnInit", _m_OnInit_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "SetText", _m_SetText_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "Restart", _m_Restart_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SafeDoString", _m_SafeDoString_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "StartHotfix", _m_StartHotfix_xlua_st_);
@@ -52,7 +53,8 @@ namespace XLua.CSObjectWrap
 			
             Utils.RegisterObject(L, translator, Utils.CLS_IDX, "luaAssetbundleAssetName", Game.XLuaManager.luaAssetbundleAssetName);
             
-			Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "HasGameStart", _g_get_HasGameStart);
+			Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "OperationTablePool", _g_get_OperationTablePool);
+            Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "HasGameStart", _g_get_HasGameStart);
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "AssetbundleName", _g_get_AssetbundleName);
             
 			
@@ -95,16 +97,19 @@ namespace XLua.CSObjectWrap
         {
 		    try {
             
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
             
             
                 
                 {
                     
-                    Game.XLuaManager.Init(  );
+                        System.Threading.Tasks.Task gen_ret = Game.XLuaManager.Init(  );
+                        translator.Push(L, gen_ret);
                     
                     
                     
-                    return 0;
+                    return 1;
                 }
                 
             } catch(System.Exception gen_e) {
@@ -154,6 +159,31 @@ namespace XLua.CSObjectWrap
                     
                     
                     return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetText_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+            
+            
+                
+                {
+                    System.IntPtr _L = LuaAPI.lua_touserdata(L, 1);
+                    
+                        int gen_ret = Game.XLuaManager.SetText( _L );
+                        LuaAPI.xlua_pushinteger(L, gen_ret);
+                    
+                    
+                    
+                    return 1;
                 }
                 
             } catch(System.Exception gen_e) {
@@ -483,6 +513,18 @@ namespace XLua.CSObjectWrap
         
         
         
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_OperationTablePool(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			    translator.Push(L, Game.XLuaManager.OperationTablePool);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _g_get_HasGameStart(RealStatePtr L)

@@ -27,7 +27,8 @@ namespace Game.Editor
         protected virtual bool AllowRotationFlipping { get { return false; } }
 
         private const uint kDefaultPaddingPower = 3; // Good for base and two mip levels.
-        public const int kDefaultMaxSprite = 1024; // 打包图集的最大尺寸
+        public const int kDefaultMaxSprite = 8192; // 打包图集的最大尺寸
+        public const int kDefaultQuality = 50; // 打包图集压缩质量
 
         public static bool IsCompressedFormat(TextureFormat fmt)
         {

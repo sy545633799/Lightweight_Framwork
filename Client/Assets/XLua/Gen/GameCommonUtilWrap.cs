@@ -37,7 +37,6 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetRot", _m_SetRot_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetLocalRot", _m_SetLocalRot_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetLocalScale", _m_SetLocalScale_xlua_st_);
-            Utils.RegisterFunc(L, Utils.CLS_IDX, "SetParent", _m_SetParent_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetAsLastSibling", _m_SetAsLastSibling_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetAsFirstSibling", _m_SetAsFirstSibling_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetLayerRecursively", _m_SetLayerRecursively_xlua_st_);
@@ -45,6 +44,7 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.CLS_IDX, "FindGo", _m_FindGo_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "FindTrans", _m_FindTrans_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "FindAnimation", _m_FindAnimation_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "IsPointerOnUI", _m_IsPointerOnUI_xlua_st_);
             
 			
             
@@ -268,33 +268,6 @@ namespace XLua.CSObjectWrap
                     float _z = (float)LuaAPI.lua_tonumber(L, 4);
                     
                     Game.CommonUtil.SetLocalScale( _obj, _x, _y, _z );
-                    
-                    
-                    
-                    return 0;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_SetParent_xlua_st_(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-            
-                
-                {
-                    UnityEngine.GameObject _parent = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    UnityEngine.GameObject _child = (UnityEngine.GameObject)translator.GetObject(L, 2, typeof(UnityEngine.GameObject));
-                    
-                    Game.CommonUtil.SetParent( _parent, _child );
                     
                     
                     
@@ -644,6 +617,30 @@ namespace XLua.CSObjectWrap
             }
             
             return LuaAPI.luaL_error(L, "invalid arguments to Game.CommonUtil.FindAnimation!");
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_IsPointerOnUI_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+            
+            
+                
+                {
+                    
+                        int gen_ret = Game.CommonUtil.IsPointerOnUI(  );
+                        LuaAPI.xlua_pushinteger(L, gen_ret);
+                    
+                    
+                    
+                    return 1;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
             
         }
         

@@ -10,11 +10,13 @@ function BattleScene:OnCreate()
 end
 
 --预加载资源
-function BattleScene:OnPrepare(co)
+function BattleScene:OnPrepare(...)
+    logError(...)
+    UIManager:LoadView(UIConfig.BattleUI)
 
 end
 
-function BattleScene:OnEnter(co)
+function BattleScene:OnEnter()
     print("enterbattle")
 end
 

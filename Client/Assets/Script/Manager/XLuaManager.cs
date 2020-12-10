@@ -1,8 +1,10 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 using XLua;
+using LuaCSFunction = XLua.LuaDLL.lua_CSFunction;
 
 namespace Game
 {
@@ -20,6 +22,7 @@ namespace Game
 		private static Action luaLateUpdate = null;
 		private static Action<float> luaFixedUpdate = null;
 
+		public static RecyclePool<LuaBase> OperationTablePool { get; private set; }
 #if UNITY_EDITOR
 #pragma warning disable 0414
 		// added by wsh @ 2017-12-29
@@ -33,15 +36,22 @@ namespace Game
 		private static Stopwatch sw = new Stopwatch();
 #endif
 
-		public static void Init()
+		public static async Task Init()
         {
-            //string path = AssetBundleUtility.PackagePathToAssetsPath(luaAssetbundleAssetName);
-            //AssetbundleName = AssetBundleUtility.AssetBundlePathToAssetBundleName(path);
-            InitLuaEnv();
+			LuaEnv.AddIniter(Init);
+			InitLuaEnv();
 			OnInit();
+			StartHotfix();
+			OperationTablePool = new RecyclePool<LuaBase>(() => luaEnv.NewTable());
 		}
 
-        public static bool HasGameStart
+		private static void Init(LuaEnv luaEnv, ObjectTranslator translator)
+		{
+			translator.DelayWrapLoader(typeof(Game.GameUtil), GameUtil.__Register);
+		}
+
+
+		public static bool HasGameStart
         {
             get;
             protected set;
@@ -76,8 +86,9 @@ namespace Game
             }
         }
 
-        // 这里必须要等待资源管理模块加载Lua AB包以后才能初始化
-        public static void OnInit()
+		
+		// 这里必须要等待资源管理模块加载Lua AB包以后才能初始化
+		public static void OnInit()
         {
             if (luaEnv != null)
             {
@@ -90,6 +101,19 @@ namespace Game
 				luaFixedUpdate = luaEnv.Global.Get<Action<float>>("FixedUpdate");
 			}
         }
+
+		public static void Inject<T>(string name, T obj)
+		{
+			luaEnv.Global.SetInPath<T>(name, obj);
+		}
+
+		[MonoPInvokeCallback(typeof(LuaCSFunction))]
+		public static int SetText(IntPtr L)
+		{
+			
+			return 1;
+		}
+
 
 		// 重启虚拟机：热更资源以后被加载的lua脚本可能已经过时，需要重新加载
 		// 最简单和安全的方式是另外创建一个虚拟器，所有东西一概重启

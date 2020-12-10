@@ -39,6 +39,7 @@ namespace XLua
 				translator.RegisterPushAndGetAndUpdate<UnityEngine.RenderMode>(translator.PushUnityEngineRenderMode, translator.Get, translator.UpdateUnityEngineRenderMode);
 				translator.RegisterPushAndGetAndUpdate<UnityEngine.UI.CanvasScaler.ScaleMode>(translator.PushUnityEngineUICanvasScalerScaleMode, translator.Get, translator.UpdateUnityEngineUICanvasScalerScaleMode);
 				translator.RegisterPushAndGetAndUpdate<UnityEngine.UI.CanvasScaler.ScreenMatchMode>(translator.PushUnityEngineUICanvasScalerScreenMatchMode, translator.Get, translator.UpdateUnityEngineUICanvasScalerScreenMatchMode);
+				translator.RegisterPushAndGetAndUpdate<UnityEngine.RuntimePlatform>(translator.PushUnityEngineRuntimePlatform, translator.Get, translator.UpdateUnityEngineRuntimePlatform);
 			
 			}
         }
@@ -995,6 +996,90 @@ namespace XLua
             }
         }
         
+        int UnityEngineRuntimePlatform_TypeID = -1;
+		int UnityEngineRuntimePlatform_EnumRef = -1;
+        
+        public void PushUnityEngineRuntimePlatform(RealStatePtr L, UnityEngine.RuntimePlatform val)
+        {
+            if (UnityEngineRuntimePlatform_TypeID == -1)
+            {
+			    bool is_first;
+                UnityEngineRuntimePlatform_TypeID = getTypeId(L, typeof(UnityEngine.RuntimePlatform), out is_first);
+				
+				if (UnityEngineRuntimePlatform_EnumRef == -1)
+				{
+				    Utils.LoadCSTable(L, typeof(UnityEngine.RuntimePlatform));
+				    UnityEngineRuntimePlatform_EnumRef = LuaAPI.luaL_ref(L, LuaIndexes.LUA_REGISTRYINDEX);
+				}
+				
+            }
+			
+			if (LuaAPI.xlua_tryget_cachedud(L, (int)val, UnityEngineRuntimePlatform_EnumRef) == 1)
+            {
+			    return;
+			}
+			
+            IntPtr buff = LuaAPI.xlua_pushstruct(L, 4, UnityEngineRuntimePlatform_TypeID);
+            if (!CopyByValue.Pack(buff, 0, (int)val))
+            {
+                throw new Exception("pack fail fail for UnityEngine.RuntimePlatform ,value="+val);
+            }
+			
+			LuaAPI.lua_getref(L, UnityEngineRuntimePlatform_EnumRef);
+			LuaAPI.lua_pushvalue(L, -2);
+			LuaAPI.xlua_rawseti(L, -2, (int)val);
+			LuaAPI.lua_pop(L, 1);
+			
+        }
+		
+        public void Get(RealStatePtr L, int index, out UnityEngine.RuntimePlatform val)
+        {
+		    LuaTypes type = LuaAPI.lua_type(L, index);
+            if (type == LuaTypes.LUA_TUSERDATA )
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != UnityEngineRuntimePlatform_TypeID)
+				{
+				    throw new Exception("invalid userdata for UnityEngine.RuntimePlatform");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+				int e;
+                if (!CopyByValue.UnPack(buff, 0, out e))
+                {
+                    throw new Exception("unpack fail for UnityEngine.RuntimePlatform");
+                }
+				val = (UnityEngine.RuntimePlatform)e;
+                
+            }
+            else
+            {
+                val = (UnityEngine.RuntimePlatform)objectCasters.GetCaster(typeof(UnityEngine.RuntimePlatform))(L, index, null);
+            }
+        }
+		
+        public void UpdateUnityEngineRuntimePlatform(RealStatePtr L, int index, UnityEngine.RuntimePlatform val)
+        {
+		    
+            if (LuaAPI.lua_type(L, index) == LuaTypes.LUA_TUSERDATA)
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != UnityEngineRuntimePlatform_TypeID)
+				{
+				    throw new Exception("invalid userdata for UnityEngine.RuntimePlatform");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+                if (!CopyByValue.Pack(buff, 0,  (int)val))
+                {
+                    throw new Exception("pack fail for UnityEngine.RuntimePlatform ,value="+val);
+                }
+            }
+			
+            else
+            {
+                throw new Exception("try to update a data with lua type:" + LuaAPI.lua_type(L, index));
+            }
+        }
+        
         
 		// table cast optimze
 		
@@ -1084,6 +1169,12 @@ namespace XLua
 				translator.PushUnityEngineUICanvasScalerScreenMatchMode(L, array[index]);
 				return true;
 			}
+			else if (type == typeof(UnityEngine.RuntimePlatform[]))
+			{
+			    UnityEngine.RuntimePlatform[] array = obj as UnityEngine.RuntimePlatform[];
+				translator.PushUnityEngineRuntimePlatform(L, array[index]);
+				return true;
+			}
             return false;
 		}
 		
@@ -1165,6 +1256,12 @@ namespace XLua
 			else if (type == typeof(UnityEngine.UI.CanvasScaler.ScreenMatchMode[]))
 			{
 			    UnityEngine.UI.CanvasScaler.ScreenMatchMode[] array = obj as UnityEngine.UI.CanvasScaler.ScreenMatchMode[];
+				translator.Get(L, obj_idx, out array[array_idx]);
+				return true;
+			}
+			else if (type == typeof(UnityEngine.RuntimePlatform[]))
+			{
+			    UnityEngine.RuntimePlatform[] array = obj as UnityEngine.RuntimePlatform[];
 				translator.Get(L, obj_idx, out array[array_idx]);
 				return true;
 			}

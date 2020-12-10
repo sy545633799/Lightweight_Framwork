@@ -31,7 +31,7 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 1, 18, 5);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 1, 19, 6);
 			
 			
             
@@ -51,6 +51,7 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "frameCount", _g_get_frameCount);
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "renderedFrameCount", _g_get_renderedFrameCount);
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "realtimeSinceStartup", _g_get_realtimeSinceStartup);
+            Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "captureDeltaTime", _g_get_captureDeltaTime);
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "captureFramerate", _g_get_captureFramerate);
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "inFixedTimeStep", _g_get_inFixedTimeStep);
             
@@ -58,6 +59,7 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "maximumDeltaTime", _s_set_maximumDeltaTime);
             Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "maximumParticleDeltaTime", _s_set_maximumParticleDeltaTime);
             Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "timeScale", _s_set_timeScale);
+            Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "captureDeltaTime", _s_set_captureDeltaTime);
             Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "captureFramerate", _s_set_captureFramerate);
             
 			
@@ -290,6 +292,18 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_captureDeltaTime(RealStatePtr L)
+        {
+		    try {
+            
+			    LuaAPI.lua_pushnumber(L, UnityEngine.Time.captureDeltaTime);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _g_get_captureFramerate(RealStatePtr L)
         {
 		    try {
@@ -360,6 +374,19 @@ namespace XLua.CSObjectWrap
 		    try {
                 
 			    UnityEngine.Time.timeScale = (float)LuaAPI.lua_tonumber(L, 1);
+            
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 0;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_captureDeltaTime(RealStatePtr L)
+        {
+		    try {
+                
+			    UnityEngine.Time.captureDeltaTime = (float)LuaAPI.lua_tonumber(L, 1);
             
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);

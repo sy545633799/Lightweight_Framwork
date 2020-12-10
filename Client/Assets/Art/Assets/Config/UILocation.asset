@@ -1,0 +1,624 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d82f5eb8fbc1748aa1d7dfb261b436, type: 3}
+  m_Name: UILocation
+  m_EditorClassIdentifier: 
+  Configs:
+  - ID: 1001001
+    SimplifiedChinese: "\u94BB\u77F3"
+    TraditionalChinese: "\u947D\u77F3"
+    English: "\u94BB\u77F3"
+    Japanese: "\u94BB\u77F3"
+    Korean: "\u94BB\u77F3"
+    Vietnamese: "\u94BB\u77F3"
+  - ID: 1001002
+    SimplifiedChinese: "\u91D1\u5E01"
+    TraditionalChinese: "\u91D1\u5E63"
+    English: "\u91D1\u5E01"
+    Japanese: "\u91D1\u5E01"
+    Korean: "\u91D1\u5E01"
+    Vietnamese: "\u91D1\u5E01"
+  - ID: 1001003
+    SimplifiedChinese: "\u6D88\u8017\u8D27\u5E01\uFF1A"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001004
+    SimplifiedChinese: "\u6392\u540D"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001005
+    SimplifiedChinese: "\u73A9\u5BB6\u540D\u5B57"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001006
+    SimplifiedChinese: "\u540D\u5B57"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001007
+    SimplifiedChinese: 123
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001008
+    SimplifiedChinese: "\u5BB6\u56ED"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001009
+    SimplifiedChinese: "\u4E0D\u53EF\u5207\u6362\u8BE5\u6A21\u5F0F"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001010
+    SimplifiedChinese: "\u4E0B\u6B21\u4E0D\u518D\u63D0\u793A"
+    TraditionalChinese: "\u4E0B\u6B21\u4E0D\u518D\u63D0\u793A"
+    English: "\u4E0B\u6B21\u4E0D\u518D\u63D0\u793A"
+    Japanese: "\u4E0B\u6B21\u4E0D\u518D\u63D0\u793A"
+    Korean: "\u4E0B\u6B21\u4E0D\u518D\u63D0\u793A"
+    Vietnamese: "\u4E0B\u6B21\u4E0D\u518D\u63D0\u793A"
+  - ID: 1001011
+    SimplifiedChinese: GM
+    TraditionalChinese: GM
+    English: GM
+    Japanese: GM
+    Korean: GM
+    Vietnamese: GM
+  - ID: 1001012
+    SimplifiedChinese: Log
+    TraditionalChinese: Log
+    English: Log
+    Japanese: Log
+    Korean: Log
+    Vietnamese: Log
+  - ID: 1001013
+    SimplifiedChinese: Task
+    TraditionalChinese: Task
+    English: Task
+    Japanese: Task
+    Korean: Task
+    Vietnamese: Task
+  - ID: 1001014
+    SimplifiedChinese: "\u606D\u559C\u83B7\u5F97"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001015
+    SimplifiedChinese: "\u73A9\u5BB6"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001016
+    SimplifiedChinese: "\u602A\u7269"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001017
+    SimplifiedChinese: "\u70B9\u51FB\u7A7A\u767D\u533A\u57DF\u5173\u95ED"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001018
+    SimplifiedChinese: "\u7B2C\u4E00\u5929"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001019
+    SimplifiedChinese: "\u7269\u54C1\u540D\u79F0"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001020
+    SimplifiedChinese: "\u7B49\u7EA7"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001021
+    SimplifiedChinese: "\u6D88\u8017"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001022
+    SimplifiedChinese: "\u63D0\u5347"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001023
+    SimplifiedChinese: "\u53D6\u6D88"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001024
+    SimplifiedChinese: "\u786E\u8BA4"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001025
+    SimplifiedChinese: "\u63D0\u793A"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001026
+    SimplifiedChinese: "\u8BF7\u8F93\u5165\u2026\u2026"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001027
+    SimplifiedChinese: "\u4ED9\u95E8"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001028
+    SimplifiedChinese: "\u591C\u730E"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001029
+    SimplifiedChinese: "\u73A9\u6CD5"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001030
+    SimplifiedChinese: "\u5F00\u542F\u5956\u52B1\uFF1A"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001031
+    SimplifiedChinese: "\u6D4B\u8BD5"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001032
+    SimplifiedChinese: "\u88C5\u5907"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001033
+    SimplifiedChinese: "\u9053\u5177"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001034
+    SimplifiedChinese: "\u53EA\u663E\u793A\u672C\u804C\u88C5\u5907"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001035
+    SimplifiedChinese: "\u5F00\u542F"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001036
+    SimplifiedChinese: "\u7AE0\u8282"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1002001
+    SimplifiedChinese: "\u8D26\u53F7"
+    TraditionalChinese: "\u8CEC\u865F"
+    English: "\u8D26\u53F7"
+    Japanese: "\u8D26\u53F7"
+    Korean: "\u8D26\u53F7"
+    Vietnamese: "\u8D26\u53F7"
+  - ID: 1002002
+    SimplifiedChinese: "\u5BC6\u7801"
+    TraditionalChinese: "\u5BC6\u78BC"
+    English: "\u5BC6\u7801"
+    Japanese: "\u5BC6\u7801"
+    Korean: "\u5BC6\u7801"
+    Vietnamese: "\u5BC6\u7801"
+  - ID: 1002003
+    SimplifiedChinese: "\u8BF7\u8F93\u5165\u8D26\u53F7"
+    TraditionalChinese: "\u8ACB\u8F38\u5165\u8CEC\u865F"
+    English: "\u8BF7\u8F93\u5165\u8D26\u53F7"
+    Japanese: "\u8BF7\u8F93\u5165\u8D26\u53F7"
+    Korean: "\u8BF7\u8F93\u5165\u8D26\u53F7"
+    Vietnamese: "\u8BF7\u8F93\u5165\u8D26\u53F7"
+  - ID: 1002004
+    SimplifiedChinese: "\u8BF7\u8F93\u5165\u5BC6\u7801"
+    TraditionalChinese: "\u8ACB\u8F38\u5165\u5BC6\u78BC"
+    English: "\u8BF7\u8F93\u5165\u5BC6\u7801"
+    Japanese: "\u8BF7\u8F93\u5165\u5BC6\u7801"
+    Korean: "\u8BF7\u8F93\u5165\u5BC6\u7801"
+    Vietnamese: "\u8BF7\u8F93\u5165\u5BC6\u7801"
+  - ID: 1002005
+    SimplifiedChinese: "\u521B\u5EFA\u89D2\u8272"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1002006
+    SimplifiedChinese: "\u8FDB\u5165\u6E38\u620F"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1003001
+    SimplifiedChinese: "\u82F1\u96C4"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1003002
+    SimplifiedChinese: "\u793E\u4EA4"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1003003
+    SimplifiedChinese: "\u6545\u4E8B"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1003004
+    SimplifiedChinese: "\u9886\u5730"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1003005
+    SimplifiedChinese: "\u80CC\u5305"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004001
+    SimplifiedChinese: "\u8FD4\u56DE"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004002
+    SimplifiedChinese: "\u66F4\u6362"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004003
+    SimplifiedChinese: "\u6635\u79F0"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004004
+    SimplifiedChinese: "\u7F16\u53F7"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004005
+    SimplifiedChinese: "\u5934\u50CF"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004006
+    SimplifiedChinese: "\u5934\u50CF\u6846"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004007
+    SimplifiedChinese: "\u8BBE\u7F6E"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004008
+    SimplifiedChinese: "\u5FAE\u535A"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004009
+    SimplifiedChinese: "\u5FAE\u4FE1"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004010
+    SimplifiedChinese: QQ
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004011
+    SimplifiedChinese: "\u8D26\u53F7"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004012
+    SimplifiedChinese: "\u5BC6\u7801"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004013
+    SimplifiedChinese: "\u8FD4\u56DE\u767B\u9646"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004014
+    SimplifiedChinese: "\u670D\u52A1\u5668"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004015
+    SimplifiedChinese: "\u4E2A\u6027"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004016
+    SimplifiedChinese: "\u97F3\u4E50"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004017
+    SimplifiedChinese: "\u97F3\u6548"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004018
+    SimplifiedChinese: "\u597D\u53CB"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004019
+    SimplifiedChinese: "\u7FA4\u804A"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004020
+    SimplifiedChinese: "\u4E16\u754C"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1004021
+    SimplifiedChinese: "\u5DF2\u5B9E\u540D\u8BA4\u8BC1"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1005001
+    SimplifiedChinese: "\u6D3B\u52A8"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1005002
+    SimplifiedChinese: "\u6210\u5C31"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1005003
+    SimplifiedChinese: "\u4EFB\u52A1"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1005004
+    SimplifiedChinese: "\u90AE\u4EF6"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1005005
+    SimplifiedChinese: "\u4E16\u754C\u9996\u9886"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1005006
+    SimplifiedChinese: "\u516C\u4F1A"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1005007
+    SimplifiedChinese: "\u9152\u9986"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1005008
+    SimplifiedChinese: "\u535A\u7269\u9986"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1005009
+    SimplifiedChinese: "\u901A\u5929\u5854"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1006001
+    SimplifiedChinese: "\u529B\u91CF"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1006002
+    SimplifiedChinese: "\u667A\u529B"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1006003
+    SimplifiedChinese: "\u751F\u547D"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1006004
+    SimplifiedChinese: "\u9632\u5FA1"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1006005
+    SimplifiedChinese: "\u66B4\u51FB"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1006006
+    SimplifiedChinese: "\u5E78\u8FD0"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1006007
+    SimplifiedChinese: "\u5347\u7EA7"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1006008
+    SimplifiedChinese: "\u8131\u88C5"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1006009
+    SimplifiedChinese: "\u4E00\u952E\u7A7F\u88C5"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1006010
+    SimplifiedChinese: "\u6392\u5217"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 

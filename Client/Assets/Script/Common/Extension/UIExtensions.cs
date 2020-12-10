@@ -1,8 +1,16 @@
-﻿using System.Collections;
+// ========================================================
+// des：
+// author: 
+// time：2020-07-16 11:36:20
+// version：1.0
+// ========================================================
+
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+//using SuperScrollView;
 
 namespace Game
 {
@@ -18,25 +26,47 @@ namespace Game
             rect.sizeDelta = size;
         }
 
-        /// <summary>
-        /// 设置位置
-        /// </summary>
-        /// <param name="go"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public static void SetAnchoredPosition(this RectTransform rect, Vector2 pos)
-        {
-            if (rect == null)
-                return;
+		public static void SetRectSize(this RectTransform rect, float x, float y)
+		{
+			rect.sizeDelta = new Vector2(x, y);
+		}
+
+		/// <summary>
+		/// 设为屏幕大小
+		/// </summary>
+		/// <param name="rect"></param>
+		public static void SetAsSceneSize(this RectTransform rect)
+		{
+			rect.offsetMax = Vector2.zero;
+			rect.offsetMin = Vector2.zero;
+			rect.anchorMin = Vector2.zero;
+			rect.anchorMax = Vector2.one;
+		}
+
+		/// <summary>
+		/// 设置位置
+		/// </summary>
+		/// <param name="go"></param>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		public static void SetAnchoredPosition(this RectTransform rect, Vector2 pos)
+		{
+			if (rect == null)
+				return;
             rect.anchoredPosition = pos;
         }
 
-        /// <summary>
-        /// 设置轴心点，并重新调整坐标(保持相对位置不变)
-        /// </summary>
-        /// <param name="go"></param>
-        /// <param name="pivot"></param>
-        public static void SetRectPivot(this RectTransform rect, Vector2 pivot)
+		public static void SetAnchoredPosition(this RectTransform rect, float x, float y)
+		{
+			rect.anchoredPosition = new Vector2(x, y);
+		}
+
+		/// <summary>
+		/// 设置轴心点，并重新调整坐标(保持相对位置不变)
+		/// </summary>
+		/// <param name="go"></param>
+		/// <param name="pivot"></param>
+		public static void SetRectPivot(this RectTransform rect, Vector2 pivot)
         {
             if (rect == null)
             {
@@ -53,20 +83,24 @@ namespace Game
             rect.anchoredPosition = adjustPos;
         }
 
+		public static void SetRectPivot(this RectTransform rect, float x, float y)
+		{
+			rect.SetRectPivot(new Vector2(x, y));
+		}
 
-        /// <summary>
-        /// 设置锚点
-        /// </summary>
-        /// <param name="tans"></param>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        public static void SetRectAnchor(this RectTransform rect, Vector2 min, Vector2 max)
-        {
-            if (rect == null)
-            {
-                return;
-            }
-            Vector2 pos = rect.anchoredPosition;
+		/// <summary>
+		/// 设置锚点
+		/// </summary>
+		/// <param name="tans"></param>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
+		public static void SetRectAnchor(this RectTransform rect, Vector2 min, Vector2 max)
+		{
+			if (rect == null)
+			{
+				return;
+			}
+			Vector2 pos = rect.anchoredPosition;
 
             Vector2 anchorMin = rect.anchorMin;
             Vector2 anchorMax = rect.anchorMax;
@@ -88,12 +122,17 @@ namespace Game
             }
         }
 
-        /// <summary>
-        /// 设置贴边
-        /// </summary>
-        /// <param name="tans"></param>
-        /// <param name="attach"></param>
-        public static void SetRectAttachment(this RectTransform rect, string attach)
+		public static void SetRectAnchor(this RectTransform rect, float x1, float y1, float x2, float y2)
+		{
+			rect.SetRectAnchor(new Vector2(x1, y1), new Vector2(x2, y2));
+		}
+
+		/// <summary>
+		/// 设置贴边
+		/// </summary>
+		/// <param name="tans"></param>
+		/// <param name="attach"></param>
+		public static void SetRectAttachment(this RectTransform rect, string attach)
         {
             if (rect == null)
             {
@@ -137,14 +176,14 @@ namespace Game
             }
         }
 
-
-        /// <summary>
-        /// 设置图片fill
-        /// </summary>
-        /// <param name="go"></param>
-        /// <param name="fillMethod"></param>
-        /// <param name="origin"></param>
-        public static void SetImageFillType(this Image image, string fillMethod, string origin)
+		/****************************************************Image************************************************************/
+		/// <summary>
+		/// 设置图片fill
+		/// </summary>
+		/// <param name="go"></param>
+		/// <param name="fillMethod"></param>
+		/// <param name="origin"></param>
+		public static void SetImageFillType(this Image image, string fillMethod, string origin)
         {
             if (image != null)
             {
@@ -214,5 +253,5 @@ namespace Game
             }
             text.alignment = (TextAlignmentOptions)anchor;
         }
-    }
+	}
 }

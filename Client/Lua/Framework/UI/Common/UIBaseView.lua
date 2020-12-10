@@ -3,35 +3,48 @@
 --- Created by shenyi
 --- DateTime: 2019.6.5
 ---------------------------------------------------
-local base = UIContent
----@class UIBaseView:UIContent
+local base = UIContain
+---@class UIBaseView:UIContain
 UIBaseView = BaseClass("UIBaseView", base)
 local resourceManager = ResourceManager
-local commonUtil = CommonUtil
-local uiUtil = UIUtil
 
-function UIBaseView:SetActive(bVal)
-    base.SetActive(self, bVal)
+function UIBaseView:ctor(container, config)
+    self.config = config
+end
+
+---@public 拉回到Canvas让相机渲染(只能让UIManager使用)
+function UIBaseView:Show(bVal)
     if bVal then
-        commonUtil.SetAsLastSibling(self.gameObject)
-        uiUtil.SetAsSceneSize(self.gameObject)
+        self:SetAnchoredPosition(0,0)
+        self:SetAsLastSibling()
+        self:SetAsSceneSize()
+    else
+        self:SetAnchoredPosition(0,5000)
     end
 end
 
-function UIBaseView:PlayUIAnimation(name,reverse,speed,during)
-    if self.Animation and type(name) == 'string' then
-        local rate = 1
-        if speed and type(speed) == 'number' then
-            rate = speed
-        end
-        local time = 0
-        if during and type(during) == 'number' then
-            time = during
-        end
-        --UIUtil.PlayAnimation(self.Animation,name,rate,time,reverse)
-    end
+function UIBaseView:OnLoad(...) end
+---@public(只能让UIManager使用)
+function UIBaseView:Load(...)
+    self:OnLoad(...)
+    self:SetActive(true)
+    self:Show(true)
+    self:PlayUIAnimation("Open")
+end
+
+function UIBaseView:OnUnLoad() end
+---@public(只能让UIManager使用)
+function UIBaseView:UnLoad()
+    self:Reset()
+    self:SetActive(false)
+    self:OnUnLoad()
+end
+
+---@protected 自身关闭
+function UIBaseView:Close()
+    UIManager:UnLoadView(self.config)
 end
 
 function UIBaseView:OnDestroy()
-    resourceManager.UnloadAssets(self.gameObject)
+    resourceManager.UnloadPrefab(self.component)
 end

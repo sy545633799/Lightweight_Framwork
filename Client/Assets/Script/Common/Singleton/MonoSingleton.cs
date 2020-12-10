@@ -58,8 +58,8 @@ namespace Game
         public void DestroySelf()
         {
             Dispose();
-            MonoSingleton<T>.mInstance = null;
-            UnityEngine.Object.Destroy(gameObject);
+            mInstance = null;
+            Destroy(gameObject);
         }
 
         public virtual void Dispose()

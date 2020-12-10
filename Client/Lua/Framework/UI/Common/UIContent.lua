@@ -5,41 +5,31 @@
 ---@class UIContent:ModelListener
 UIContent = BaseClass("UIContent", ModelListener)
 --------------------------------------------------------------------------
---子类实现
-function UIContent:OnCreate(...) end
+local commonUtil = CommonUtil
+local uiUtil = UIUtil
 
-function UIContent:ctor(comp,...)
-    self.gameObject = comp.gameObject
-    self.transform = comp.transform
+function UIContent:ctor(container,...)
+    ---@type table<string, UIContent>
     self.components = {}
-    self:OnCreate(comp, ...)
-    self.active = true
+    ---@type boolean
+    self.enaled = false
 end
 
 function UIContent:SetActive(bVal)
-    --self.gameObject:SetActive(bVal)
-    if bVal and not self.active then
-        self.gameObject:SetActive(true)
-        self.active = true
-        --TODO 是否统一操作
-        for _, compMap in pairs(self.components) do
-            for comp, _ in pairs(compMap) do
-                comp:SetActive(bVal)
-            end
+    logError("请使用canvasgroup")
+end
+
+---@protected
+function UIContent:Reset()
+    for _, compMap in pairs(self.components) do
+        for comp, _ in pairs(compMap) do
+            comp:Reset()
         end
-    elseif not bVal and self.active then
-        for _, compMap in pairs(self.components) do
-            for comp, _ in pairs(compMap) do
-                comp:SetActive(bVal)
-            end
-        end
-        self:RemoveAllTimer()
-        self:RemoveAllTweener()
-        self:RemoveAllEventListener()
-        self:RemoveAllModelListener()
-        self.active = false
-        self.gameObject:SetActive(false)
     end
+    self:RemoveAllTimer()
+    self:RemoveAllTweener()
+    self:RemoveAllEventListener()
+    self:RemoveAllModelListener()
 end
 
 -------------------------------------------------------组件相关-------------------------------------------------------
@@ -76,7 +66,83 @@ function UIContent:RemoveAllComponents()
     self.components = {}
 end
 
---子类实现
+---@return UIWidget
+function UIContent:AddWidget(component)
+    return self:AddComponent(UIWidget, component)
+end
+
+---@return UIText
+function UIContent:AddText(component)
+    return self:AddComponent(UIText, component)
+end
+
+---@return UIButton
+function UIContent:AddButton(component)
+    return self:AddComponent(UIButton, component)
+end
+
+---@return UIImage
+function UIContent:AddImage(component)
+    return self:AddComponent(UIImage, component)
+end
+
+---@return UIToggle
+function UIContent:AddToggle(component)
+    return self:AddComponent(UIToggle, component)
+end
+
+---@return UIToggleGroup
+function UIContent:AddToggleGroup(component)
+    return self:AddComponent(UIToggleGroup, component)
+end
+
+
+---@return UIDropDown
+function UIContent:AddDropDown(component)
+    return self:AddComponent(UIDropDown, component)
+end
+
+---@return UISlider
+function UIContent:AddSlider(component)
+    return self:AddComponent(UISlider, component)
+end
+
+---@return UIListView
+function UIContent:AddListView(component)
+    return self:AddComponent(UIListView, component)
+end
+
+---@return UIInput
+function UIContent:AddInput(component)
+    return self:AddComponent(UIInput, component)
+end
+
+---@return UICanvasGroup
+function UIContent:AddCanvasGroup(component)
+    return self:AddComponent(UICanvasGroup, component)
+end
+
+---@return UIModel
+function UIContent:AddModel(component)
+    return self:AddComponent(UIModel, component)
+end
+
+--Animation
+function UIContent:PlayUIAnimation(name,reverse,speed,during)
+    if self.Animation and type(name) == 'string' then
+        local rate = 1
+        if speed and type(speed) == 'number' then
+            rate = speed
+        end
+        local time = 0
+        if during and type(during) == 'number' then
+            time = during
+        end
+        --UIUtil.PlayAnimation(self.Animation,name,rate,time,reverse)
+    end
+end
+
+---删除预制物(删除所有组件后再执行这个方法)
 function UIContent:OnDestroy() end
 
 function UIContent:dtor()

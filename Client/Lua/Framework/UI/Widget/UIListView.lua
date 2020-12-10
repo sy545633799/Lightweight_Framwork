@@ -1,21 +1,43 @@
 ---@class UIListView:UIContent
 UIListView = BaseClass("UIListView", UIContent)
 -- 创建
-function UIListView:OnCreate(list_view)
-	self.unity_listview = list_view
+function UIListView:ctor(component)
+	---@type SuperScrollView.LoopListView2
+	self.component = component
+	self.TotalItemCount = 0
 end
 
 
 function UIListView:OnItemSizeChanged(index)
-	self.unity_listview:OnItemSizeChanged(index - 1)
+	self.component:OnItemSizeChanged(index - 1)
 end
 
-function UIListView:InitListView(itemTotalCount, onGetItemByIndex)
-	self.unity_listview:InitListView(itemTotalCount, function (listview, index)
-		return onGetItemByIndex(listview, index + 1)
+function UIListView:InitListView(itemTotalCount, onGetItemByIndex, handle)
+	self.TotalItemCount = 0
+	self.component:InitListView(itemTotalCount, function (listview, index)
+		if handle then
+			return onGetItemByIndex(handle, listview, index + 1)
+		else
+			return onGetItemByIndex(listview, index + 1)
+		end
 	end)
+
 end
+
+function UIListView:MovePanelToItemIndex(targetIndex)
+	self.component:MovePanelToItemIndex(targetIndex, 0)
+end
+
 
 function UIListView:SetListItemCount(count, resetPos)
-	self.unity_listview:SetListItemCount(count, resetPos or false)
+	self.TotalItemCount = count
+	self.component:SetListItemCount(count, resetPos or false)
+end
+
+function UIListView:RefreshAllShownItem()
+	self.component:RefreshAllShownItem()
+end
+
+function UIListView:dtor()
+	--self.component:RemoveListener()
 end

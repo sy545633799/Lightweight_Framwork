@@ -1,10 +1,17 @@
+---@type UnityEngine.Application
+Application = CS.UnityEngine.Application
+---@type CS.UnityEngine.RuntimePlatform
+RuntimePlatform = CS.UnityEngine.RuntimePlatform
+---@type UnityEngine.PlayerPrefs
+PlayerPrefs = CS.UnityEngine.PlayerPrefs
+
 ---@type Game.CommonUtil
 CommonUtil = CS.Game.CommonUtil
 ---@type Game.UIUtil
 UIUtil = CS.Game.UIUtil
 ---@type Game.UIListener
 UIListener = CS.Game.UIListener
---@type Game.InputManager
+---@type Game.InputManager
 InputManager = CS.Game.InputManager
 ---@type Game.LoadManager
 LoadManager = CS.Game.LoadManager
@@ -12,40 +19,75 @@ LoadManager = CS.Game.LoadManager
 ResourceManager = CS.Game.ResourceManager
 ---@type Game.TcpManager
 TcpManager = CS.Game.TcpManager
+---@type  Game.MapManager
+MapManager = CS.Game.MapManager
+---------------------------------------------------------------------------------------------
+local modules = {}
 
-require "Common.Main"
-require "Framework.Common.BaseClass"
-require "Framework.Common.ConstClass"
-require "Framework.Common.DataClass"
-require "Framework.Common.Updatable"
-require "Framework.Common.MessageListener"
-require "Framework.Common.BaseModel"
-require "Framework.Common.ModelListener"
-require "Framework.Util.TimerUtil"
-require "Framework.Util.CoroutineUtil"
+function RegisterModule(path)
+    local module ={ path = path }
+    table.insert(modules, module)
+end
+
+function RegisterGlobalModule(path)
+    local obj = {}
+    local module ={ obj = obj, path = path}
+    table.insert(modules, module)
+    return obj
+end
+
+function GetModule()
+    return modules
+end
+
+local registerModule = RegisterModule
+local registerGlobalModule = RegisterGlobalModule
+--Common
+registerModule( "Framework/Common/BaseClass")
+registerModule( "Framework/Common/ConstClass")
+registerModule( "Framework/Common/DataClass")
+registerModule( "Framework/Common/Updatable")
+registerModule( "Framework/Common/Model")
+registerModule( "Framework/Common/ModelListener")
+registerModule( "Framework/Common/MessageListener")
+registerModule( "Framework/Common/Controller")
+registerModule( "Framework/Util/TimerUtil")
+registerModule( "Framework/Util/CoroutineUtil")
 --UI
-require "Framework.UI.Common.UIContent"
-require "Framework.UI.Common.UIBaseView"
-require "Framework.UI.Common.UIBaseCtrl"
-require "Framework.UI.Common.UITabCtrl"
+registerModule( "Framework/UI/LayerGroup")
+registerModule( "Framework/UI/UIConfig")
+registerModule( "Framework/UI/TipsConfig")
+registerModule( "Framework/UI/AtlasNames")
+--Base
+registerModule( "Framework/UI/Common/UIContent")
 --Widget
-require "Framework.UI.Widget.UIText"
-require "Framework.UI.Widget.UIImage"
-require "Framework.UI.Widget.UIButton"
-require "Framework.UI.Widget.UIToggle"
-require "Framework.UI.Widget.UISlider"
-require "Framework.UI.Widget.UIListView"
-require "Framework.UI.Widget.UIWidget"
---Event
-require "Framework.Event.EventNames"
+registerModule( "Framework/UI/Widget/UIText")
+registerModule( "Framework/UI/Widget/UIImage")
+registerModule( "Framework/UI/Widget/UIButton")
+registerModule( "Framework/UI/Widget/UIToggle")
+registerModule( "Framework/UI/Widget/UIToggleGroup")
+registerModule( "Framework/UI/Widget/UIDropDown")
+registerModule( "Framework/UI/Widget/UISlider")
+registerModule( "Framework/UI/Widget/UIListView")
+registerModule( "Framework/UI/Widget/UIWidget")
+registerModule( "Framework/UI/Widget/UIInput")
+registerModule( "Framework/UI/Widget/UIModel")
+registerModule( "Framework/UI/Widget/UICanvasGroup")
+--Component
+registerModule( "Framework/UI/Common/UIContain")
+registerModule( "Framework/UI/Common/UIBaseView")
+registerModule( "Framework/UI/Common/UIBaseItem")
+registerModule( "Framework/UI/Common/UIBaseTips")
+registerModule( "Framework/UI/Common/UITabView")
 
 
---Manager(TODO)
 ---@type EventManager
-EventManager = require("Framework.Event.EventManager").New()
+EventManager = registerGlobalModule("Framework/Event/EventManager")
 ---@type SceneManager
-SceneManager = require("Framework.Scene.SceneManager").New()
+SceneManager = registerGlobalModule("Framework/Scene/SceneManager")
 ---@type UIManager
-UIManager = require("Framework.UI.UIManager").New()
+UIManager = registerGlobalModule("Framework/UI/UIManager")
+---@type TipsManager
+TipsManager = registerGlobalModule("Framework/UI/TipsManager")
 ---@type NetworkManager
-NetworkManager = require("Framework.Network.NetworkManager").New()
+NetworkManager = registerGlobalModule("Framework/Network/NetworkManager")

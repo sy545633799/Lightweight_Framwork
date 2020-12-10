@@ -31,7 +31,7 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 6, 10, 10);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 6, 12, 12);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "SetInputEnabled", _m_SetInputEnabled_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "GetInputEnabled", _m_GetInputEnabled_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "Update", _m_Update_xlua_st_);
@@ -48,8 +48,10 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "onDrag", _g_get_onDrag);
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "onDownScene", _g_get_onDownScene);
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "onUpScene", _g_get_onUpScene);
+            Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "onDragScene", _g_get_onDragScene);
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "onDownUI", _g_get_onDownUI);
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "onUpUI", _g_get_onUpUI);
+            Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "onDragUI", _g_get_onDragUI);
             
 			Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "onWheelEvent", _s_set_onWheelEvent);
             Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "onkeyCodeDownEvent", _s_set_onkeyCodeDownEvent);
@@ -59,8 +61,10 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "onDrag", _s_set_onDrag);
             Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "onDownScene", _s_set_onDownScene);
             Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "onUpScene", _s_set_onUpScene);
+            Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "onDragScene", _s_set_onDragScene);
             Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "onDownUI", _s_set_onDownUI);
             Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "onUpUI", _s_set_onUpUI);
+            Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "onDragUI", _s_set_onDragUI);
             
 			
 			Utils.EndClassRegister(type, L, translator);
@@ -199,15 +203,12 @@ namespace XLua.CSObjectWrap
         {
 		    try {
             
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
             
             
                 
                 {
-                    UnityEngine.Vector2 _position;translator.Get(L, 1, out _position);
                     
-                        bool gen_ret = Game.InputManager.IsOverGUI( _position );
+                        bool gen_ret = Game.InputManager.IsOverGUI(  );
                         LuaAPI.lua_pushboolean(L, gen_ret);
                     
                     
@@ -321,6 +322,18 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_onDragScene(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			    translator.Push(L, Game.InputManager.onDragScene);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _g_get_onDownUI(RealStatePtr L)
         {
 		    try {
@@ -338,6 +351,18 @@ namespace XLua.CSObjectWrap
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			    translator.Push(L, Game.InputManager.onUpUI);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_onDragUI(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			    translator.Push(L, Game.InputManager.onDragUI);
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
             }
@@ -429,7 +454,7 @@ namespace XLua.CSObjectWrap
         {
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			    Game.InputManager.onDownScene = (Game.InputManager.ClickEventEx)translator.GetObject(L, 1, typeof(Game.InputManager.ClickEventEx));
+			    Game.InputManager.onDownScene = (Game.InputManager.ClickEvent)translator.GetObject(L, 1, typeof(Game.InputManager.ClickEvent));
             
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
@@ -442,7 +467,20 @@ namespace XLua.CSObjectWrap
         {
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			    Game.InputManager.onUpScene = (Game.InputManager.ClickEventEx)translator.GetObject(L, 1, typeof(Game.InputManager.ClickEventEx));
+			    Game.InputManager.onUpScene = (Game.InputManager.ClickEvent)translator.GetObject(L, 1, typeof(Game.InputManager.ClickEvent));
+            
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 0;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_onDragScene(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			    Game.InputManager.onDragScene = (Game.InputManager.ClickEvent)translator.GetObject(L, 1, typeof(Game.InputManager.ClickEvent));
             
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
@@ -469,6 +507,19 @@ namespace XLua.CSObjectWrap
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			    Game.InputManager.onUpUI = (Game.InputManager.ClickEvent)translator.GetObject(L, 1, typeof(Game.InputManager.ClickEvent));
+            
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 0;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_onDragUI(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			    Game.InputManager.onDragUI = (Game.InputManager.ClickEvent)translator.GetObject(L, 1, typeof(Game.InputManager.ClickEvent));
             
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);

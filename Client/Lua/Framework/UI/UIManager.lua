@@ -2,123 +2,260 @@
 --- Created by shenyi.
 --- DateTime: 2020/3/20 15:43
 
-require("Framework.UI.LayerGroup")
-require("Framework.UI.UIConfig")
 ---@class UIManager:Updatable
 local UIManager = BaseClass("UIManager", Updatable)
-local uiutil = UIUtil
 local commonUtil = CommonUtil
 local resourceManager = ResourceManager
 
-function UIManager:ctor(config)
-    self.canvas = {}
-    self.loadedCtrl = {}
-    self.root = commonUtil.FindGo("Canvas")
-    for name, path in pairs(LayerGroup) do
-        self.canvas[name] = CommonUtil.FindGo(self.root, path)
-        self.loadedCtrl[name] = {}
-    end
-    self.ctrlInfo = {}
+---@class UIConfigClass
+local UIConfigClass = {
+    ---@type string UI名字
+    Name = "",
+    ---@type number UI预制体路径
+    ID = 0,
+    ---@type string UI代码路径
+    View = "",
+    ---@type LayerGroup UI层级
+    Layer = LayerGroup.Pop,
+    ---@type boolean 关闭时是否销毁(第二优先级)
+    DestroyWhenUnload = true,
+    ---@type boolean 是否显示金钱条
+    ShowMoneyBar = false,
+    ---@type boolean 是否透明
+    IsTransParent = false,
+}
+
+---@class ViewInfoClass
+local ViewInfoClass =
+{
+    ---@type table 传给窗口的参数
+    args = '',
+    ---@type boolean 是否打开
+    isLoaded = false,
+    ---@type boolean 是否正在加载
+    isLoading = false,
+    ---@type boolean 是否销毁(第一优先级)
+    destroy = false,
+    ---@type boolean 是否隐藏
+    hide = false,
+}
+
+function UIManager:ctor()
+    ---@type table<UIConfigClass, UIBaseView>
+    self.cacheView = {}
+    self.root = commonUtil.FindTrans("UIRoot")
+    --for name, path in pairs(LayerGroup) do
+    --    self.canvas[name] = commonUtil.FindTrans(self.root, path)
+    --    self.cacheView[name] = {}
+    --end
+
+    ---@type table<UIConfigClass, ViewInfoClass>
+    self.viewInfo = {}
+    ---@type table<number, UIConfigClass>
+    self.popQueue = {}
+    ---@type UIConfigClass
+    self.baseUI = nil
 end
 
+---@public
+---@param config UIConfigClass
 function UIManager:IsViewOpen(config)
-    local viewInfo = self.ctrlInfo[config]
-    if viewInfo then
-        return viewInfo.isLoaded and not viewInfo.isLoading
-    else
-        return false
-    end
+    local viewInfo = self.viewInfo[config]
+    return viewInfo and viewInfo.isLoaded and not viewInfo.isLoading
 end
 
-local function CreateCtrl(self, config, go, active)
-    commonUtil.SetParent(self.canvas[config.Layer], go)
-    local view = require(config.View).New(go)
-    view:SetActive(active)
-    local ctrl = require(config.Ctrl).New(view)
-    self.loadedCtrl[config] = ctrl
-    return ctrl
+---@private
+---@param config UIConfigClass
+---@param uiView UnityEngine.GameObject
+function UIManager:CreateView(config, uiView)
+    self.root:SetParentAndReset(uiView.transform)
+    ---@type UIBaseView
+    local view = require(config.View).New(uiView, config)
+    local viewInfo = self.viewInfo[config]
+    if not viewInfo.isLoaded then
+        view:SetActive(false)
+    end
+    self.cacheView[config] = view
+    return view
 end
 
-function UIManager:LoadView(config, ...)
-    --正在加载
-    if not self.ctrlInfo[config] then
-        self.ctrlInfo[config] = {}
-    end
+function UIManager:IsInPopGroup(config)
+    return config.Layer == LayerGroup.Base or config.Layer == LayerGroup.Pop
+end
 
-    self.ctrlInfo[config].isLoaded = true
-    if self.ctrlInfo[config].isLoading then
-        self.ctrlInfo[config].args = LuaUtil.SafePack(...) return
-    else
-        local ctrl = self.loadedCtrl[config]
-        if ctrl then
-            ctrl:Load(...) return
+
+---@private
+---@param config UIConfigClass
+function UIManager:InnerLoadView(config)
+    ---处理货币条
+    --if self:IsInPopGroup(config) then
+    --    if config.ShowMoneyBar then
+    --        self:LoadView(UIConfig.CurrencyUI, config)
+    --    else
+    --        self:UnLoadView(UIConfig.CurrencyUI)
+    --    end
+    --end
+    local view = self.cacheView[config]
+    if self:IsInPopGroup(config)  then
+        local len = table.length(self.popQueue)
+        if len > 0 then
+            local lastConfig = self.popQueue[len]
+            local lastView = self.cacheView[lastConfig]
+            lastView:Show(config.IsTransParent)
+        end
+        if self.popQueue[#self.popQueue] == config then
+            logError("重复打开界面")
         else
-            self.ctrlInfo[config].args = LuaUtil.SafePack(...)
+            table.insert(self.popQueue, config)
         end
     end
+    view:Load(LuaUtil.SafeUnpack(self.viewInfo[config].args))
+    self.viewInfo[config].isLoading = false
+end
 
-    self.ctrlInfo[config].isLoading = true
-    resourceManager.LoadPrefab(config.Path, function (go)
+---@param config UIConfigClass
+function UIManager:PreLoadView(config, ...)
+    if config.DestroyWhenUnload then
+        logError(string.format("%s 不能预加载", config.Name))
+    else
+        if not self.viewInfo[config] then
+            self.viewInfo[config] = {}
+        end
+        local uiView = coroutine.Do(ResourceManager.LuaLoadUI, nil, config.ID)
+        self.viewInfo[config].isLoaded = false
+        self:CreateView(config, uiView)
+    end
+end
 
-        local ctrlInfo = self.ctrlInfo[config]
-        ctrlInfo.isLoading = false
-        if IsNull(go) then
-            ctrlInfo.isLoaded = false
+---@publicsce
+---@param config UIConfigClass
+function UIManager:LoadView(config, ...)
+    if self.viewInfo[config] then
+        if self.viewInfo[config].isLoaded then
             return
         end
+    else
+        self.viewInfo[config] = {}
+    end
 
-        if not ctrlInfo.isLoaded then
-            if config.DestroyWhenUnload or ctrlInfo.destroy then
-                resourceManager.UnloadAssets(go)
-                return
-            else
-                CreateCtrl(self, config, go, false)
-                return
-            end
+    self.viewInfo[config].isLoaded = true
+    if self.viewInfo[config].isLoading then
+        self.viewInfo[config].args = LuaUtil.SafePack(...) return
+    else
+        self.viewInfo[config].isLoading = true
+        self.viewInfo[config].args = LuaUtil.SafePack(...)
+        local view = self.cacheView[config]
+        if view then
+            self:InnerLoadView(config) return
         end
+    end
 
-        local ctrl = CreateCtrl(self, config, go, true)
-        ctrl:Load(LuaUtil.SafeUnpack(self.ctrlInfo[config].args))
-        ctrlInfo.isLoaded = true
-        EventManager:Broadcast(EventNames.UI.LoadUI, config)
-    end)
-end
-
-function UIManager:UnLoadView(config, destroy)
-    local ctrlInfo = self.ctrlInfo[config]
-    if not ctrlInfo then return end
-    if ctrlInfo.isLoading then
-        ctrlInfo.destroy = destroy or false
-        ctrlInfo.isLoaded = false
+    local uiView = coroutine.Do(ResourceManager.LuaLoadUI, nil, config.ID)
+    local viewInfo = self.viewInfo[config]
+    if IsNull(uiView) then
+        logError(string.format("%s加载失败", config.Name))
+        viewInfo.isLoaded = false
         return
     end
 
-    local ctrl = self.loadedCtrl[config]
-    if ctrl then
-        if ctrlInfo.isLoaded then
-            ctrl:UnLoad()
-            ctrlInfo.isLoaded = false
-            EventManager:Broadcast(EventNames.UI.UnloadUI, config)
-        end
-        if config.DestroyWhenUnload or destroy then
-            ctrl:Delete()
-            self.loadedCtrl[config] = nil
+    if viewInfo.isLoaded then
+        self:CreateView(config, uiView)
+        self:InnerLoadView(config)
+        EventManager:Broadcast(EventNames.UI.LoadUI, config)
+    else
+        if viewInfo.destroy then
+            resourceManager.LuaUnLoadUI(config.Name)
+        else
+            self:CreateView(config, uiView)
         end
     end
 end
 
+---@private
+---@param config UIConfigClass
+function UIManager:InnerUnLoadView(config)
+    local view = self.cacheView[config]
+    if view then
+        local viewInfo = self.viewInfo[config]
+        view:UnLoad()
+        if self:IsInPopGroup(config)  then
+            local len = #self.popQueue
+            if self.popQueue[len] == config then
+                table.remove(self.popQueue, len)
+                if len > 1 then
+                    local lastConfig = self.popQueue[len - 1]
+                    local lastView = self.cacheView[lastConfig]
+                    lastView:Show(true)
+                    --if lastConfig.ShowMoneyBar then
+                    --    self:UnLoadView(UIConfig.CurrencyUI)
+                    --    self:LoadView(UIConfig.CurrencyUI, lastConfig)
+                    --else
+                    --    self:UnLoadView(UIConfig.CurrencyUI)
+                    --end
+                end
+            else
+                local index = 1
+                for i, v in ipairs(self.popQueue) do
+                    if v == config then index = i break end
+                end
+                table.remove(self.popQueue, index)
+            end
+        end
+
+        EventManager:Broadcast(EventNames.UI.UnloadUI, config)
+
+        if viewInfo.destroy then
+            view:Delete()
+            self.cacheView[config] = nil
+        end
+    end
+end
+
+---@param config UIConfigClass 关闭的UI
+---@param destroy boolean 是否关闭
+function UIManager:UnLoadView(config, destroy)
+    local viewInfo = self.viewInfo[config]
+    if not viewInfo then return end
+    viewInfo.destroy = destroy or config.DestroyWhenUnload
+    if viewInfo.isLoaded then
+        if not viewInfo.isLoading then
+            self:InnerUnLoadView(config)
+        end
+    elseif viewInfo.destroy then
+        local view = self.cacheView[config]
+        if view then
+            view:Delete()
+            self.cacheView[config] = nil
+        end
+    end
+    viewInfo.isLoaded = false
+end
+
+---@public
+---@param layer LayerGroup
+---@param destroy boolean 是否销毁界面(第一优先级)
 function UIManager:UnLoadViewByLayer(layer, destroy)
-    for config, info in pairs(self.ctrlInfo) do
+    for config, info in pairs(self.viewInfo) do
         if config.Layer == layer and not info.isLoading then
             self:UnLoadView(config, destroy)
         end
     end
 end
 
-function UIManager:UnLoadAllView(destroy)
-    for config, info in pairs(self.ctrlInfo) do
-        self:UnLoadView(config, destroy or false)
+---@public 此方法默认不销毁loading界面
+---@param destroy boolean 是否销毁界面(第一优先级)
+function UIManager:ClearAllUI()
+    self.popQueue = {}
+    for config, _ in pairs(self.viewInfo) do
+        if config.Layer ~= LayerGroup.Loading then
+            self:UnLoadView(config, true)
+        end
     end
+end
+
+function UIManager:dtor()
+    self:ClearAllUI()
+    self:UnLoadViewByLayer(LayerGroup.Loading, true)
 end
 
 return UIManager

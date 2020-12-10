@@ -81,29 +81,47 @@ using Game;
         typeof(UnityEngine.SceneManagement.SceneManager),
         
         // 其它
+        typeof(Application),
+        typeof(RuntimePlatform),
         typeof(PlayerPrefs),
         typeof(GC),
-
+        
 		//ui
 		//typeof(LoopListView),
   //      typeof(LoopListViewItem),
-        typeof(UIText),
+		//typeof(UIListView),
+		//typeof(UIListViewItem),
+		typeof(UIText),
         typeof(UIButton),
         typeof(UIToggle),
         typeof(UIInput),
         typeof(UIDropDown),
+        typeof(UIImage),
+        typeof(UIJoyStick),
 
 		//manager
 		typeof(InputManager),
         typeof(LoadManager),
         typeof(ResourceManager),
-        //typeof(NetPackageType),
-        typeof(TcpManager),
+		typeof(AtlasManager),
+		typeof(TcpManager),
+        typeof(MapManager),
 		//adapt
 		typeof(UIUtil),
         typeof(UIListener),
         typeof(CommonUtil),
-		typeof(GameUtil),
+		//typeof(GameUtil),
+
+        typeof(GameSettings),
+
+
+        //widget
+        typeof(CameraDrag),
+
+        //extensions
+         typeof(EventExtension),
+		 typeof(UIExtensions),
+		 typeof(TransformExtension),
 	};
 
         //C#静态调用Lua的配置（包括事件的原型），仅可以配delegate，interface

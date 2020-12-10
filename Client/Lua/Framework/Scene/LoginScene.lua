@@ -10,14 +10,13 @@ function LoginScene:OnCreate()
 end
 
 --预加载资源
-function LoginScene:OnPrepare(co)
+function LoginScene:OnPrepare()
     UIManager:LoadView(UIConfig.LoginUI)
-    coroutine.waituntil(co,function () return UIManager:IsViewOpen(UIConfig.LoginUI) end)
 end
 
-function LoginScene:OnEnter(co)
+function LoginScene:OnEnter()
     --打开登录界面
-    
+
 end
 
 function LoginScene:OnLeave()

@@ -29,7 +29,7 @@ local _pcall = {
 			status, err = pcall(self.func, self.obj, ...)
 		end	
 		if not status then
-			Logger.LogError(err.."\n"..traceback())
+			logError(err)
 		end
 		return status
 	end,

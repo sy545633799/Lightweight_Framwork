@@ -25,12 +25,27 @@ namespace XLua
 {
     public partial class LuaTable : LuaBase
     {
+		private IntPtr pointer;
+
         public LuaTable(int reference, LuaEnv luaenv) : base(reference, luaenv)
         {
-        }
+			pointer = LuaAPI.lua_topointer(luaEnv.L, -1);
+		}
 
-        // no boxing version get
-        public void Get<TKey, TValue>(TKey key, out TValue value)
+		public unsafe void SetInt(int key, int num)
+		{
+			RawLuaTable* table = (RawLuaTable*)pointer;
+			table->SetInt(key, num);
+		}
+
+		public unsafe void SetDouble(int key, double num)
+		{
+			RawLuaTable* table = (RawLuaTable*)pointer;
+			(*table).SetDouble(key, num);
+		}
+
+		// no boxing version get
+		public void Get<TKey, TValue>(TKey key, out TValue value)
         {
 #if THREAD_SAFE || HOTFIX_ENABLE
             lock (luaEnv.luaEnvLock)

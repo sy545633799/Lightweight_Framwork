@@ -21,8 +21,9 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(UnityEngine.UI.Slider);
-			Utils.BeginObjectRegister(type, L, translator, 0, 12, 9, 9);
+			Utils.BeginObjectRegister(type, L, translator, 0, 13, 9, 9);
 			
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetValueWithoutNotify", _m_SetValueWithoutNotify);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Rebuild", _m_Rebuild);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "LayoutComplete", _m_LayoutComplete);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GraphicUpdateComplete", _m_GraphicUpdateComplete);
@@ -83,6 +84,34 @@ namespace XLua.CSObjectWrap
         
         
         
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetValueWithoutNotify(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.UI.Slider gen_to_be_invoked = (UnityEngine.UI.Slider)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    float _input = (float)LuaAPI.lua_tonumber(L, 2);
+                    
+                    gen_to_be_invoked.SetValueWithoutNotify( _input );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _m_Rebuild(RealStatePtr L)

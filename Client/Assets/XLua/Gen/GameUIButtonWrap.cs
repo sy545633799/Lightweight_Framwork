@@ -21,20 +21,30 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(Game.UIButton);
-			Utils.BeginObjectRegister(type, L, translator, 0, 3, 5, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 5, 9, 4);
 			
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnPointerClick", _m_OnPointerClick);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnPointerDown", _m_OnPointerDown);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnPointerUp", _m_OnPointerUp);
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnDrag", _m_OnDrag);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnPointerEnter", _m_OnPointerEnter);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnPointerExit", _m_OnPointerExit);
 			
 			
-			Utils.RegisterFunc(L, Utils.GETTER_IDX, "onDown", _g_get_onDown);
+			Utils.RegisterFunc(L, Utils.GETTER_IDX, "onClick", _g_get_onClick);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "onDown", _g_get_onDown);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "onPress", _g_get_onPress);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "onUp", _g_get_onUp);
-            Utils.RegisterFunc(L, Utils.GETTER_IDX, "onDrag", _g_get_onDrag);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "ondoubleClick", _g_get_ondoubleClick);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "EnterClip", _g_get_EnterClip);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "ClickClip", _g_get_ClickClip);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "ExitClip", _g_get_ExitClip);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "AudioSource", _g_get_AudioSource);
             
-			
+			Utils.RegisterFunc(L, Utils.SETTER_IDX, "EnterClip", _s_set_EnterClip);
+            Utils.RegisterFunc(L, Utils.SETTER_IDX, "ClickClip", _s_set_ClickClip);
+            Utils.RegisterFunc(L, Utils.SETTER_IDX, "ExitClip", _s_set_ExitClip);
+            Utils.RegisterFunc(L, Utils.SETTER_IDX, "AudioSource", _s_set_AudioSource);
+            
 			
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
@@ -78,6 +88,34 @@ namespace XLua.CSObjectWrap
         
         
         
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_OnPointerClick(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                Game.UIButton gen_to_be_invoked = (Game.UIButton)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    UnityEngine.EventSystems.PointerEventData _eventData = (UnityEngine.EventSystems.PointerEventData)translator.GetObject(L, 2, typeof(UnityEngine.EventSystems.PointerEventData));
+                    
+                    gen_to_be_invoked.OnPointerClick( _eventData );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _m_OnPointerDown(RealStatePtr L)
@@ -136,7 +174,7 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_OnDrag(RealStatePtr L)
+        static int _m_OnPointerEnter(RealStatePtr L)
         {
 		    try {
             
@@ -150,7 +188,35 @@ namespace XLua.CSObjectWrap
                 {
                     UnityEngine.EventSystems.PointerEventData _eventData = (UnityEngine.EventSystems.PointerEventData)translator.GetObject(L, 2, typeof(UnityEngine.EventSystems.PointerEventData));
                     
-                    gen_to_be_invoked.OnDrag( _eventData );
+                    gen_to_be_invoked.OnPointerEnter( _eventData );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_OnPointerExit(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                Game.UIButton gen_to_be_invoked = (Game.UIButton)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    UnityEngine.EventSystems.PointerEventData _eventData = (UnityEngine.EventSystems.PointerEventData)translator.GetObject(L, 2, typeof(UnityEngine.EventSystems.PointerEventData));
+                    
+                    gen_to_be_invoked.OnPointerExit( _eventData );
                     
                     
                     
@@ -165,6 +231,20 @@ namespace XLua.CSObjectWrap
         
         
         
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_onClick(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                Game.UIButton gen_to_be_invoked = (Game.UIButton)translator.FastGetCSObj(L, 1);
+                translator.Push(L, gen_to_be_invoked.onClick);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _g_get_onDown(RealStatePtr L)
@@ -209,20 +289,6 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _g_get_onDrag(RealStatePtr L)
-        {
-		    try {
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-			
-                Game.UIButton gen_to_be_invoked = (Game.UIButton)translator.FastGetCSObj(L, 1);
-                translator.Push(L, gen_to_be_invoked.onDrag);
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            return 1;
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _g_get_ondoubleClick(RealStatePtr L)
         {
 		    try {
@@ -236,7 +302,123 @@ namespace XLua.CSObjectWrap
             return 1;
         }
         
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_EnterClip(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                Game.UIButton gen_to_be_invoked = (Game.UIButton)translator.FastGetCSObj(L, 1);
+                translator.Push(L, gen_to_be_invoked.EnterClip);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
         
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_ClickClip(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                Game.UIButton gen_to_be_invoked = (Game.UIButton)translator.FastGetCSObj(L, 1);
+                translator.Push(L, gen_to_be_invoked.ClickClip);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_ExitClip(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                Game.UIButton gen_to_be_invoked = (Game.UIButton)translator.FastGetCSObj(L, 1);
+                translator.Push(L, gen_to_be_invoked.ExitClip);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_AudioSource(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                Game.UIButton gen_to_be_invoked = (Game.UIButton)translator.FastGetCSObj(L, 1);
+                translator.Push(L, gen_to_be_invoked.AudioSource);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
+        
+        
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_EnterClip(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                Game.UIButton gen_to_be_invoked = (Game.UIButton)translator.FastGetCSObj(L, 1);
+                gen_to_be_invoked.EnterClip = (UnityEngine.AudioClip)translator.GetObject(L, 2, typeof(UnityEngine.AudioClip));
+            
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 0;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_ClickClip(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                Game.UIButton gen_to_be_invoked = (Game.UIButton)translator.FastGetCSObj(L, 1);
+                gen_to_be_invoked.ClickClip = (UnityEngine.AudioClip)translator.GetObject(L, 2, typeof(UnityEngine.AudioClip));
+            
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 0;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_ExitClip(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                Game.UIButton gen_to_be_invoked = (Game.UIButton)translator.FastGetCSObj(L, 1);
+                gen_to_be_invoked.ExitClip = (UnityEngine.AudioClip)translator.GetObject(L, 2, typeof(UnityEngine.AudioClip));
+            
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 0;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_AudioSource(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                Game.UIButton gen_to_be_invoked = (Game.UIButton)translator.FastGetCSObj(L, 1);
+                gen_to_be_invoked.AudioSource = (UnityEngine.AudioSource)translator.GetObject(L, 2, typeof(UnityEngine.AudioSource));
+            
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 0;
+        }
         
 		
 		

@@ -10,7 +10,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using ModestTree.Util;
 
 namespace Game
 {
@@ -318,65 +317,65 @@ namespace Game
 					yield return a;
 		}
 
-		public static IEnumerable When(Func<bool> cond, IEnumerable whenTrue, IEnumerable whenFalse = null, Func<bool> stopCond = null)
-		{
-			whenFalse = whenFalse != null ?
-				whenFalse :
-				KeepDoing(Nothing);
+		//public static IEnumerable When(Func<bool> cond, IEnumerable whenTrue, IEnumerable whenFalse = null, Func<bool> stopCond = null)
+		//{
+		//	whenFalse = whenFalse != null ?
+		//		whenFalse :
+		//		KeepDoing(Nothing);
 
-			return SimpleStateMachine(stopCond,
-				ValuePair.New(cond, whenTrue),
-				ValuePair.New(Not(cond), whenFalse)
-			);
-		}
+		//	return SimpleStateMachine(stopCond,
+		//		ValuePair.New(cond, whenTrue),
+		//		ValuePair.New(Not(cond), whenFalse)
+		//	);
+		//}
 
-		public static IEnumerable When(Func<bool> cond, System.Action whenTrue, System.Action whenFalse = null, Func<bool> stopCond = null)
-		{
-			whenFalse = whenFalse != null ?
-				whenFalse :
-				Nothing;
+		//public static IEnumerable When(Func<bool> cond, System.Action whenTrue, System.Action whenFalse = null, Func<bool> stopCond = null)
+		//{
+		//	whenFalse = whenFalse != null ?
+		//		whenFalse :
+		//		Nothing;
 
-			return When(cond, KeepDoing(whenTrue), KeepDoing(whenFalse), stopCond);
-		}
+		//	return When(cond, KeepDoing(whenTrue), KeepDoing(whenFalse), stopCond);
+		//}
 
-		public static IEnumerable When(this IEnumerable e, Func<bool> cond, System.Action whenTrue, System.Action whenFalse = null, Func<bool> stopCond = null)
-		{
-			return e.Then(When(cond, whenTrue, whenFalse, stopCond));
-		}
-		public static IEnumerable When(this IEnumerable e, Func<bool> cond, IEnumerable whenTrue, IEnumerable whenFalse = null, Func<bool> stopCond = null)
-		{
-			return e.Then(When(cond, whenTrue, whenFalse, stopCond));
-		}
+		//public static IEnumerable When(this IEnumerable e, Func<bool> cond, System.Action whenTrue, System.Action whenFalse = null, Func<bool> stopCond = null)
+		//{
+		//	return e.Then(When(cond, whenTrue, whenFalse, stopCond));
+		//}
+		//public static IEnumerable When(this IEnumerable e, Func<bool> cond, IEnumerable whenTrue, IEnumerable whenFalse = null, Func<bool> stopCond = null)
+		//{
+		//	return e.Then(When(cond, whenTrue, whenFalse, stopCond));
+		//}
 
-		public static IEnumerable SimpleStateMachine(Func<bool> stopCond, params ValuePair<Func<bool>, IEnumerable>[] states)
-		{
-			var enums = states.Select(s => new
-			{
-				cond = s.First,
-				enu = s.Second.GetEnumerator()
-			})
-			.ToList();
+		//public static IEnumerable SimpleStateMachine(Func<bool> stopCond, params ValuePair<Func<bool>, IEnumerable>[] states)
+		//{
+		//	var enums = states.Select(s => new
+		//	{
+		//		cond = s.First,
+		//		enu = s.Second.GetEnumerator()
+		//	})
+		//	.ToList();
 
-			while (stopCond == null || !stopCond())
-			{
-				var current = enums.FirstOrDefault(state => state.cond());
+		//	while (stopCond == null || !stopCond())
+		//	{
+		//		var current = enums.FirstOrDefault(state => state.cond());
 
-				if (current != null)
-				{
-					current.enu.MoveNext();
-					yield return current.enu.Current;
-				}
-				else
-				{
-					yield break;
-				}
-			}
-		}
+		//		if (current != null)
+		//		{
+		//			current.enu.MoveNext();
+		//			yield return current.enu.Current;
+		//		}
+		//		else
+		//		{
+		//			yield break;
+		//		}
+		//	}
+		//}
 
-		public static IEnumerable SimpleStateMachine(params ValuePair<Func<bool>, IEnumerable>[] states)
-		{
-			return SimpleStateMachine(null, states);
-		}
+		//public static IEnumerable SimpleStateMachine(params ValuePair<Func<bool>, IEnumerable>[] states)
+		//{
+		//	return SimpleStateMachine(null, states);
+		//}
 		public static IEnumerable CatchError<E>(this IEnumerable e, Action<E> errorHandler) where E : Exception
 		{
 			var enu = e.GetEnumerator();

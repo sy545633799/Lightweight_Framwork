@@ -46,7 +46,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4512234091854539125}
   - component: {fileID: 3246929381000637120}
-  - component: {fileID: 7377127918814622073}
+  - component: {fileID: 6984933486331012304}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -81,7 +81,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1809046401855034171}
   m_CullTransparentMesh: 0
---- !u!114 &7377127918814622073
+--- !u!114 &6984933486331012304
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -90,17 +90,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1809046401855034171}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 304298126b6b0e34ab18103fb2795f91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
@@ -110,6 +109,9 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+  Empty: 0
+  Collider2D: {fileID: 0}
 --- !u!1 &2228891973315241619
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,8 +121,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3661333591858327479}
-  - component: {fileID: 4072570758737534010}
-  - component: {fileID: 6552076341392714826}
+  - component: {fileID: 256638466591633738}
+  - component: {fileID: 4339118857628279646}
+  - component: {fileID: 1398820708201865787}
+  - component: {fileID: 8467137285709532751}
   m_Layer: 5
   m_Name: LoadingUI
   m_TagString: Untagged
@@ -137,7 +141,7 @@ RectTransform:
   m_GameObject: {fileID: 2228891973315241619}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 7360854386165544162}
   m_Father: {fileID: 0}
@@ -148,15 +152,40 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &4072570758737534010
-CanvasRenderer:
+--- !u!223 &256638466591633738
+Canvas:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2228891973315241619}
-  m_CullTransparentMesh: 0
---- !u!114 &6552076341392714826
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 1
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_SortingLayerID: 422437347
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!225 &4339118857628279646
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2228891973315241619}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &1398820708201865787
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -165,26 +194,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 2228891973315241619}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: eb933809a72f3a3439cb12c3664051be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 32
+--- !u!114 &8467137285709532751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2228891973315241619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6567e9681d40484b93c41914bf35817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ViewType: 0
+  canvasGroup: {fileID: 4339118857628279646}
+  behaviours:
+  - {fileID: 8539874930091898258}
+  names:
+  - slider_progress
+  LayerIndex: 9
+  ShowMoneyBar: 0
+  IsTransParent: 0
+  DestroyOnUnload: 1
+  SceneName: 
 --- !u!1 &5224540497460649600
 GameObject:
   m_ObjectHideFlags: 0
@@ -194,7 +234,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7360854386165544162}
-  - component: {fileID: 5789732631951358834}
+  - component: {fileID: 8539874930091898258}
   m_Layer: 5
   m_Name: (Slider)progress
   m_TagString: Untagged
@@ -224,7 +264,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 55}
   m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &5789732631951358834
+--- !u!114 &8539874930091898258
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -233,7 +273,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5224540497460649600}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -113659843, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 130f9b42d8b13e6439e172590bb0a51e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -247,20 +287,23 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
+    m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 5757476391950528972}
+  m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 2702387676574498480}
   m_HandleRect: {fileID: 6850549154124469005}
   m_Direction: 0
@@ -271,8 +314,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!1 &8151026559590081521
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,7 +360,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2702387676574498480}
   - component: {fileID: 1329038785559444972}
-  - component: {fileID: 4802425355183061680}
+  - component: {fileID: 1759824164693675133}
   m_Layer: 5
   m_Name: Fill
   m_TagString: Untagged
@@ -354,7 +395,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8424166369699641449}
   m_CullTransparentMesh: 0
---- !u!114 &4802425355183061680
+--- !u!114 &1759824164693675133
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -363,17 +404,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 8424166369699641449}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 304298126b6b0e34ab18103fb2795f91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
@@ -383,6 +423,9 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+  Empty: 0
+  Collider2D: {fileID: 0}
 --- !u!1 &8889126967296930431
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,7 +436,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6850549154124469005}
   - component: {fileID: 8114906669297345337}
-  - component: {fileID: 5757476391950528972}
+  - component: {fileID: 6952656753629249408}
   m_Layer: 5
   m_Name: Handle
   m_TagString: Untagged
@@ -428,7 +471,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8889126967296930431}
   m_CullTransparentMesh: 0
---- !u!114 &5757476391950528972
+--- !u!114 &6952656753629249408
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -437,17 +480,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 8889126967296930431}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 304298126b6b0e34ab18103fb2795f91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 0
   m_PreserveAspect: 0
@@ -457,3 +499,6 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+  Empty: 0
+  Collider2D: {fileID: 0}

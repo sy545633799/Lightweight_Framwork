@@ -21,8 +21,9 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(Game.UIDropDown);
-			Utils.BeginObjectRegister(type, L, translator, 0, 0, 0, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 1, 0, 0);
 			
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnPointerClick", _m_OnPointerClick);
 			
 			
 			
@@ -70,6 +71,34 @@ namespace XLua.CSObjectWrap
         
         
         
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_OnPointerClick(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                Game.UIDropDown gen_to_be_invoked = (Game.UIDropDown)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    UnityEngine.EventSystems.PointerEventData _eventData = (UnityEngine.EventSystems.PointerEventData)translator.GetObject(L, 2, typeof(UnityEngine.EventSystems.PointerEventData));
+                    
+                    gen_to_be_invoked.OnPointerClick( _eventData );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
         
         
         

@@ -2,6 +2,39 @@
 
 <linker>
 
+	<assembly fullname="Assembly-CSharp">
+	    <type fullname="XluaTest" preserve="all"/>
+		<type fullname="XLua.BinaryWriterExtentions" preserve="all"/>
+		<type fullname="XLua.UnityEngineObjectExtention" preserve="all"/>
+		<type fullname="XLua.XLuaHelper" preserve="all"/>
+		<type fullname="Game.LoggerHelper" preserve="all"/>
+		<type fullname="Game.GameUtility" preserve="all"/>
+		<type fullname="Game.XLuaManager" preserve="all"/>
+		<type fullname="Game.LuaBehaviour" preserve="all"/>
+		<type fullname="Game.UIText" preserve="all"/>
+		<type fullname="Game.UIButton" preserve="all"/>
+		<type fullname="Game.UIToggle" preserve="all"/>
+		<type fullname="Game.UIInput" preserve="all"/>
+		<type fullname="Game.UIDropDown" preserve="all"/>
+		<type fullname="Game.UIImage" preserve="all"/>
+		<type fullname="Game.UIJoyStick" preserve="all"/>
+		<type fullname="Game.InputManager" preserve="all"/>
+		<type fullname="Game.LoadManager" preserve="all"/>
+		<type fullname="Game.ResourceManager" preserve="all"/>
+		<type fullname="Game.AtlasManager" preserve="all"/>
+		<type fullname="Game.TcpManager" preserve="all"/>
+		<type fullname="Game.MapManager" preserve="all"/>
+		<type fullname="Game.UIUtil" preserve="all"/>
+		<type fullname="Game.UIListener" preserve="all"/>
+		<type fullname="Game.CommonUtil" preserve="all"/>
+		<type fullname="Game.GameSettings" preserve="all"/>
+		<type fullname="Game.CameraDrag" preserve="all"/>
+		<type fullname="Game.EventExtension" preserve="all"/>
+		<type fullname="Game.UIExtensions" preserve="all"/>
+		<type fullname="Game.TransformExtension" preserve="all"/>
+		
+	</assembly>
+
 	<assembly fullname="mscorlib">
 	    <type fullname="System.IO.BinaryWriter" preserve="all"/>
 		<type fullname="System.Array" preserve="all"/>
@@ -16,34 +49,8 @@
 		
 	</assembly>
 
-	<assembly fullname="Assembly-CSharp">
-	    <type fullname="XLua.BinaryWriterExtentions" preserve="all"/>
-		<type fullname="XLua.UnityEngineObjectExtention" preserve="all"/>
-		<type fullname="XLua.XLuaHelper" preserve="all"/>
-		<type fullname="Game.LoggerHelper" preserve="all"/>
-		<type fullname="Game.GameUtility" preserve="all"/>
-		<type fullname="Game.XLuaManager" preserve="all"/>
-		<type fullname="Game.UIText" preserve="all"/>
-		<type fullname="Game.UIButton" preserve="all"/>
-		<type fullname="Game.UIToggle" preserve="all"/>
-		<type fullname="Game.UIInput" preserve="all"/>
-		<type fullname="Game.UIDropDown" preserve="all"/>
-		<type fullname="Game.InputManager" preserve="all"/>
-		<type fullname="Game.LoadManager" preserve="all"/>
-		<type fullname="Game.ResourceManager" preserve="all"/>
-		<type fullname="Game.TcpManager" preserve="all"/>
-		<type fullname="Game.UIUtil" preserve="all"/>
-		<type fullname="Game.UIListener" preserve="all"/>
-		<type fullname="Game.CommonUtil" preserve="all"/>
-		<type fullname="Game.GameUtil" preserve="all"/>
-		
-	</assembly>
-
 	<assembly fullname="UnityEngine.CoreModule">
-	    <type fullname="UnityEngine.WaitForSeconds" preserve="all"/>
-		<type fullname="UnityEngine.WaitForEndOfFrame" preserve="all"/>
-		<type fullname="UnityEngine.WaitForFixedUpdate" preserve="all"/>
-		<type fullname="UnityEngine.Object" preserve="all"/>
+	    <type fullname="UnityEngine.Object" preserve="all"/>
 		<type fullname="UnityEngine.Component" preserve="all"/>
 		<type fullname="UnityEngine.Ray2D" preserve="all"/>
 		<type fullname="UnityEngine.GameObject" preserve="all"/>
@@ -66,8 +73,6 @@
 		<type fullname="UnityEngine.Quaternion" preserve="all"/>
 		<type fullname="UnityEngine.Ray" preserve="all"/>
 		<type fullname="UnityEngine.Time" preserve="all"/>
-		<type fullname="UnityEngine.Touch" preserve="all"/>
-		<type fullname="UnityEngine.TouchPhase" preserve="all"/>
 		<type fullname="UnityEngine.Vector2" preserve="all"/>
 		<type fullname="UnityEngine.Vector3" preserve="all"/>
 		<type fullname="UnityEngine.Vector4" preserve="all"/>
@@ -77,6 +82,8 @@
 		<type fullname="UnityEngine.Sprite" preserve="all"/>
 		<type fullname="UnityEngine.ResourceRequest" preserve="all"/>
 		<type fullname="UnityEngine.SceneManagement.SceneManager" preserve="all"/>
+		<type fullname="UnityEngine.Application" preserve="all"/>
+		<type fullname="UnityEngine.RuntimePlatform" preserve="all"/>
 		<type fullname="UnityEngine.PlayerPrefs" preserve="all"/>
 		
 	</assembly>
@@ -93,6 +100,12 @@
 
 	<assembly fullname="UnityEngine.PhysicsModule">
 	    <type fullname="UnityEngine.RaycastHit" preserve="all"/>
+		
+	</assembly>
+
+	<assembly fullname="UnityEngine.InputLegacyModule">
+	    <type fullname="UnityEngine.Touch" preserve="all"/>
+		<type fullname="UnityEngine.TouchPhase" preserve="all"/>
 		
 	</assembly>
 

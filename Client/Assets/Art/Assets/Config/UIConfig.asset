@@ -1,0 +1,114 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcc66fc347e1ec34e98c06844ca418d9, type: 3}
+  m_Name: UIConfig
+  m_EditorClassIdentifier: 
+  Configs:
+  - ID: 1602468823
+    Name: LoginUI
+    Path: Assets/Art/UI/Login/LoginUI.prefab
+    SceneName: 
+    AtlasNames: []
+  - ID: 1602478039
+    Name: BattleUI
+    Path: Assets/Art/UI/Battle/BattleUI.prefab
+    SceneName: 
+    AtlasNames:
+    - Common
+  - ID: 1602478061
+    Name: ChapterUI
+    Path: Assets/Art/UI/Chapter/ChapterUI.prefab
+    SceneName: 
+    AtlasNames: []
+  - ID: 1602478079
+    Name: HomeUI
+    Path: Assets/Art/UI/Home/HomeUI.prefab
+    SceneName: 
+    AtlasNames:
+    - Qualty
+    - Item
+    - Equip
+    - Attrib
+    - Common
+    - Skill
+    - Head
+    - HeadFrame
+    - Home
+    - Texture
+  - ID: 1602478188
+    Name: RegisterUI
+    Path: Assets/Art/UI/Register/RegisterUI.prefab
+    SceneName: 
+    AtlasNames: []
+  - ID: 1602478219
+    Name: SettingUI
+    Path: Assets/Art/UI/Setting/SettingUI.prefab
+    SceneName: 
+    AtlasNames: []
+  - ID: 1602478556
+    Name: LoadingUI
+    Path: Assets/Art/UI/Loading/LoadingUI.prefab
+    SceneName: 
+    AtlasNames: []
+  - ID: 1604046474
+    Name: 
+    Path: Assets/Art/UI/Test/TestTabUI.prefab
+    SceneName: 
+    AtlasNames:
+    - Common
+    - Home
+    - Texture
+  - ID: 1604052821
+    Name: 
+    Path: Assets/Art/UI/NewUI/NewUI.prefab
+    SceneName: 
+    AtlasNames: []
+  - ID: 1605401762
+    Name: 
+    Path: Assets/Art/UI/Home/HomeUI.prefab
+    SceneName: 
+    AtlasNames:
+    - HeadFrame
+    - Head
+    - Home
+    - Common
+    - Texture
+  - ID: 1605402054
+    Name: 
+    Path: Assets/Art/UI/Home/HomeUI.prefab
+    SceneName: 
+    AtlasNames:
+    - HeadFrame
+    - Head
+    - Home
+    - Common
+    - Texture
+  - ID: 1605402338
+    Name: 
+    Path: Assets/Art/UI/Home/HomeUI.prefab
+    SceneName: 
+    AtlasNames:
+    - HeadFrame
+    - Head
+    - Home
+    - Common
+    - Texture
+  - ID: 1605402393
+    Name: 
+    Path: Assets/Art/UI/Home/HomeUI.prefab
+    SceneName: 
+    AtlasNames:
+    - HeadFrame
+    - Head
+    - Home
+    - Common
+    - Texture

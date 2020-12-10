@@ -1,42 +1,36 @@
 // ========================================================
 // des：
-// author: 
+// author: shenyi
 // time：2020-05-01 14:04:46
 // version：1.0
 // ========================================================
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
-using Zenject;
+using UnityEngine.UI;
 
 namespace Game {
 
-	public class LaunchUI : IInitializable, IDisposable, ITickable
+	public class LaunchUI
 	{
-		private readonly SignalBus _signalBus;
-		private GameObject mLauchUI;
-
-		public LaunchUI(SignalBus signalBus)
+		private static GameObject mLauchUI;
+		private static Slider mProcess;
+		public static async Task Init()
 		{
-			_signalBus = signalBus;
-		}
-
-		public void Initialize()
-		{
-			mLauchUI = GameObject.Find("Canvas/Loading/LaunchUI");
+			mLauchUI = GameObject.Find("UIRoot/LaunchUI");
+			mProcess = mLauchUI.transform.Find("Root/Process").GetComponent<Slider>();
 			mLauchUI.SetActive(true);
-			_signalBus.Subscribe<LoadSceneStartSignal>(Dispose);
 		}
 
-		public void Dispose()
+		public static void ShowProcess(float process)
 		{
-			GameObject.Destroy(mLauchUI); 
+			mProcess.value = process;
 		}
-
-		public void Tick()
+		
+		public static void Dispose()
 		{
+			if (mLauchUI)
+				GameObject.Destroy(mLauchUI);
 
 		}
 	}

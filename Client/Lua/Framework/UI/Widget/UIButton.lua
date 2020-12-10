@@ -1,30 +1,95 @@
 ---@class UIButton:UIContent
 UIButton = BaseClass("UIButton", UIContent)
--- 创建
-function UIButton:OnCreate(btn)
+
+---@public 创建
+function UIButton:ctor(component)
 	---@type Game.UIButton
-	self.unity_uibutton = btn
+	self.component = component
+	self.click_map = {}
 end
 
--- 虚拟点击
-function UIButton:Click(self)
-	if self.__onclick  ~= nil then
-		self.__onclick()
+---@public 虚拟点击
+function UIButton:Click()
+	for _, func in pairs(self.click_map) do func() end
+end
+
+---@public 设置回调
+function UIButton:AddClick(callback, handle, ...)
+	local args = LuaUtil.SafePack(...)
+	local func = function()
+		coroutine.start(function()
+			if handle then
+				callback(handle, LuaUtil.SafeUnpack(args))
+			else
+				callback(LuaUtil.SafeUnpack(args))
+			end
+		end)
+	end
+	self.click_map[callback] = func
+	self.component.onClick:AddListener(func)
+end
+
+---@public 设置回调
+function UIButton:AddDown(callback, handle, ...)
+	local args = LuaUtil.SafePack(...)
+	local func = function()
+		coroutine.start(function()
+			if handle then
+				callback(handle, LuaUtil.SafeUnpack(args))
+			else
+				callback(LuaUtil.SafeUnpack(args))
+			end
+		end)
+	end
+	self.click_map[callback] = func
+	self.component.onDown:AddListener(func)
+end
+
+---@public 设置回调
+function UIButton:AddPress(callback, handle, ...)
+	local args = LuaUtil.SafePack(...)
+	local func = function()
+		coroutine.start(function()
+			if handle then
+				callback(handle, LuaUtil.SafeUnpack(args))
+			else
+				callback(LuaUtil.SafeUnpack(args))
+			end
+
+		end)
+	end
+	self.click_map[callback] = func
+	self.component.onPress:AddListener(func)
+end
+
+---@public 设置回调
+function UIButton:AddUP(callback, handle, ...)
+	local args = LuaUtil.SafePack(...)
+	local func = function()
+		coroutine.start(function()
+			if handle then
+				callback(handle, LuaUtil.SafeUnpack(args))
+			else
+				callback(LuaUtil.SafeUnpack(args))
+			end
+
+		end)
+	end
+	self.click_map[callback] = func
+	self.component.onUp:AddListener(func)
+end
+
+function UIButton:RemoveClick(callback)
+	local func = self.click_map[callback]
+	if func then
+		self.component.onClick:RemoveListener(func)
+		self.click_map[callback] = nil
 	end
 end
 
--- 设置回调
-function UIButton:AddClick(callback)
-	self.__onclick = callback
-	self.unity_uibutton.onClick:AddListener(self.__onclick)
-end
-
-function UIButton:RmoveClick(callback)
-	self.unity_uibutton.onClick:RemoveListener(self.__onclick)
-end
-
-function UIButton:RmoveAllClick()
-	self.unity_uibutton.onClick:RemoveAllListeners()
+function UIButton:RemoveAllClick()
+	self.click_map = {}
+	self.component.onClick:RemoveAllListeners()
 end
 
 function UIButton:SetInteractable(enabled)
@@ -44,8 +109,6 @@ function UIButton:SetInteractable(enabled)
 	--MDUIUtil:SetPicGray(img, not enabled)
 end
 
--- 资源释放
-function UIButton:OnDestroy()
-	self.__onclick = nil
-	self:RmoveAllClick()
+function UIButton:dtor()
+	self:RemoveAllClick()
 end

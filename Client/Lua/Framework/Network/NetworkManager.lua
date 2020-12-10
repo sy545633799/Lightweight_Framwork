@@ -3,7 +3,7 @@
 --- DateTime: 2020/6/26
 
 local sproto = require "Framework.Network.Sproto.sproto"
-local core = require "sproto.core"
+--local core = require "sproto.core"
 local sprotoparser = require "Framework.Network.Sproto.sprotoparser"
 local c2s = require "Framework.Network.Proto.protoc2s"
 local s2c = require "Framework.Network.Proto.protos2c"
@@ -43,7 +43,6 @@ function NetworkManager:ctor()
     tcpManager.onReceiveMsgCallBack = function(bytes) self:OnReceiveMsgCallBack(bytes) end
 end
 
---卡牌
 function NetworkManager:Login(ip, loginport, gameport, server, account)
     if self.loginLock then log("已登录或正在登陆中") return end
 
@@ -92,28 +91,37 @@ function NetworkManager:OnDisConnectCallBack(bytes)
         end
     end
     self.loginLock = false
+    self.handshakeSucess = false
+    --if SceneManager.current_config ~= SceneConfig.LoginScene then
+    --    coroutine.start(function () LoginController:Disconnect() end)
+    --end
 end
 
 ---注册服务器单方向客户端发送的信息
-function NetworkManager:RegSrvReqHandler(protoName, handler)
+function NetworkManager:RegSrvReqHandler(protoName, callback, handle)
     assert(type(protoName) == "string")
-    assert(type(handler) == "function")
-    self.srvReqHandler[protoName] = handler
+    assert(type(callback) == "function")
+    self.srvReqHandler[protoName] = { callback = callback, handle = handle}
 end
 
 ---客户端主动向服务器发送请求
-function NetworkManager:SendRequest(protoName, args, callback)
-    self.session = self.session + 1
-    if callback then
-        self.sessionId2CBs[self.session] = callback
-    end
-    local str = self.sproto_request(protoName, args, self.session)
+function NetworkManager:SendMessage(protoName, args)
+    local str = self.sproto_request(protoName, args or {}, 0)
     tcpManager.SendBytes(str)
+end
+
+function NetworkManager:SendRequest(protoName, args)
+    self.session = self.session + 1
+    self.sessionId2CBs[self.session] = coroutine.running()
+    local str = self.sproto_request(protoName, args or {}, self.session)
+    tcpManager.SendBytes(str)
+    return coroutine.yield()
 end
 
 ---登录验证阶段
 function NetworkManager:OnReceiveLineCallBack(bytes)
     local code = tostring(bytes)
+
     --log('Cat:LoginController.lua[145] code|'..code.."|login state:"..self.login_state)
     if self.login_state == LoginConst.WaitForLoginServerChanllenge then
         self.challenge = crypt.base64decode(code)
@@ -144,7 +152,7 @@ function NetworkManager:OnReceiveLineCallBack(bytes)
             self:Close()
             tcpManager.Connect(self.ip, self.gameport, CS.Game.NetPackageType.BaseHead)
         else
-            logError('Cat:LoginController.lua[147] self.error_map[result]' .. (Error_Map[result] or "未知错误"))
+            error('Cat:LoginController.lua[147] self.error_map[result]' .. (Error_Map[result] or "未知错误"))
         end
     end
 end
@@ -156,30 +164,27 @@ function NetworkManager:OnReceiveMsgCallBack(bytes)
         if tonumber(result) == 200 then
             self.handshakeSucess = true
             log("与游戏服务器握手成功")
-            self:SendRequest("req_register", { nickname = "test111"})
-            SceneManager:SwitchScene(SceneConfig.HomeScene)
+            PlayerPrefs.SetString("Account", self.account)
+            coroutine.start(function () LoginController:HandSucess() end)
         else
             logError("与游戏服务器握手失败:" .. result)
         end
     else
         local type, session, args = self.sproto_host:dispatch(bytes)
-        print(tostring(args))
         if type =="REQUEST" then
             local handler = self.srvReqHandler[session]
             if handler then
-                handler(args)
+                coroutine.start(function () if handler then handler(handler.handler, args) else handler(args) end end)
             end
         else
-            local callback = self.sessionId2CBs[session]
-            if callback then
-                callback(args)
-                self.sessionId2CBs[session] = nil
-            end
+            local co = self.sessionId2CBs[session]
+            coroutine.resumeex(co, args)
+            self.sessionId2CBs[session] = nil
         end
     end
 end
 
-function NetworkManager:Dispose()
+function NetworkManager:dtor()
     tcpManager.onConnectCallBack = nil
     tcpManager.onDisConnectCallBack = nil
     tcpManager.onReceiveLineCallBack = nil

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Game
 {
@@ -49,14 +50,13 @@ namespace Game
             obj.transform.localScale = new Vector3(x, y, z);
         }
 
-        public static void SetParent(GameObject parent, GameObject child)
-        {
-            child.transform.SetParent(parent.transform);
-            child.transform.localPosition = Vector3.zero;
-            child.transform.localRotation = Quaternion.identity;
-            child.transform.localScale = Vector3.one;
-        }
-
+        //public static void SetParent(GameObject parent, GameObject child)
+        //{
+        //    child.transform.SetParent(parent.transform);
+        //    child.transform.localPosition = Vector3.zero;
+        //    child.transform.localRotation = Quaternion.identity;
+        //    child.transform.localScale = Vector3.one;
+        //}
 
 		public static void SetAsLastSibling(GameObject go)
 		{
@@ -154,6 +154,49 @@ namespace Game
         {
             return trans.FindComponent<Animation>(path);
         }
-    }
+
+		/// <summary>
+		/// 游戏点击事件 0 无点击 1 点击UI上 2 点击在地面上 3 点击不在地面 不在场景上
+		/// 使用射线只有在寻路网格上点击才有效
+		/// </summary>
+		public static int IsPointerOnUI()
+		{
+#if !UNITY_EDITOR && (UNITY_IPHONE || UNITY_IOS || UNITY_ANDROID)
+        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)
+#else
+			if (Input.GetMouseButton(0))
+#endif
+			{
+				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				RaycastHit hit;
+				if (Physics.Raycast(ray, out hit))
+				{
+
+#if !UNITY_EDITOR && (UNITY_IPHONE || UNITY_IOS || UNITY_ANDROID)
+                    if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+#else
+					if (EventSystem.current.IsPointerOverGameObject())
+#endif
+					{
+						return 1;
+					}
+					else
+					{
+						if (hit.collider.CompareTag("TerrainGeometry"))
+						{
+							return 2;
+						}
+						else
+						{
+							return 3;
+						}
+					}
+				}
+				return 1;
+
+			}
+			return 0;
+		}
+	}
 
 }

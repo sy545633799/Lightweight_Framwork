@@ -1,3 +1,0 @@
-------------------------------------auto gen--------------------------------------------
-UIConfig.LoginUI = { Name = "LoginUI", Path = "UI/Login/LoginUI.prefab", View = "Logic/UI/View/LoginUI", Ctrl = "Logic/UI/Controller/Login/LoginUICtrl", Layer = LayerGroup.Pop,  DestroyWhenUnload = true}
-UIConfig.LoadingUI = { Name = "LoadingUI", Path = "UI/Loading/LoadingUI.prefab", View = "Logic/UI/View/LoadingUI", Ctrl = "Logic/UI/Controller/Loading/LoadingUICtrl", Layer = LayerGroup.Loading,  DestroyWhenUnload = true}

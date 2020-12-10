@@ -6,22 +6,29 @@ local base = require "Framework.Scene.BaseScene"
 local HomeScene = BaseClass("HomeScene", base)
 
 function HomeScene:OnCreate()
-    
-end
-
---预加载资源
-function HomeScene:OnPrepare(co)
 
 end
 
-function HomeScene:OnEnter(co)
+function HomeScene:OnPrepare()
+    --MapManager.LoadMap("Map/Map001/Map001.prefab", 1, function (index)
+    --    local chapters = ChapterModel.Chapters[index]
+    --    if not chapters then
+    --        logError(string.format("找不到章节信息:%d", index))
+    --        return
+    --    end
+    --    coroutine.start(function () UIManager:LoadView(UIConfig.ChapterUI, index) end)
+    --end)
+    --UIManager:LoadView(UIConfig.HomeUI)
+    UIManager:LoadView(UIConfig.BattleUI)
+end
 
-    print("enter home")
+function HomeScene:OnEnter()
+
 
 end
 
 function HomeScene:OnLeave()
-
+    MapManager.ReleaseMap()
 end
 
 return HomeScene

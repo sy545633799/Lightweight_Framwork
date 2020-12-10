@@ -31,10 +31,12 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 20, 0, 0);
-			Utils.RegisterFunc(L, Utils.CLS_IDX, "SetUIRenderLayer", _m_SetUIRenderLayer_xlua_st_);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 13, 0, 0);
+			Utils.RegisterFunc(L, Utils.CLS_IDX, "IsPointerOnUI", _m_IsPointerOnUI_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "SetUIRenderLayer", _m_SetUIRenderLayer_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetImageColor", _m_SetImageColor_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetTextColor", _m_SetTextColor_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "SetActive", _m_SetActive_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetRectSize", _m_SetRectSize_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetAsSceneSize", _m_SetAsSceneSize_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetRectPivot", _m_SetRectPivot_xlua_st_);
@@ -42,15 +44,6 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetRectAttachment", _m_SetRectAttachment_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetAnchoredPosition", _m_SetAnchoredPosition_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SetImageFillType", _m_SetImageFillType_xlua_st_);
-            Utils.RegisterFunc(L, Utils.CLS_IDX, "FindRectTransform", _m_FindRectTransform_xlua_st_);
-            Utils.RegisterFunc(L, Utils.CLS_IDX, "FindImage", _m_FindImage_xlua_st_);
-            Utils.RegisterFunc(L, Utils.CLS_IDX, "FindText", _m_FindText_xlua_st_);
-            Utils.RegisterFunc(L, Utils.CLS_IDX, "FindInput", _m_FindInput_xlua_st_);
-            Utils.RegisterFunc(L, Utils.CLS_IDX, "FindButton", _m_FindButton_xlua_st_);
-            Utils.RegisterFunc(L, Utils.CLS_IDX, "FindToggle", _m_FindToggle_xlua_st_);
-            Utils.RegisterFunc(L, Utils.CLS_IDX, "FindToggleGroup", _m_FindToggleGroup_xlua_st_);
-            Utils.RegisterFunc(L, Utils.CLS_IDX, "FindSlider", _m_FindSlider_xlua_st_);
-            Utils.RegisterFunc(L, Utils.CLS_IDX, "FindScrollRect", _m_FindScrollRect_xlua_st_);
             
 			
             
@@ -89,6 +82,32 @@ namespace XLua.CSObjectWrap
         
         
         
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_IsPointerOnUI_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+            
+                
+                {
+                    
+                        Game.PointerType gen_ret = Game.UIUtil.IsPointerOnUI(  );
+                        translator.Push(L, gen_ret);
+                    
+                    
+                    
+                    return 1;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _m_SetUIRenderLayer_xlua_st_(RealStatePtr L)
@@ -206,6 +225,33 @@ namespace XLua.CSObjectWrap
                     float _z = (float)LuaAPI.lua_tonumber(L, 4);
                     
                     Game.UIUtil.SetTextColor( _text, _x, _y, _z );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetActive_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+            
+                
+                {
+                    UnityEngine.RectTransform _rect = (UnityEngine.RectTransform)translator.GetObject(L, 1, typeof(UnityEngine.RectTransform));
+                    bool _active = LuaAPI.lua_toboolean(L, 2);
+                    
+                    Game.UIUtil.SetActive( _rect, _active );
                     
                     
                     
@@ -604,589 +650,6 @@ namespace XLua.CSObjectWrap
             }
             
             return LuaAPI.luaL_error(L, "invalid arguments to Game.UIUtil.SetImageFillType!");
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_FindRectTransform_xlua_st_(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-            
-			    int gen_param_count = LuaAPI.lua_gettop(L);
-            
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.GameObject>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        UnityEngine.RectTransform gen_ret = Game.UIUtil.FindRectTransform( _go, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.GameObject>(L, 1)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    
-                        UnityEngine.RectTransform gen_ret = Game.UIUtil.FindRectTransform( _go );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.Transform>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.Transform _tans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        UnityEngine.RectTransform gen_ret = Game.UIUtil.FindRectTransform( _tans, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.Transform>(L, 1)) 
-                {
-                    UnityEngine.Transform _tans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    
-                        UnityEngine.RectTransform gen_ret = Game.UIUtil.FindRectTransform( _tans );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-            return LuaAPI.luaL_error(L, "invalid arguments to Game.UIUtil.FindRectTransform!");
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_FindImage_xlua_st_(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-            
-			    int gen_param_count = LuaAPI.lua_gettop(L);
-            
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.GameObject>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        UnityEngine.UI.Image gen_ret = Game.UIUtil.FindImage( _go, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.GameObject>(L, 1)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    
-                        UnityEngine.UI.Image gen_ret = Game.UIUtil.FindImage( _go );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.Transform>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        UnityEngine.UI.Image gen_ret = Game.UIUtil.FindImage( _trans, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.Transform>(L, 1)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    
-                        UnityEngine.UI.Image gen_ret = Game.UIUtil.FindImage( _trans );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-            return LuaAPI.luaL_error(L, "invalid arguments to Game.UIUtil.FindImage!");
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_FindText_xlua_st_(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-            
-			    int gen_param_count = LuaAPI.lua_gettop(L);
-            
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.GameObject>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        Game.UIText gen_ret = Game.UIUtil.FindText( _go, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.GameObject>(L, 1)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    
-                        Game.UIText gen_ret = Game.UIUtil.FindText( _go );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.Transform>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        Game.UIText gen_ret = Game.UIUtil.FindText( _trans, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.Transform>(L, 1)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    
-                        Game.UIText gen_ret = Game.UIUtil.FindText( _trans );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-            return LuaAPI.luaL_error(L, "invalid arguments to Game.UIUtil.FindText!");
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_FindInput_xlua_st_(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-            
-			    int gen_param_count = LuaAPI.lua_gettop(L);
-            
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.GameObject>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        Game.UIInput gen_ret = Game.UIUtil.FindInput( _go, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.GameObject>(L, 1)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    
-                        Game.UIInput gen_ret = Game.UIUtil.FindInput( _go );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.Transform>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        Game.UIInput gen_ret = Game.UIUtil.FindInput( _trans, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.Transform>(L, 1)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    
-                        Game.UIInput gen_ret = Game.UIUtil.FindInput( _trans );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-            return LuaAPI.luaL_error(L, "invalid arguments to Game.UIUtil.FindInput!");
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_FindButton_xlua_st_(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-            
-			    int gen_param_count = LuaAPI.lua_gettop(L);
-            
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.GameObject>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        Game.UIButton gen_ret = Game.UIUtil.FindButton( _go, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.GameObject>(L, 1)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    
-                        Game.UIButton gen_ret = Game.UIUtil.FindButton( _go );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.Transform>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        Game.UIButton gen_ret = Game.UIUtil.FindButton( _trans, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.Transform>(L, 1)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    
-                        Game.UIButton gen_ret = Game.UIUtil.FindButton( _trans );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-            return LuaAPI.luaL_error(L, "invalid arguments to Game.UIUtil.FindButton!");
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_FindToggle_xlua_st_(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-            
-			    int gen_param_count = LuaAPI.lua_gettop(L);
-            
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.GameObject>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        Game.UIToggle gen_ret = Game.UIUtil.FindToggle( _go, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.Transform>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        Game.UIToggle gen_ret = Game.UIUtil.FindToggle( _trans, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.Transform>(L, 1)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    
-                        Game.UIToggle gen_ret = Game.UIUtil.FindToggle( _trans );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-            return LuaAPI.luaL_error(L, "invalid arguments to Game.UIUtil.FindToggle!");
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_FindToggleGroup_xlua_st_(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-            
-			    int gen_param_count = LuaAPI.lua_gettop(L);
-            
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.GameObject>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        UnityEngine.UI.ToggleGroup gen_ret = Game.UIUtil.FindToggleGroup( _go, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.GameObject>(L, 1)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    
-                        UnityEngine.UI.ToggleGroup gen_ret = Game.UIUtil.FindToggleGroup( _go );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.Transform>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        UnityEngine.UI.ToggleGroup gen_ret = Game.UIUtil.FindToggleGroup( _trans, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.Transform>(L, 1)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    
-                        UnityEngine.UI.ToggleGroup gen_ret = Game.UIUtil.FindToggleGroup( _trans );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-            return LuaAPI.luaL_error(L, "invalid arguments to Game.UIUtil.FindToggleGroup!");
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_FindSlider_xlua_st_(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-            
-			    int gen_param_count = LuaAPI.lua_gettop(L);
-            
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.GameObject>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        UnityEngine.UI.Slider gen_ret = Game.UIUtil.FindSlider( _go, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.GameObject>(L, 1)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    
-                        UnityEngine.UI.Slider gen_ret = Game.UIUtil.FindSlider( _go );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.Transform>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        UnityEngine.UI.Slider gen_ret = Game.UIUtil.FindSlider( _trans, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.Transform>(L, 1)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    
-                        UnityEngine.UI.Slider gen_ret = Game.UIUtil.FindSlider( _trans );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-            return LuaAPI.luaL_error(L, "invalid arguments to Game.UIUtil.FindSlider!");
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_FindScrollRect_xlua_st_(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-            
-			    int gen_param_count = LuaAPI.lua_gettop(L);
-            
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.GameObject>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        UnityEngine.UI.ScrollRect gen_ret = Game.UIUtil.FindScrollRect( _go, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.GameObject>(L, 1)) 
-                {
-                    UnityEngine.GameObject _go = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
-                    
-                        UnityEngine.UI.ScrollRect gen_ret = Game.UIUtil.FindScrollRect( _go );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 2&& translator.Assignable<UnityEngine.Transform>(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    string _subnode = LuaAPI.lua_tostring(L, 2);
-                    
-                        UnityEngine.UI.ScrollRect gen_ret = Game.UIUtil.FindScrollRect( _trans, _subnode );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                if(gen_param_count == 1&& translator.Assignable<UnityEngine.Transform>(L, 1)) 
-                {
-                    UnityEngine.Transform _trans = (UnityEngine.Transform)translator.GetObject(L, 1, typeof(UnityEngine.Transform));
-                    
-                        UnityEngine.UI.ScrollRect gen_ret = Game.UIUtil.FindScrollRect( _trans );
-                        translator.Push(L, gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-            return LuaAPI.luaL_error(L, "invalid arguments to Game.UIUtil.FindScrollRect!");
             
         }
         

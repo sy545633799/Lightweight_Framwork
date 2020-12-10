@@ -41,7 +41,7 @@ namespace Game.Editor
                     Debug.LogWarningFormat("[{0}]-->auto fix sprite and Named: {1}", assetPath, spritrName);
                 }
                 else
-                    textureImporter.spritePackingTag = spritrName;
+                    textureImporter.spritePackingTag = null;
 
                 EditorUtility.SetDirty(textureImporter);
 

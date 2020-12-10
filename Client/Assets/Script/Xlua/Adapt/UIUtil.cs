@@ -2,19 +2,85 @@
 using UnityEngine;
 using UnityEngine.UI;
 //using SuperScrollView;
+using UnityEngine.EventSystems;
 
 namespace Game
 {
-    public class UIUtil
+	public enum PointerType
+	{
+		None,
+		UI,
+		TerrainGeometry,
+		Other,
+	}
+
+	public class UIUtil
     {
-        /// <summary>
-        /// 设置渲染层级
-        /// </summary>
-        /// <param name="go"></param>
-        /// <param name="sortingLayerName"></param>
-        /// <param name="order"></param>
-        /// <param name="includeInactive"></param>
-        public static void SetUIRenderLayer(GameObject go, string sortingLayerName, int order, bool includeInactive = false)
+		/// <summary>
+		/// 游戏点击事件 0 无点击 1 点击UI上 2 点击在地面上 3 点击不在地面 不在场景上
+		/// 使用射线只有在寻路网格上点击才有效
+		/// </summary>
+		public static PointerType IsPointerOnUI()
+		{
+#if !UNITY_EDITOR && (UNITY_IPHONE || UNITY_IOS || UNITY_ANDROID)
+        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)
+#else
+			if (Input.GetMouseButton(0))
+#endif
+			{
+				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				RaycastHit hit;
+				if (Physics.Raycast(ray, out hit))
+				{
+
+#if !UNITY_EDITOR && (UNITY_IPHONE || UNITY_IOS || UNITY_ANDROID)
+                    if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+#else
+					if (EventSystem.current.IsPointerOverGameObject())
+#endif
+					{
+						return PointerType.UI;
+					}
+					else
+					{
+						if (hit.collider.CompareTag("TerrainGeometry"))
+						{
+							return PointerType.TerrainGeometry;
+						}
+						else
+						{
+							return PointerType.Other;
+						}
+					}
+				}
+				return PointerType.None;
+
+				//#if !UNITY_EDITOR && (UNITY_IPHONE || UNITY_IOS || UNITY_ANDROID)
+				//            if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+				//#else
+				//            //只有点击到 寻路网格上 才有用
+				//            if (EventSystem.current.IsPointerOverGameObject())
+				//#endif
+				//			{
+				//				return 1;
+				//			}
+				//            else
+				//            {
+				//                //Debug.LogError("tag : " + EventSystem.current.gameObject.tag);
+				//                return 2;
+				//            }
+			}
+			return 0;
+		}
+
+		/// <summary>
+		/// 设置渲染层级
+		/// </summary>
+		/// <param name="go"></param>
+		/// <param name="sortingLayerName"></param>
+		/// <param name="order"></param>
+		/// <param name="includeInactive"></param>
+		public static void SetUIRenderLayer(GameObject go, string sortingLayerName, int order, bool includeInactive = false)
         {
             Renderer[] renders = go.GetComponentsInChildren<Renderer>(includeInactive);
             if (renders != null)
@@ -42,13 +108,26 @@ namespace Game
             text.color = new Color(x / 255, y / 255, z / 255);
         }
 
-        /// <summary>
-        /// 设置大小
+		/// <summary>
+        /// 设置显隐
         /// </summary>
-        /// <param name="go"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public static void SetRectSize(GameObject go, float x, float y)
+        /// <param name="rect"></param>
+        /// <param name="active"></param>
+		public static void SetActive(RectTransform rect, bool active)
+		{
+			if (active)
+				rect.localScale = Vector3.one;
+			else
+				rect.localScale = Vector3.zero;
+		}
+
+		/// <summary>
+		/// 设置大小
+		/// </summary>
+		/// <param name="go"></param>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		public static void SetRectSize(GameObject go, float x, float y)
         {
             RectTransform rect = go.GetComponent<RectTransform>();
             rect.SetRectSize(new Vector2(x, y));
@@ -205,105 +284,5 @@ namespace Game
             img.SetImageFillType(fillMethod, origin);
         }
 
-        /*************************************************查找组件********************************************************/
-        public static RectTransform FindRectTransform(GameObject go, string subnode = null)
-        {
-            return go.transform.FindComponent<RectTransform>(subnode);
-        }
-
-        public static RectTransform FindRectTransform(Transform tans, string subnode = null)
-        {
-            return tans.FindComponent<RectTransform>(subnode);
-        }
-
-        public static Image FindImage(GameObject go, string subnode = null)
-        {
-            return go.transform.FindComponent<Image>(subnode);
-        }
-
-        public static Image FindImage(Transform trans, string subnode = null)
-        {
-            return trans.FindComponent<Image>(subnode);
-        }
-
-        public static UIText FindText(GameObject go, string subnode = null)
-        {
-            return go.transform.FindComponent<UIText>(subnode);
-        }
-
-        public static UIText FindText(Transform trans, string subnode = null)
-        {
-            return trans.FindComponent<UIText>(subnode);
-        }
-
-        public static UIInput FindInput(GameObject go, string subnode = null)
-        {
-            return go.transform.FindComponent<UIInput>(subnode);
-        }
-
-        public static UIInput FindInput(Transform trans, string subnode = null)
-        {
-            return trans.FindComponent<UIInput>(subnode);
-        }
-
-        public static UIButton FindButton(GameObject go, string subnode = null)
-        {
-            return go.transform.FindComponent<UIButton>(subnode);
-        }
-
-        public static UIButton FindButton(Transform trans, string subnode = null)
-        {
-            return trans.FindComponent<UIButton>(subnode);
-        }
-
-        public static UIToggle FindToggle(GameObject go, string subnode)
-        {
-            return go.transform.FindComponent<UIToggle>(subnode);
-        }
-
-        public static UIToggle FindToggle(Transform trans, string subnode = null)
-        {
-            return trans.FindComponent<UIToggle>(subnode);
-        }
-
-        public static ToggleGroup FindToggleGroup(GameObject go, string subnode = null)
-        {
-            return go.transform.FindComponent<ToggleGroup>(subnode);
-        }
-
-        public static ToggleGroup FindToggleGroup(Transform trans, string subnode = null)
-        {
-            return trans.FindComponent<ToggleGroup>(subnode);
-        }
-
-        public static Slider FindSlider(GameObject go, string subnode = null)
-        {
-            return go.transform.FindComponent<Slider>(subnode);
-        }
-
-        public static Slider FindSlider(Transform trans, string subnode = null)
-        {
-            return trans.FindComponent<Slider>(subnode);
-        }
-
-        public static ScrollRect FindScrollRect(GameObject go, string subnode = null)
-        {
-            return go.transform.FindComponent<ScrollRect>(subnode);
-        }
-
-        public static ScrollRect FindScrollRect(Transform trans, string subnode = null)
-        {
-            return trans.FindComponent<ScrollRect>(subnode);
-        }
-
-		//public static LoopListView FindLoopList(GameObject go, string subnode = null)
-		//{
-		//	return go.transform.FindComponent<LoopListView>(subnode);
-		//}
-
-		//public static LoopListView FindLoopList(Transform trans, string subnode = null)
-		//{
-		//	return trans.FindComponent<LoopListView>(subnode);
-		//}
 	}
 }

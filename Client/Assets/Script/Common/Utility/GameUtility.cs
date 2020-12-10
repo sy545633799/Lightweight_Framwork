@@ -396,6 +396,32 @@ namespace Game
                 return false;
             }
         }
+        //新增
+        public static void SaveStringToFile(string filePath, string data)
+        {
+            FileInfo fileInfo = new FileInfo(filePath);
+            StreamWriter streamWriter;
+
+            streamWriter = fileInfo.CreateText();
+            if (streamWriter == null)
+            {
+                Debug.LogError(string.Format("Save file {0} Error!", filePath));
+                return;
+            }
+
+            streamWriter.Write(data);
+            streamWriter.Close();
+        }
+
+        public static Component GetOrAddComponent(GameObject obj, Type type)
+        {
+            var com = obj.GetComponent(type);
+            if (com == null)
+            {
+                com = obj.AddComponent(type);
+            }
+            return com;
+        }
     }
 
 #if UNITY_EDITOR

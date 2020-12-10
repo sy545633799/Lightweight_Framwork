@@ -31,10 +31,11 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 22, 8, 8);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 23, 9, 8);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "Init", _m_Init_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "AddEvent", _m_AddEvent_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "Update", _m_Update_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "FixedUpdate", _m_FixedUpdate_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "Connect", _m_Connect_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "OnConnect", _m_OnConnect_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SendBytes", _m_SendBytes_xlua_st_);
@@ -50,7 +51,7 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.CLS_IDX, "OnReceivedMessageLine", _m_OnReceivedMessageLine_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "OnReceivedMessage", _m_OnReceivedMessage_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "Close", _m_Close_xlua_st_);
-            Utils.RegisterFunc(L, Utils.CLS_IDX, "Destroy", _m_Destroy_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "Dispose", _m_Dispose_xlua_st_);
             
 			
             Utils.RegisterObject(L, translator, Utils.CLS_IDX, "MinLuaNetSessionID", Game.TcpManager.MinLuaNetSessionID);
@@ -60,6 +61,7 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "OnDisConnectCallBack", _g_get_OnDisConnectCallBack);
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "OnReceiveLineCallBack", _g_get_OnReceiveLineCallBack);
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "OnReceiveMsgCallBack", _g_get_OnReceiveMsgCallBack);
+            Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "TimeStamp", _g_get_TimeStamp);
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "onConnectCallBack", _g_get_onConnectCallBack);
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "onDisConnectCallBack", _g_get_onDisConnectCallBack);
             Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "onReceiveLineCallBack", _g_get_onReceiveLineCallBack);
@@ -113,16 +115,19 @@ namespace XLua.CSObjectWrap
         {
 		    try {
             
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
             
             
                 
                 {
                     
-                    Game.TcpManager.Init(  );
+                        System.Threading.Tasks.Task gen_ret = Game.TcpManager.Init(  );
+                        translator.Push(L, gen_ret);
                     
                     
                     
-                    return 0;
+                    return 1;
                 }
                 
             } catch(System.Exception gen_e) {
@@ -169,6 +174,29 @@ namespace XLua.CSObjectWrap
                 {
                     
                     Game.TcpManager.Update(  );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_FixedUpdate_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+            
+            
+                
+                {
+                    
+                    Game.TcpManager.FixedUpdate(  );
                     
                     
                     
@@ -556,7 +584,7 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_Destroy_xlua_st_(RealStatePtr L)
+        static int _m_Dispose_xlua_st_(RealStatePtr L)
         {
 		    try {
             
@@ -565,7 +593,7 @@ namespace XLua.CSObjectWrap
                 
                 {
                     
-                    Game.TcpManager.Destroy(  );
+                    Game.TcpManager.Dispose(  );
                     
                     
                     
@@ -623,6 +651,18 @@ namespace XLua.CSObjectWrap
 		    try {
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			    translator.Push(L, Game.TcpManager.OnReceiveMsgCallBack);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_TimeStamp(RealStatePtr L)
+        {
+		    try {
+            
+			    LuaAPI.lua_pushnumber(L, Game.TcpManager.TimeStamp);
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
             }

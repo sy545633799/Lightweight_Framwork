@@ -12,7 +12,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using XLua;
-
+using System.Threading.Tasks;
 
 namespace Game
 {
@@ -99,7 +99,9 @@ namespace Game
             }
         }
 
-        public static void Init()
+		public static double TimeStamp { get; private set; }
+
+		public static async Task Init()
         {
             memStream = new MemoryStream();
             reader = new BinaryReader(memStream);
@@ -125,7 +127,15 @@ namespace Game
             }
         }
 
-        public static void Connect(string host, int port, NetPackageType type)
+		public static void FixedUpdate()
+		{
+			if (TimeStamp == 0)
+				TimeStamp = TimeUtility.GetTimeStamp();
+			else
+				TimeStamp += Time.fixedDeltaTime;
+		}
+
+		public static void Connect(string host, int port, NetPackageType type)
         {
             Debug.Log("host : " + host + " port:" + port.ToString() + " type:" + type.ToString());
             Close();
@@ -388,7 +398,7 @@ namespace Game
             // loggedIn = false;
         }
 
-        public static void Destroy()
+        public static void Dispose()
         {
             onConnectCallBack = null;
             onDisConnectCallBack = null;

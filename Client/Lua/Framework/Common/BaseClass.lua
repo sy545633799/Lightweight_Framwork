@@ -20,8 +20,8 @@ function BaseClass(classname, super)
     class_type.__ctype = ClassType.class
 
     class_type.super = super
-    class_type.New = function(...)
-        local obj = {}
+
+    class_type.NewByTable = function (obj, ...)
         obj._class_type = class_type
         obj.__ctype = ClassType.instance
 
@@ -52,7 +52,11 @@ function BaseClass(classname, super)
                 now_super = now_super.super
             end
         end
+        return obj
+    end
 
+    class_type.New = function(...)
+        local obj = class_type.NewByTable({}, ...)
         return obj
     end
 

@@ -17,13 +17,14 @@ using LuaCSFunction = XLua.LuaDLL.lua_CSFunction;
 #endif
 
 using System;
+using Game;
 
 namespace XLua
 {
-    public abstract class LuaBase : IDisposable
+    public abstract class LuaBase : RecycleObject<LuaBase>, IDisposable
     {
         protected bool disposed;
-        protected int luaReference;
+		protected int luaReference;
         protected LuaEnv luaEnv;
 
 #if UNITY_EDITOR || XLUA_GENERAL

@@ -7,7 +7,7 @@ namespace Game
     /// <summary>
     /// Transform的扩展方法
     /// </summary>
-    public static class TransformEx
+    public static class TransformExtension
     {
         public static void SetPositionX(this Transform t, float newX)
         {
@@ -158,7 +158,14 @@ namespace Game
             pTran.transform.localScale = pLocalScale;
         }
 
-        public static void SetActive(this Transform pTran, bool pFlag)
+		public static void SetParentAndReset(this Transform parent, Transform child)
+		{
+			child.SetParent(parent.transform);
+			child.localPosition = Vector3.zero;
+			child.localRotation = Quaternion.identity;
+			child.localScale = Vector3.one;
+		}
+		public static void SetActive(this Transform pTran, bool pFlag)
         {
             pTran.gameObject.SetActive(pFlag);
         }
@@ -457,6 +464,50 @@ namespace Game
             }
 
         }
+
+        public static void GetAllChildren(this Transform parent, ref List<Transform> children)
+        {
+            if (parent != null)
+            {
+                for (int i = 0; i < parent.transform.childCount; i++)
+                {
+                    Transform child = parent.transform.GetChild(i);
+                    children.Add(child);
+                    GetAllChildren(child, ref children);
+                }
+            }
+        }
+
+        public static void GetAllChildrenPath(this Transform parent, ref List<string> children, string parentPath = "")
+        {
+            if (parent != null)
+            {
+                for (int i = 0; i < parent.transform.childCount; i++)
+                {
+                    Transform child = parent.transform.GetChild(i);
+                    string childPath = parentPath + child.name;
+                    children.Add(childPath);
+                    childPath += "/";
+                    GetAllChildrenPath(child, ref children, childPath);
+                }
+            }
+        }
+
+        public static void GetAllChildrenWithPath(this Transform parent, ref Dictionary<Transform, string> children, string parentPath = "")
+        {
+            if (parent != null)
+            {
+                for (int i = 0; i < parent.transform.childCount; i++)
+                {
+                    Transform child = parent.transform.GetChild(i);
+                    string childPath = parentPath + child.name;
+                    children.Add(child, childPath);
+                    childPath += "/";
+                    GetAllChildrenWithPath(child, ref children, childPath);
+                }
+            }
+        }
+
     }
 
 }

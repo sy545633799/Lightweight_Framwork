@@ -10,7 +10,7 @@ using LuaCSFunction = XLua.LuaDLL.lua_CSFunction;
 
 using XLua;
 using System.Collections.Generic;
-
+using Game;
 
 namespace XLua.CSObjectWrap
 {
@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(UnityEngine.GameObject);
-			Utils.BeginObjectRegister(type, L, translator, 0, 13, 8, 3);
+			Utils.BeginObjectRegister(type, L, translator, 0, 21, 8, 3);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetComponent", _m_GetComponent);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetComponentInChildren", _m_GetComponentInChildren);
@@ -29,6 +29,7 @@ namespace XLua.CSObjectWrap
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetComponents", _m_GetComponents);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetComponentsInChildren", _m_GetComponentsInChildren);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetComponentsInParent", _m_GetComponentsInParent);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "TryGetComponent", _m_TryGetComponent);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SendMessageUpwards", _m_SendMessageUpwards);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SendMessage", _m_SendMessage);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "BroadcastMessage", _m_BroadcastMessage);
@@ -36,6 +37,13 @@ namespace XLua.CSObjectWrap
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetActive", _m_SetActive);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "CompareTag", _m_CompareTag);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "AddMissingComponent", _m_AddMissingComponent);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "AddClickListener", _m_AddClickListener);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "RemoveClickListener", _m_RemoveClickListener);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "AddEnterListener", _m_AddEnterListener);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "RemoveEnterListener", _m_RemoveEnterListener);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "AddExitListener", _m_AddExitListener);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "RemoveExitListener", _m_RemoveExitListener);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "RemoveAllListener", _m_RemoveAllListener);
 			
 			
 			Utils.RegisterFunc(L, Utils.GETTER_IDX, "transform", _g_get_transform);
@@ -395,6 +403,38 @@ namespace XLua.CSObjectWrap
             }
             
             return LuaAPI.luaL_error(L, "invalid arguments to UnityEngine.GameObject.GetComponentsInParent!");
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_TryGetComponent(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.GameObject gen_to_be_invoked = (UnityEngine.GameObject)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    System.Type _type = (System.Type)translator.GetObject(L, 2, typeof(System.Type));
+                    UnityEngine.Component _component;
+                    
+                        bool gen_ret = gen_to_be_invoked.TryGetComponent( _type, out _component );
+                        LuaAPI.lua_pushboolean(L, gen_ret);
+                    translator.Push(L, _component);
+                        
+                    
+                    
+                    
+                    return 2;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
             
         }
         
@@ -811,6 +851,227 @@ namespace XLua.CSObjectWrap
                     
                     
                     return 1;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_AddClickListener(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.GameObject gen_to_be_invoked = (UnityEngine.GameObject)translator.FastGetCSObj(L, 1);
+            
+            
+			    int gen_param_count = LuaAPI.lua_gettop(L);
+            
+                if(gen_param_count == 2&& translator.Assignable<UnityEngine.Events.UnityAction>(L, 2)) 
+                {
+                    UnityEngine.Events.UnityAction _callback = translator.GetDelegate<UnityEngine.Events.UnityAction>(L, 2);
+                    
+                    gen_to_be_invoked.AddClickListener( _callback );
+                    
+                    
+                    
+                    return 0;
+                }
+                if(gen_param_count == 6&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 4)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 5)&& translator.Assignable<UnityEngine.Events.UnityAction>(L, 6)) 
+                {
+                    float _x = (float)LuaAPI.lua_tonumber(L, 2);
+                    float _y = (float)LuaAPI.lua_tonumber(L, 3);
+                    float _z = (float)LuaAPI.lua_tonumber(L, 4);
+                    float _height = (float)LuaAPI.lua_tonumber(L, 5);
+                    UnityEngine.Events.UnityAction _callback = translator.GetDelegate<UnityEngine.Events.UnityAction>(L, 6);
+                    
+                    gen_to_be_invoked.AddClickListener( _x, _y, _z, _height, _callback );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+            return LuaAPI.luaL_error(L, "invalid arguments to UnityEngine.GameObject.AddClickListener!");
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_RemoveClickListener(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.GameObject gen_to_be_invoked = (UnityEngine.GameObject)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    UnityEngine.Events.UnityAction _callback = translator.GetDelegate<UnityEngine.Events.UnityAction>(L, 2);
+                    
+                    gen_to_be_invoked.RemoveClickListener( _callback );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_AddEnterListener(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.GameObject gen_to_be_invoked = (UnityEngine.GameObject)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    float _x = (float)LuaAPI.lua_tonumber(L, 2);
+                    float _y = (float)LuaAPI.lua_tonumber(L, 3);
+                    float _z = (float)LuaAPI.lua_tonumber(L, 4);
+                    float _height = (float)LuaAPI.lua_tonumber(L, 5);
+                    UnityEngine.Events.UnityAction<UnityEngine.GameObject> _callback = translator.GetDelegate<UnityEngine.Events.UnityAction<UnityEngine.GameObject>>(L, 6);
+                    
+                    gen_to_be_invoked.AddEnterListener( _x, _y, _z, _height, _callback );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_RemoveEnterListener(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.GameObject gen_to_be_invoked = (UnityEngine.GameObject)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    UnityEngine.Events.UnityAction<UnityEngine.GameObject> _callback = translator.GetDelegate<UnityEngine.Events.UnityAction<UnityEngine.GameObject>>(L, 2);
+                    
+                    gen_to_be_invoked.RemoveEnterListener( _callback );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_AddExitListener(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.GameObject gen_to_be_invoked = (UnityEngine.GameObject)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    float _x = (float)LuaAPI.lua_tonumber(L, 2);
+                    float _y = (float)LuaAPI.lua_tonumber(L, 3);
+                    float _z = (float)LuaAPI.lua_tonumber(L, 4);
+                    float _height = (float)LuaAPI.lua_tonumber(L, 5);
+                    UnityEngine.Events.UnityAction<UnityEngine.GameObject> _callback = translator.GetDelegate<UnityEngine.Events.UnityAction<UnityEngine.GameObject>>(L, 6);
+                    
+                    gen_to_be_invoked.AddExitListener( _x, _y, _z, _height, _callback );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_RemoveExitListener(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.GameObject gen_to_be_invoked = (UnityEngine.GameObject)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    UnityEngine.Events.UnityAction<UnityEngine.GameObject> _callback = translator.GetDelegate<UnityEngine.Events.UnityAction<UnityEngine.GameObject>>(L, 2);
+                    
+                    gen_to_be_invoked.RemoveExitListener( _callback );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_RemoveAllListener(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.GameObject gen_to_be_invoked = (UnityEngine.GameObject)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    
+                    gen_to_be_invoked.RemoveAllListener(  );
+                    
+                    
+                    
+                    return 0;
                 }
                 
             } catch(System.Exception gen_e) {

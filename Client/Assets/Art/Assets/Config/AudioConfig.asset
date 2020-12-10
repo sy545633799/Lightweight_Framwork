@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e07bc199c688cb4e809edb787de35e6, type: 3}
+  m_Name: AudioConfig
+  m_EditorClassIdentifier: 
+  Configs:
+  - ID: 10001
+    MusicOrSound: 1
+    SoundType: 1
+    PlayMode: 1
+    Resource: Bgm/ceshi
+  - ID: 10002
+    MusicOrSound: 1
+    SoundType: 1
+    PlayMode: 1
+    Resource: Bgm/mojiazhuang
+  - ID: 10003
+    MusicOrSound: 2
+    SoundType: 3
+    PlayMode: 1
+    Resource: Hit/40001_zqsound1
+  - ID: 10004
+    MusicOrSound: 2
+    SoundType: 4
+    PlayMode: 2
+    Resource: MainPlot/201001
+  - ID: 10005
+    MusicOrSound: 2
+    SoundType: 4
+    PlayMode: 2
+    Resource: MainPlot/201002
+  - ID: 10006
+    MusicOrSound: 2
+    SoundType: 4
+    PlayMode: 2
+    Resource: MainPlot/201003

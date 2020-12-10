@@ -5,29 +5,29 @@ namespace Game
 {
     public abstract class Singleton<T> where T : class, new()
     {
-        private static T m_instance;
-        public static T instance
+        private static T mInstance = null;
+        public static T Instance
         {
             get
             {
-                if (Singleton<T>.m_instance == null)
+                if (mInstance == null)
                 {
-                    Singleton<T>.m_instance = Activator.CreateInstance<T>();
-                    if (Singleton<T>.m_instance != null)
+                    mInstance = Activator.CreateInstance<T>();
+                    if (mInstance != null)
                     {
-                        (Singleton<T>.m_instance as Singleton<T>).Init();
+                        (mInstance as Singleton<T>).Init();
                     }
                 }
 
-                return Singleton<T>.m_instance;
+                return mInstance;
             }
         }
 
         public static void Release()
         {
-            if (Singleton<T>.m_instance != null)
+            if (mInstance != null)
             {
-                Singleton<T>.m_instance = (T)((object)null);
+                mInstance = (T)((object)null);
             }
         }
 
@@ -36,7 +36,9 @@ namespace Game
 
         }
 
-        public abstract void Dispose();
+        public virtual void Dispose()
+        {
 
+        }
     }
 }

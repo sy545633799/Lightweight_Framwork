@@ -31,7 +31,7 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 23, 0, 0);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 25, 0, 0);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "FormatToUnityPath", _m_FormatToUnityPath_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "FormatToSysFilePath", _m_FormatToSysFilePath_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "FullPathToAssetPath", _m_FullPathToAssetPath_xlua_st_);
@@ -53,6 +53,8 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SafeDeleteFile", _m_SafeDeleteFile_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SafeRenameFile", _m_SafeRenameFile_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SafeCopyFile", _m_SafeCopyFile_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "SaveStringToFile", _m_SaveStringToFile_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "GetOrAddComponent", _m_GetOrAddComponent_xlua_st_);
             
 			
             Utils.RegisterObject(L, translator, Utils.CLS_IDX, "AssetsFolderName", Game.GameUtility.AssetsFolderName);
@@ -659,6 +661,59 @@ namespace XLua.CSObjectWrap
                     
                         bool gen_ret = Game.GameUtility.SafeCopyFile( _fromFile, _toFile );
                         LuaAPI.lua_pushboolean(L, gen_ret);
+                    
+                    
+                    
+                    return 1;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SaveStringToFile_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+            
+            
+                
+                {
+                    string _filePath = LuaAPI.lua_tostring(L, 1);
+                    string _data = LuaAPI.lua_tostring(L, 2);
+                    
+                    Game.GameUtility.SaveStringToFile( _filePath, _data );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_GetOrAddComponent_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+            
+                
+                {
+                    UnityEngine.GameObject _obj = (UnityEngine.GameObject)translator.GetObject(L, 1, typeof(UnityEngine.GameObject));
+                    System.Type _type = (System.Type)translator.GetObject(L, 2, typeof(System.Type));
+                    
+                        UnityEngine.Component gen_ret = Game.GameUtility.GetOrAddComponent( _obj, _type );
+                        translator.Push(L, gen_ret);
                     
                     
                     

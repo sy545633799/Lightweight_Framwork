@@ -1,8 +1,17 @@
-﻿using UnityEngine;
+// ========================================================
+// des：
+// author: 
+// time：2020-07-16 11:36:20
+// version：1.0
+// ========================================================
+
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 public static class Extensions
 {
@@ -99,5 +108,18 @@ public static class Extensions
 		if (obj != null)
 			ret = obj.ToString();
 		return ret;
+	}
+
+	public static void ExtendCapacity<T>(this List<T> verts, int neededCapacity)
+	{
+		if (verts.Capacity < neededCapacity)
+		{
+			verts.Capacity = neededCapacity;
+		}
+	}
+
+	public static TaskAwaiter GetAwaiter(this TimeSpan timeSpan)
+	{
+		return Task.Delay(timeSpan).GetAwaiter();
 	}
 }

@@ -21,9 +21,10 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(UnityEngine.Component);
-			Utils.BeginObjectRegister(type, L, translator, 0, 10, 3, 1);
+			Utils.BeginObjectRegister(type, L, translator, 0, 11, 3, 1);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetComponent", _m_GetComponent);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "TryGetComponent", _m_TryGetComponent);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetComponentInChildren", _m_GetComponentInChildren);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetComponentsInChildren", _m_GetComponentsInChildren);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetComponentInParent", _m_GetComponentInParent);
@@ -126,6 +127,38 @@ namespace XLua.CSObjectWrap
             }
             
             return LuaAPI.luaL_error(L, "invalid arguments to UnityEngine.Component.GetComponent!");
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_TryGetComponent(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.Component gen_to_be_invoked = (UnityEngine.Component)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    System.Type _type = (System.Type)translator.GetObject(L, 2, typeof(System.Type));
+                    UnityEngine.Component _component;
+                    
+                        bool gen_ret = gen_to_be_invoked.TryGetComponent( _type, out _component );
+                        LuaAPI.lua_pushboolean(L, gen_ret);
+                    translator.Push(L, _component);
+                        
+                    
+                    
+                    
+                    return 2;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
             
         }
         

@@ -1,35 +1,36 @@
 ---@class UIToggle:UIContent
 UIToggle = BaseClass("UIToggle", UIContent)
 -- 创建
-function UIToggle:OnCreate(uitoggle)
-	self.unity_uitoggle = uitoggle
+function UIToggle:ctor(component)
+	self.component = component
+	self.__callback = {}
+	self.__oldValue = false
 end
-
 
 function UIToggle:SetValue(bVal)
 	assert(type(bVal) == "boolean")
-	self.unity_uitoggle.isOn = bVal
+	self.component.isOn = bVal
 end
 
-function UIToggle:GetValueValue()
-	return self.unity_uitoggle.isOn
+function UIToggle:GetValue()
+	return self.component.isOn
 end
 
 function UIToggle:SetToggleGroup(group)
-	self.unity_uitoggle.group = group.unity_uitoggleGroup
+	self.component.group = group.componentGroup
 end
 
 function UIToggle:ClearToggleGroup()
-	self.unity_uitoggle.group = nil
+	self.component.group = nil
 end
 
 function UIToggle:GetTouchEnabled()
-	return self.unity_uitoggle.interactable
+	return self.component.interactable
 end
 
 function UIToggle:SetTouchEnabled(bVal)
 	assert(type(bVal) == "boolean")
-	self.ui_component.unity_uitoggle = bVal
+	self.component.interactable = bVal
 end
 
 function UIToggle:SetCheckOldValue(bVal)
@@ -37,22 +38,31 @@ function UIToggle:SetCheckOldValue(bVal)
 	self.__checkOldValue = bVal
 end
 
-function UIToggle:SetOnValueChange(callback, bCover)
-	if bCover then
-		self.__callback = {}
-		self.unity_uitoggle.onValueChanged:RemoveAllListeners()
-	end
-	local func = function (status)
-		if not self.__checkOldValue or not self.__oldValue == status then
-			callback(status)
-			self.__oldValue = status
+function UIToggle:SetOnValueChange(callback, handle, ...)
+	local args = LuaUtil.SafePack(...)
+	local func = function(bVal)
+		if not self.__checkOldValue or not self.__oldValue == bVal then
+			coroutine.start(function()
+				if handle then
+					callback(handle, bVal, LuaUtil.SafeUnpack(args))
+				else
+					callback(bVal, LuaUtil.SafeUnpack(args))
+				end
+			end)
+			self.__oldValue = bVal
 		end
 	end
-	table.insert(self.__callback, func)
-	self.unity_uitoggle.onValueChanged:AddListener(func)
+	self.__callback[callback] = func
+	self.component.onValueChanged:AddListener(func)
+end
+
+function UIToggle:RemoveAllListeners()
+	self.__callback = {}
+	self.component.onValueChanged:RemoveAllListeners()
 end
 
 -- 资源释放
-function UIToggle:OnDestroy()
-	self.unity_uitoggle.onValueChanged:RemoveAllListeners()
+function UIToggle:dtor()
+	self.__callback = {}
+	self.component.onValueChanged:RemoveAllListeners()
 end

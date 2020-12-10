@@ -37,13 +37,14 @@ local function __GetCoroutine()
     return co
 end
 
-local function __PResume(co, func, ...)
-    local resume_ret = nil
-    if func ~= nil then
-        resume_ret = LuaUtil.SafePack(coroutine.resume(co, func, co, ...))
-    else
-        resume_ret = LuaUtil.SafePack(coroutine.resume(co, co, ...))
-    end
+local function __PResume(co, ...)
+    --local resume_ret = nil
+    --if func ~= nil then
+    --    resume_ret = LuaUtil.SafePack(coroutine.resume(co, ...))
+    --else
+    --    resume_ret = LuaUtil.SafePack(coroutine.resume(co, ...))
+    --end
+    local resume_ret = LuaUtil.SafePack(coroutine.resume(co, ...))
     local flag, msg = resume_ret[1], resume_ret[2]
     if not flag then
         logError(msg.."\n"..debug.traceback(co))
@@ -63,25 +64,28 @@ function coroutine.start(func, ...)
     return co
 end
 
-function coroutine.stop(co)
-    assert(co_Timer[co])
-    TimerUtil.RemoveTimer(co_Timer[co])
-    co_Timer[co] = nil
-    __PResume(co)
+function coroutine.resumeex(co, ...)
+    if co_Timer[co] then
+        TimerUtil.RemoveTimer(co_Timer[co])
+        co_Timer[co] = nil
+    end
+    return __PResume(co, ...)
 end
 
 --- 等待帧数，并在Update执行完毕后resume
-function coroutine.waitforframes(co, frames)
+function coroutine.waitforframes(frames)
+    local co = coroutine.running()
     assert(co and type(frames) == "number" and frames >= 1 and math.floor(frames) == frames)
-    co_Timer[co] = TimerUtil.DelayFrame(1, function () coroutine.stop(co) end)
+    co_Timer[co] = TimerUtil.DelayFrame(frames, function () coroutine.resumeex(co) end)
     return coroutine.yield()
 end
 
 --- 等待秒数，并在Update执行完毕后resume
 --- 等同于Unity侧的yield return new WaitForSeconds
-function coroutine.waitforseconds(co, seconds)
+function coroutine.waitforseconds(seconds)
+    local co = coroutine.running()
     assert(co and type(seconds) == "number" and seconds >= 0)
-    co_Timer[co] = TimerUtil.Delay(1, function () coroutine.stop(co) end)
+    co_Timer[co] = TimerUtil.Delay(seconds, function () coroutine.resumeex(co) end)
     return coroutine.yield()
 end
 
@@ -90,27 +94,45 @@ end
 --- 注意：yield return WWW也是这种情况之一
 --- @async_operation：异步句柄---或者任何带有isDone、progress成员属性的异步对象
 --- @callback：每帧回调，传入参数为异步操作进度progress
-function coroutine.waitforasync(co, async_operation, callback)
+function coroutine.waitforasync(async_operation, callback)
+    local co = coroutine.running()
     assert(co and async_operation)
     co_Timer[co] = TimerUtil.RepeatFrame(1, function ()
         if callback then callback(async_operation.process) end
-        if async_operation.isDone then coroutine.stop(co) end
+        if async_operation.isDone then coroutine.resumeex(co) end
     end)
     return coroutine.yield()
 end
 
-function coroutine.waituntil(co, func, ...)
+function coroutine.waituntil(func, ...)
+    local co = coroutine.running()
     assert(co and func)
     local args = LuaUtil.SafePack(...)
-    co_Timer[co] = TimerUtil.RepeatFrame(1, function () if func(LuaUtil.SafeUnpack(args)) then coroutine.stop(co) end end)
+    co_Timer[co] = TimerUtil.RepeatFrame(1, function () if func(LuaUtil.SafeUnpack(args)) then coroutine.resumeex(co) end end)
     return coroutine.yield()
 end
 
 --- 等待条件为假，并在Update执行完毕resume
 --- 等同于Unity侧的yield return new WaitWhile
-function coroutine.waitwhile(co, func, ...)
+function coroutine.waitwhile(func, ...)
+    local co = coroutine.running()
     assert(co and func)
     local args = LuaUtil.SafePack(...)
-    co_Timer[co] = TimerUtil.RepeatFrame(1, function () if not func(LuaUtil.SafeUnpack(args)) then coroutine.stop(co) end end)
+    co_Timer[co] = TimerUtil.RepeatFrame(1, function () if not func(LuaUtil.SafeUnpack(args)) then coroutine.resumeex(co) end end)
+    return coroutine.yield()
+end
+
+function coroutine.Do(func, process, ...)
+    local co = coroutine.running()
+    assert(co and func)
+    local operation = func(...)
+    co_Timer[co] = TimerUtil.RepeatFrame(1, function ()
+        if operation.IsDone or operation.isDone then
+            if process then process(1) end
+            coroutine.resumeex(co, operation.Result)
+        else
+            if process then process(operation.process) end
+        end
+    end)
     return coroutine.yield()
 end

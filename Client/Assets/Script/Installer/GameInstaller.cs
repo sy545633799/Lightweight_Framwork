@@ -1,111 +1,135 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
-using UniRx;
-using UnityEngine.SceneManagement;
-using XLua;
 using System.Threading.Tasks;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
+using System.IO;
 using System;
 
 namespace Game
 {
-    public class GameInstaller : MonoInstaller
-    {
-		[HideInInspector][Inject]
+	public class GameInstaller : MonoSingleton<GameInstaller>
+	{
 		public GameSettings GameSettings;
+		private long LuaLoadedTime = 0;
 
-		public override void InstallBindings()
+		private void Awake()
 		{
-			SignalBusInstaller.Install(Container);
+#if UNITY_EDITOR || UNITY_STANDALONE
+			Application.targetFrameRate = 60;
+#else
+			Application.targetFrameRate = 30;
+			int width = Screen.width;
+			int high = Screen.height;
+			if (width > 1920)
+			{
+				float aspect = (float)(width) / (float)high;
+				width = 1920;
+				high = (int)(1920.0f / aspect);
+			}
 
-			Container.DeclareSignal<LoadSceneStartSignal>();
-			//封装不够严密, 不用
-			//Container.BindSignal<LoadSceneSignal>()
-			//	.ToMethod<LaunchUI>(x => x.Close).FromResolve();
-
-			//Container.Bind<ITickable>().To<LaunchUI>().AsSingle().NonLazy();
-			//区别：BindInterfacesTo 只绑定当前类的接口到框架里面，类对外界隐藏的
-			//Container.BindInterfacesTo<LaunchUI>().AsSingle();
-			//Container.BindInterfacesAndSelfTo<LaunchUI>().AsSingle().NonLazy();
-
-
-			//Container.BindInstance(100).WhenInjectedInto<TestB>();
-			//Container.BindInstance(10);
-
-
-			//等同于Container.Bind<int>().FromInstance(10);
-			//Container.Bind<ITickable>().FromInstance(this);
-			//Container.BindInterfacesAndSelfTo<TestA>().AsSingle(); //必须加as
-			//Container.BindInterfacesAndSelfTo<TestB>().AsSingle();
-
-
-			//Container.Bind<int>().FromInstance(10);
-			//Container.Bind<ITickable>().To<TestA>().AsSingle();
-			//Container.Bind<ITickable>().To<TestB>().AsSingle();
-			//Container.BindInterfacesAndSelfTo<TestCollection>().AsSingle();
-
-			Container.BindInterfacesAndSelfTo<LaunchUI>().AsSingle();
+			Debug.Log(Screen.width + "-" + Screen.height);
+			Screen.SetResolution(Screen.width, Screen.height, true);
+			Debug.Log(Screen.width + ":" + Screen.height);
+#endif
+			TaskInfo info = TimeManager.AddTaskYearly(11, 4, 5, 0, 0, 0, null);
+			Debug.LogError(info.Date);
+			Debug.LogError(info.TimeInZone);
 		}
 
-		public async override void Start()
+		public async void Start()
 		{
-			SignalBus bus = Container.Resolve<SignalBus>();
-			LoadManager.StartLoadEvent += name => bus.Fire(new LoadSceneStartSignal() { SceneName = name });
+			//初始化zstring
+			using (zstring.Block()) { }
 
+			List<Func<Task>> initFunctions = new List<Func<Task>>();
+			//launch
+			initFunctions.Add(LaunchUI.Init);
+			//config
+			initFunctions.Add(UILocationAsset.Refresh);
+			initFunctions.Add(UICodeTextAsset.Refresh);
+			initFunctions.Add(AtlasConfigAsset.Refresh);
+			initFunctions.Add(UIConfigAsset.Refresh);
+			//manager
+			initFunctions.Add(SoundManager.Init);
+			initFunctions.Add(TcpManager.Init);
+			for (int i = 0; i < initFunctions.Count; i++)
+			{
+				await initFunctions[i].Invoke();
+				LaunchUI.ShowProcess((float)(i + 1) / (float)initFunctions.Count * 0.5f);
+			}
 
-			////每次都new一个新的实例
-			////container.Bind<DiTest>().AsTransient();
-			////每次绑定创建一个新的实例
-			//container.Bind<DiTest>().AsCached();
-			//Container.Inject(this);
-			//diTest.Test();
-
-
-			//从factory中创建tick并没有执行
-			//Container.BindFactory<TestA, FactoryA>();
-			//var a = Container.Resolve<FactoryA>().Create();
-			//print(a.Num);
-
-			//Container.Bind<TestB>().FromFactory<FactoryB>();
-			//var b = Container.Resolve<TestB>();
-			////必须手动注入
-			//Container.Inject(b);
-			//print(b.Num);
-
-			TcpManager.Init();
-			//Xlua热修复
-			XLuaManager.Init();
-			XLuaManager.StartHotfix();
+			await XLuaManager.Init();
+			XLuaManager.Inject<GameSettings>("GameSettings", GameSettings);
 			XLuaManager.StartGame();
+			LuaLoadedTime = DateTime.UtcNow.Ticks;
+			
 		}
 
-		private void TestAdressableComp(AsyncOperationHandle<IList<TextAsset>> obj)
+		private string GetColor(int arg)
 		{
-			throw new NotImplementedException();
+			switch (arg)
+			{
+				case 0:
+					return "红色";
+				case 1:
+					return "橙色";
+				case 2:
+					return "紫色";
+				case 3:
+					return "蓝色";
+				default:
+					return "";
+			}
+		}
+
+
+		private void OnEnable()
+		{
+			AtlasManager.Init();
+		}
+		private void OnDisable()
+		{
+			XLuaManager.Dispose();
 		}
 
 		private void Update()
 		{
-			//if (Input.GetMouseButtonDown(0))
-			//{
-			//	SignalBus bus = Container.Resolve<SignalBus>();
-			//	bus.Fire(new LoadSceneSignal() { SceneName = "Test" });
-			//}
 			InputManager.Update();
 			TcpManager.Update();
+			//TimeManager放在XLuaManager之后，保证OperationLuaTable即使0帧回收，也不会在XLuaUpdate里被利用
 			XLuaManager.Update();
+			TimeManager.Update();
 		}
 
 		private void LateUpdate()
 		{
 			XLuaManager.LateUpdate();
+#if UNITY_EDITOR
+			if (Input.GetKeyDown(KeyCode.F1))
+			{
+				string path = Application.dataPath.Replace("Assets", "Lua/");
+				DirectoryInfo fdir = new DirectoryInfo(path);
+				FileInfo[] file = fdir.GetFiles("*.lua", SearchOption.AllDirectories);
+
+
+				for (int i = 0; i < file.Length; i++)
+				{
+					if (file[i].LastWriteTimeUtc.Ticks - LuaLoadedTime > 0)
+					{
+						//string luaFile = file[i].FullName.Replace("\\", "/").Replace(path, "").Replace(".lua", "");
+						//XLuaManager.HotfixLua(luaFile);
+					}
+				}
+
+				LuaLoadedTime = DateTime.UtcNow.Ticks;
+			}
+
+#endif
 		}
 
 		private void FixedUpdate()
 		{
+			TcpManager.FixedUpdate();
+			TimeManager.FixedUpdate();
 			XLuaManager.FixedUpdate();
 		}
 
@@ -116,56 +140,12 @@ namespace Game
 
 		private async void OnApplicationQuit()
 		{
+			AtlasManager.Dispose();
 			XLuaManager.OnApplicationQuit();
+			TcpManager.Dispose();
+			TimeManager.Dispose();
 			//why
 			await Task.Delay(1);
-			XLuaManager.Dispose();
-		}
-
-		public void Tick()
-		{
-			
-		}
-
-		public class TestA : ITickable
-		{
-			[Inject] public int Num;
-
-			public void Tick()
-			{
-				print(Num);
-			}
-		}
-
-		public class TestB : ITickable
-		{
-			[Inject] public int Num;
-
-			public void Tick()
-			{
-				print(Num);
-			}
-		}
-
-		public class FactoryA : PlaceholderFactory<TestA>
-		{
-
-		}
-
-		public class FactoryB : IFactory<TestB>
-		{
-			public TestB Create()
-			{
-				return new TestB();
-			}
-		}
-
-		public class TestCollection
-		{
-			public TestCollection(IEnumerable<ITickable> tickables)
-			{
-				print(new List<ITickable>(tickables).Count);
-			}
 		}
 	}
 }

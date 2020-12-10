@@ -91,8 +91,23 @@ namespace Game
 
         private IEnumerator DoHttpGet(HttpInfo info)
         {
-            //TODO
-            yield return null;
+            //TODO:xz 2020/7/11
+
+#if UNITY_EDITOR
+            // Debug.Log("HTTP Request: " + info.url);
+#endif
+
+            m_info = info;
+            m_www = new WWW(m_info.url);
+            yield return m_www;
+
+            if (m_www.error != null)
+            {
+                Logger.LogError(m_www.error);
+            }
+            
+            Complete();
+            yield break;
         }
 
         private IEnumerator DoHttpPost(HttpInfo info)

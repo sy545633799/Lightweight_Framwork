@@ -10,7 +10,7 @@ using LuaCSFunction = XLua.LuaDLL.lua_CSFunction;
 
 using XLua;
 using System.Collections.Generic;
-
+using Game;
 
 namespace XLua.CSObjectWrap
 {
@@ -21,13 +21,19 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(UnityEngine.RectTransform);
-			Utils.BeginObjectRegister(type, L, translator, 0, 5, 9, 8);
+			Utils.BeginObjectRegister(type, L, translator, 0, 11, 9, 8);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ForceUpdateRectTransforms", _m_ForceUpdateRectTransforms);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetLocalCorners", _m_GetLocalCorners);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetWorldCorners", _m_GetWorldCorners);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetInsetAndSizeFromParentEdge", _m_SetInsetAndSizeFromParentEdge);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetSizeWithCurrentAnchors", _m_SetSizeWithCurrentAnchors);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetRectSize", _m_SetRectSize);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetAsSceneSize", _m_SetAsSceneSize);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetAnchoredPosition", _m_SetAnchoredPosition);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetRectPivot", _m_SetRectPivot);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetRectAnchor", _m_SetRectAnchor);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetRectAttachment", _m_SetRectAttachment);
 			
 			
 			Utils.RegisterFunc(L, Utils.GETTER_IDX, "rect", _g_get_rect);
@@ -224,6 +230,236 @@ namespace XLua.CSObjectWrap
                     float _size = (float)LuaAPI.lua_tonumber(L, 3);
                     
                     gen_to_be_invoked.SetSizeWithCurrentAnchors( _axis, _size );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetRectSize(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.RectTransform gen_to_be_invoked = (UnityEngine.RectTransform)translator.FastGetCSObj(L, 1);
+            
+            
+			    int gen_param_count = LuaAPI.lua_gettop(L);
+            
+                if(gen_param_count == 3&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)) 
+                {
+                    float _x = (float)LuaAPI.lua_tonumber(L, 2);
+                    float _y = (float)LuaAPI.lua_tonumber(L, 3);
+                    
+                    gen_to_be_invoked.SetRectSize( _x, _y );
+                    
+                    
+                    
+                    return 0;
+                }
+                if(gen_param_count == 2&& translator.Assignable<UnityEngine.Vector2>(L, 2)) 
+                {
+                    UnityEngine.Vector2 _size;translator.Get(L, 2, out _size);
+                    
+                    gen_to_be_invoked.SetRectSize( _size );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+            return LuaAPI.luaL_error(L, "invalid arguments to UnityEngine.RectTransform.SetRectSize!");
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetAsSceneSize(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.RectTransform gen_to_be_invoked = (UnityEngine.RectTransform)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    
+                    gen_to_be_invoked.SetAsSceneSize(  );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetAnchoredPosition(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.RectTransform gen_to_be_invoked = (UnityEngine.RectTransform)translator.FastGetCSObj(L, 1);
+            
+            
+			    int gen_param_count = LuaAPI.lua_gettop(L);
+            
+                if(gen_param_count == 3&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)) 
+                {
+                    float _x = (float)LuaAPI.lua_tonumber(L, 2);
+                    float _y = (float)LuaAPI.lua_tonumber(L, 3);
+                    
+                    gen_to_be_invoked.SetAnchoredPosition( _x, _y );
+                    
+                    
+                    
+                    return 0;
+                }
+                if(gen_param_count == 2&& translator.Assignable<UnityEngine.Vector2>(L, 2)) 
+                {
+                    UnityEngine.Vector2 _pos;translator.Get(L, 2, out _pos);
+                    
+                    gen_to_be_invoked.SetAnchoredPosition( _pos );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+            return LuaAPI.luaL_error(L, "invalid arguments to UnityEngine.RectTransform.SetAnchoredPosition!");
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetRectPivot(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.RectTransform gen_to_be_invoked = (UnityEngine.RectTransform)translator.FastGetCSObj(L, 1);
+            
+            
+			    int gen_param_count = LuaAPI.lua_gettop(L);
+            
+                if(gen_param_count == 3&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)) 
+                {
+                    float _x = (float)LuaAPI.lua_tonumber(L, 2);
+                    float _y = (float)LuaAPI.lua_tonumber(L, 3);
+                    
+                    gen_to_be_invoked.SetRectPivot( _x, _y );
+                    
+                    
+                    
+                    return 0;
+                }
+                if(gen_param_count == 2&& translator.Assignable<UnityEngine.Vector2>(L, 2)) 
+                {
+                    UnityEngine.Vector2 _pivot;translator.Get(L, 2, out _pivot);
+                    
+                    gen_to_be_invoked.SetRectPivot( _pivot );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+            return LuaAPI.luaL_error(L, "invalid arguments to UnityEngine.RectTransform.SetRectPivot!");
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetRectAnchor(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.RectTransform gen_to_be_invoked = (UnityEngine.RectTransform)translator.FastGetCSObj(L, 1);
+            
+            
+			    int gen_param_count = LuaAPI.lua_gettop(L);
+            
+                if(gen_param_count == 5&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 4)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 5)) 
+                {
+                    float _x1 = (float)LuaAPI.lua_tonumber(L, 2);
+                    float _y1 = (float)LuaAPI.lua_tonumber(L, 3);
+                    float _x2 = (float)LuaAPI.lua_tonumber(L, 4);
+                    float _y2 = (float)LuaAPI.lua_tonumber(L, 5);
+                    
+                    gen_to_be_invoked.SetRectAnchor( _x1, _y1, _x2, _y2 );
+                    
+                    
+                    
+                    return 0;
+                }
+                if(gen_param_count == 3&& translator.Assignable<UnityEngine.Vector2>(L, 2)&& translator.Assignable<UnityEngine.Vector2>(L, 3)) 
+                {
+                    UnityEngine.Vector2 _min;translator.Get(L, 2, out _min);
+                    UnityEngine.Vector2 _max;translator.Get(L, 3, out _max);
+                    
+                    gen_to_be_invoked.SetRectAnchor( _min, _max );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+            return LuaAPI.luaL_error(L, "invalid arguments to UnityEngine.RectTransform.SetRectAnchor!");
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetRectAttachment(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                UnityEngine.RectTransform gen_to_be_invoked = (UnityEngine.RectTransform)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    string _attach = LuaAPI.lua_tostring(L, 2);
+                    
+                    gen_to_be_invoked.SetRectAttachment( _attach );
                     
                     
                     

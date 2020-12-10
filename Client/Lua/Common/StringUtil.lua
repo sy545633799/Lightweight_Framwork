@@ -142,6 +142,16 @@ function string.utf8lenex(str)
 	return len, aNum, hNum
 end
 
+function string.haschinese(str)
+	for i=1, string.len(str) do
+		local curByte = string.byte(str, i)
+		if curByte > 127 then
+			return true
+		end
+	end
+	return false
+end
+
 function string.charsize(ch)
 	if not ch then return 0
 	elseif ch >=252 then return 6

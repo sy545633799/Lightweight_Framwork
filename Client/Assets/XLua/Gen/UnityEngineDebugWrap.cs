@@ -352,6 +352,20 @@ namespace XLua.CSObjectWrap
                     
                     return 0;
                 }
+                if(gen_param_count >= 4&& translator.Assignable<UnityEngine.LogType>(L, 1)&& translator.Assignable<UnityEngine.LogOption>(L, 2)&& translator.Assignable<UnityEngine.Object>(L, 3)&& (LuaAPI.lua_isnil(L, 4) || LuaAPI.lua_type(L, 4) == LuaTypes.LUA_TSTRING)&& (LuaTypes.LUA_TNONE == LuaAPI.lua_type(L, 5) || translator.Assignable<object>(L, 5))) 
+                {
+                    UnityEngine.LogType _logType;translator.Get(L, 1, out _logType);
+                    UnityEngine.LogOption _logOptions;translator.Get(L, 2, out _logOptions);
+                    UnityEngine.Object _context = (UnityEngine.Object)translator.GetObject(L, 3, typeof(UnityEngine.Object));
+                    string _format = LuaAPI.lua_tostring(L, 4);
+                    object[] _args = translator.GetParams<object>(L, 5);
+                    
+                    UnityEngine.Debug.LogFormat( _logType, _logOptions, _context, _format, _args );
+                    
+                    
+                    
+                    return 0;
+                }
                 
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);

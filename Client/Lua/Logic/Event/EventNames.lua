@@ -1,4 +1,0 @@
-
-EventNames.CS = {
-    Test = "Test"
-}
