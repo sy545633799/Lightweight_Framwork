@@ -8,16 +8,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: UCSSU_HoodieZipper
-  m_Shader: {fileID: 4800000, guid: 766736548846cdf459a9766614dcccab, type: 3}
+  m_Shader: {fileID: 4800000, guid: 7539722448785d547ad53de9ea6b1156, type: 3}
   m_ShaderKeywords: _ _EMISSIVE_SIMPLE _IS_ANGELRING_OFF _IS_CLIPPING_MODE _IS_OUTLINE_CLIPPING_YES
     _OUTLINE_NML
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: -1
   stringTagMap:
     IgnoreProjection: False
-    RenderType: TransparentCutout
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -64,6 +63,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: ea99e25da400bf640befd4b861541223, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskMap:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MatCap_Sampler:
@@ -114,6 +117,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _ShaderGradeMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ShadingGradeMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -141,6 +148,7 @@ Material:
     - _BaseShade_Feather: 0.105
     - _Base_Speed: 0
     - _Blend: 0
+    - _BlendMode: 0
     - _BlurLevelMatcap: 0
     - _BlurLevelSGM: 0
     - _BumpScale: 1
@@ -200,16 +208,23 @@ Material:
     - _Nearest_Distance: 2
     - _OUTLINE: 0
     - _OcclusionStrength: 1
+    - _OffsetFactor: -0.1
+    - _OffsetUnits: 0.1
     - _Offset_X_Axis_BLD: -0.05
     - _Offset_Y_Axis_BLD: 0.09
     - _Offset_Z: 0
+    - _OutlineWidth: 0.2
     - _Outline_Width: 2
+    - _Outlinethreshold: 0.5
     - _QueueOffset: 0
+    - _Rampthreshold: 0.5
     - _ReceiveShadows: 1
     - _RimLight: 0
     - _RimLight_FeatherOff: 0
     - _RimLight_InsideMask: 0.0001
     - _RimLight_Power: 0.1
+    - _RimStrength: 1
+    - _RimThreshold: 1
     - _Rotate_EmissiveUV: 0
     - _Rotate_MatCapUV: 0
     - _Rotate_NormalMapForMatCapUV: 0
@@ -221,6 +236,7 @@ Material:
     - _ShadeColor_Step: 0.72
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
+    - _SpecRange: 100
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _StencilComp: 0
@@ -265,7 +281,9 @@ Material:
     - _Emissive_Color: {r: 0, g: 0, b: 0, a: 1}
     - _HighColor: {r: 1, g: 1, b: 1, a: 1}
     - _MatCapColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _Outline_Color: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimLightColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _ViewShift: {r: 0, g: 0, b: 0, a: 1}

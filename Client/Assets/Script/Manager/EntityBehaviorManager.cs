@@ -24,7 +24,7 @@ namespace Game
 		/// </summary>
 		/// <typeparam name="EntityBehavior"></typeparam>
 		/// <returns></returns>
-		private static MonoObjectPool<EntityBehavior> entitiesPool = new MonoObjectPool<EntityBehavior>();
+		private static MonoObjectPool<EntityBehavior> entitiesPool = new MonoObjectPool<EntityBehavior>(AllocEntity);
 
 		/// <summary>
 		/// 按照uid存取
@@ -62,6 +62,81 @@ namespace Game
 				Id2ModelCondig.Add(id, configs[i]);
 			}
 		}
+
+		private static EntityBehavior AllocEntity()
+		{
+			GameObject go = new GameObject("Entity");
+			EntityBehavior behavior = go.AddComponent<EntityBehavior>();
+
+			CharacterController controller = go.AddComponent<CharacterController>();
+			controller.center = new Vector3(0, controller.height * 0.5f, 0);
+			controller.radius = 0.5f;
+			return behavior;
+		}
+
+		/// <summary>
+		/// 创建实体
+		/// </summary>
+		/// <param name="sceneid"></param>
+		/// <param name="uid"></param>
+		/// <param name="proxyId"></param>
+		/// <param name="res">预设体AddressableKey</param>
+		/// <param name="bornPos">出生位置</param>
+		/// <param name="orientation">方向</param>
+		/// <param name="scale">缩放</param>
+		/// <param name="entityType">实体类型</param>
+		/// <param name="onBodyCreated">实体的组件</param>
+		/// <returns></returns>
+		public static EntityBehavior CreateEntity(int sceneid, string uid, int res_id, Vector3 bornPos, float orientation, int entityType, Action<EntityComp[]> onBodyCreated = null)
+		{
+			// uid 相同
+			if (entityBehaviors.ContainsKey(uid))
+			{
+				Debug.LogError("CreateEntity error exist uid=" + uid);
+				return null;
+			}
+
+
+			EntityBehavior entity = entitiesPool.Alloc();
+			//GameObject go = new GameObject();
+			//EntityBehavior entity = go.AddComponent<EntityBehavior>();
+
+			if (entity == null)
+				Debug.LogError("entity is nil");
+
+			entity.res_id = res_id;
+			// if (entityType == 1) {
+			// 	entity.isHero = uid == heroUID;
+			// } else {
+			// 	entity.isHero = false;
+			// }
+
+			// 设置父物体
+			GameObject parent = entity.gameObject;
+			if (!parent.activeSelf)
+				parent.SetActive(true);
+			parent.transform.localScale = Vector3.one;
+			parent.transform.SetParent(entityContainer.transform, false);
+			parent.transform.position = bornPos;
+
+			entity.uid = uid;
+			entity.onBodyCreate = null;
+			entity.sceneid = sceneid;
+			entity.entityType = entityType;
+			// 把实体放到容器中
+
+			entityBehaviors.Add(uid, entity);
+			//entityBehaviors_p.Add (proxyId, entity);
+			entityBehaviorsQueue.AddFirst(entity);
+
+			entity.transform.rotation = Quaternion.Euler(0, orientation, 0);
+			entity.onBodyCreate = onBodyCreated;
+			//entity.onBodyCreate = null;
+			//entity.InitComp(false);
+
+			return entity;
+		}
+
 
 
 		private static async void CreateBody(EntityBehavior entity)
@@ -155,69 +230,7 @@ namespace Game
 			}
 		}
 
-		/// <summary>
-		/// 创建实体
-		/// </summary>
-		/// <param name="sceneid"></param>
-		/// <param name="uid"></param>
-		/// <param name="proxyId"></param>
-		/// <param name="res">预设体AddressableKey</param>
-		/// <param name="bornPos">出生位置</param>
-		/// <param name="orientation">方向</param>
-		/// <param name="scale">缩放</param>
-		/// <param name="entityType">实体类型</param>
-		/// <param name="onBodyCreated">实体的组件</param>
-		/// <returns></returns>
-		public static EntityBehavior CreateEntity(int sceneid, string uid, int res_id, Vector3 bornPos, float orientation, int entityType, Action<EntityComp[]> onBodyCreated = null)
-		{
-			// uid 相同
-			if (entityBehaviors.ContainsKey(uid))
-			{
-				Debug.LogError("CreateEntity error exist uid=" + uid);
-				return null;
-			}
-
-
-			EntityBehavior entity = entitiesPool.Alloc();
-			//GameObject go = new GameObject();
-			//EntityBehavior entity = go.AddComponent<EntityBehavior>();
-
-			if (entity == null)
-				Debug.LogError("entity is nil");
-
-			entity.res_id = res_id;
-			// if (entityType == 1) {
-			// 	entity.isHero = uid == heroUID;
-			// } else {
-			// 	entity.isHero = false;
-			// }
-
-			// 设置父物体
-			GameObject parent = entity.gameObject;
-			if (!parent.activeSelf)
-				parent.SetActive(true);
-			parent.transform.localScale = Vector3.one;
-			parent.transform.SetParent(entityContainer.transform, false);
-			parent.transform.position = bornPos;
-
-			entity.uid = uid;
-			entity.onBodyCreate = null;
-			entity.sceneid = sceneid;
-			entity.entityType = entityType;
-			// 把实体放到容器中
-
-			entityBehaviors.Add(uid, entity);
-			//entityBehaviors_p.Add (proxyId, entity);
-			entityBehaviorsQueue.AddFirst(entity);
-
-			entity.transform.rotation = Quaternion.Euler(0, orientation, 0);
-			entity.onBodyCreate = onBodyCreated;
-			//entity.onBodyCreate = null;
-			//entity.InitComp(false);
-
-			return entity;
-		}
-
+		
 		/// <summary>
 		/// 删除指定实体
 		/// </summary>

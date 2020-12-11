@@ -5,6 +5,7 @@
 // version：1.0
 // ========================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,10 +29,16 @@ namespace Game {
 
 	public class MonoObjectPool<T> : IMonoObjectPool where T : MonoBehaviour, IMonoPoolObject<T>
 	{
+		private Func<T> AllocFunc;
+		private Queue<T> m_UnusedObjects = new Queue<T>();
 
-        private Queue<T> m_UnusedObjects = new Queue<T>();
 
-        public T Alloc()
+		public MonoObjectPool(Func<T> func)
+		{
+			AllocFunc = func;
+		}
+
+		public T Alloc()
         {
             if (m_UnusedObjects.Count > 0)
             {
@@ -39,8 +46,7 @@ namespace Game {
             }
             else
             {
-                UnityEngine.GameObject go = new GameObject("Entity");
-                T t = go.AddComponent<T>();
+                T t = AllocFunc.Invoke();
                 return t;
             }
         }

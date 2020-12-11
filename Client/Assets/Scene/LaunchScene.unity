@@ -388,7 +388,7 @@ MonoBehaviour:
   HidePlayerDistance: 1
   allowXTilt: 1
   allowYTilt: 1
-  yMinLimit: -10
+  yMinLimit: -30
   yMaxLimit: 80
   xMinLimit: -360
   xMaxLimit: 360
@@ -396,7 +396,7 @@ MonoBehaviour:
   ySpeed: 20
   targetX: 270
   targetY: 45
-  minY: 0.1
+  minY: 0.412
   layerMask:
     serializedVersion: 2
     m_Bits: 1

@@ -13,7 +13,7 @@ namespace Game {
 	[DisallowMultipleComponent]
 	public class UIView : UIContainer
 	{
-		public int LayerIndex = Game.LayerIndex.Pop;
+		public int LayerIndex = Game.LayerIndex.Base;
 		public bool ShowMoneyBar = false;
 		public bool IsTransParent = false;
 		public bool DestroyOnUnload = true;

@@ -16,7 +16,6 @@ namespace Game {
 		public const string Scene = "Scene";
         public const string Damage = "Damage";
         public const string Base = "Base";
-        public const string Pop = "Pop";
 		public const string Notice = "Notice";
 		public const string Guide = "Guide";
 		public const string Lock = "Lock";
@@ -30,11 +29,10 @@ namespace Game {
 		public const int Scene = 1;
 		public const int Damage = 2;
 		public const int Base = 3;
-		public const int Pop = 4;
-		public const int Notice = 5;
-		public const int Guide = 6;
-		public const int Lock = 7;
-		public const int Network = 8;
-		public const int Loading = 9;
+		public const int Notice = 4;
+		public const int Guide = 5;
+		public const int Lock = 6;
+		public const int Network = 7;
+		public const int Loading = 8;
 	}
 }

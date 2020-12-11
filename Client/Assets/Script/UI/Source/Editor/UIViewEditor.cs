@@ -22,7 +22,7 @@ namespace Game.Editor
 	{
 		private static UIView mUIView;
 		private string[] UITypeNames = { "不带页签的UI", "带页签的UI", "可以同时出现多个的Tips" };
-		private string[] LayerNames = { "Default", "Scene", "Damage", "Base", "Pop", "Notice", "Guide", "Lock", "Network", "Loading" };
+		private string[] LayerNames = { "Default", "Scene", "Damage", "Base", "Notice", "Notice", "Guide", "Lock", "Network", "Loading" };
 		private string UIConfigPath = "Lua/Framework/UI/UIConfig.lua";
 		private string TipsConfigPath = "Lua/Framework/UI/TipsConfig.lua";
 		private static string UILuaViewBasePath = "Lua/Logic/UI/BaseView/";
@@ -72,7 +72,7 @@ namespace Game.Editor
 				UIName = EditorGUILayout.TextField("UIConfig键名", string.IsNullOrEmpty(UIName) ? mUIView.name : UIName);
 				GUILayout.Space(10);
 				mUIView.LayerIndex = EditorGUILayout.Popup("UI层级", mUIView.LayerIndex, LayerNames);
-				if (mUIView.LayerIndex == LayerIndex.Base || mUIView.LayerIndex == LayerIndex.Pop)
+				if (mUIView.LayerIndex == LayerIndex.Base || mUIView.LayerIndex == LayerIndex.Base)
 				{
 					GUILayout.Space(10);
 					mUIView.ShowMoneyBar = EditorGUILayout.Toggle("是否显示金钱条", mUIView.ShowMoneyBar);
@@ -96,6 +96,18 @@ namespace Game.Editor
 
 			if (GUILayout.Button("导出UI配置"))
 			{
+				Canvas canvas = EnsureComponent<Canvas>(mUIView);
+				canvas.overrideSorting = true;
+				canvas.sortingLayerName = LayerNames[mUIView.LayerIndex];
+				EnsureComponent<CanvasGroup>(mUIView);
+				UIGraphicRaycaster raycaster = EnsureComponent<UIGraphicRaycaster>(mUIView);
+
+				UIImage image = mUIView.gameObject.GetComponent<UIImage>();
+				if (image)
+				{
+					GameObject.Destroy(image);
+					Debug.LogError("不要在UI根节点放UIImage");
+				}
 				Dictionary<Transform, string> goPathDic = new Dictionary<Transform, string>();
 				mUIView.transform.GetAllChildrenWithPath(ref goPathDic);
 				EnsureUIView(goPathDic);
@@ -104,6 +116,14 @@ namespace Game.Editor
 			}
 
 			EditorGUILayout.Space();
+		}
+
+		private T EnsureComponent<T>(Component comp)
+			where T : Component
+		{
+			T t = mUIView.GetComponent<T>();
+			if (!t) t= comp.gameObject.AddComponent<T>();
+			return t;
 		}
 
 		private void EnsureUIContainer(UIContainer uiConTainer)
@@ -534,13 +554,17 @@ return {className}");
 		{
 			StringBuilder sb = new StringBuilder();
 			List<string> atlasNames = new List<string>();
+			
 			UIImage[] images = mUIView.GetComponentsInChildren<UIImage>();
 			for (int i = 0; i < images.Length; i++)
 			{
 				Sprite sprite = images[i].sprite;
 				string spritePath = AssetDatabase.GetAssetPath(sprite);
 				if (string.IsNullOrEmpty(spritePath))
+				{
 					Debug.LogError($"{goPathDic[images[i].transform]}带有默认图片, 请去除");
+				}
+					
 				else
 				{
 					string atlasName = Path.GetDirectoryName(spritePath).GetLastPartNameOfPath();

@@ -112,3 +112,21 @@ MonoBehaviour:
     - Home
     - Common
     - Texture
+  - ID: 1607653737
+    Name: 
+    Path: Assets/Art/UI/Main/MainUI.prefab
+    SceneName: 
+    AtlasNames:
+    - Battle
+  - ID: 1607654056
+    Name: 
+    Path: Assets/Art/UI/Main/MainUI.prefab
+    SceneName: 
+    AtlasNames:
+    - Battle
+  - ID: 1607654950
+    Name: 
+    Path: Assets/Art/UI/Main/MainUI.prefab
+    SceneName: 
+    AtlasNames:
+    - Battle
