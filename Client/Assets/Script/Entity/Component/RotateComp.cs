@@ -12,11 +12,7 @@ using UnityEngine;
 namespace Game {
 	public class RotateComp : EntityComp {
 
-		public RotateComp () { }
-		public RotateComp (EntityBehavior behavior) : base (behavior) { }
-
 		private Transform cacheTransform;
-		//private SyncComp syncComp;
 
 		public bool hasRotation { get; private set; }
 		public float rotationY { get; private set; }

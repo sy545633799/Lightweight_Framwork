@@ -399,7 +399,7 @@ MonoBehaviour:
   minY: 0.412
   layerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 257
   IsBattleModel: 0
 --- !u!114 &435719940
 MonoBehaviour:

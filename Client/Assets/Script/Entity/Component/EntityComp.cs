@@ -14,8 +14,6 @@ namespace Game
 
 	public class EntityComp : RecycleObject<EntityComp>
 	{
-		public string compName = "";
-
 		protected EntityBehavior behavior;
 
 		public void SetBehavior(EntityBehavior behavior)
@@ -23,47 +21,40 @@ namespace Game
 			this.behavior = behavior;
 		}
 
-		public EntityComp() { } // 为了使用对象池 增加的无参构造方法 尽量不要用
-
-		public EntityComp(EntityBehavior behavior)
-		{
-			this.behavior = behavior;
-			compName = this.GetType().ToString();
-		}
-
 		public virtual void OnUpdate(float deltaTime) { }
 		public virtual void OnFixedUpdate(float fixedDeltaTime) { }
+		public virtual void OnLateUpdate(float deltaTime) { }
 		public virtual void OnAdd() { }
 		public virtual void OnRemove() { }
 
 
-		public static bool operator !=(EntityComp r, EntityComp l)
-		{
-			bool rnull = (((object)r) == null || r.behavior == null);
-			bool lnull = (((object)l) == null || l.behavior == null);
-			if (rnull && lnull)
-				return false;
+		//public static bool operator !=(EntityComp r, EntityComp l)
+		//{
+		//	bool rnull = (((object)r) == null || r.behavior == null);
+		//	bool lnull = (((object)l) == null || l.behavior == null);
+		//	if (rnull && lnull)
+		//		return false;
 
-			if (rnull == true || rnull == true)
-				return true;
+		//	if (rnull == true || rnull == true)
+		//		return true;
 
-			return !r.Equals(l);
-		}
+		//	return !r.Equals(l);
+		//}
 
 
-		public static bool operator ==(EntityComp r, EntityComp l)
-		{
-			bool rnull = (((object)r) == null || r.behavior == null);
-			bool lnull = (((object)l) == null || l.behavior == null);
-			//rnull = (rnull == false ? r.behavior == null : rnull);
-			//lnull = (lnull == false ? l.behavior == null : lnull);
-			if (rnull && lnull)
-				return true;
-			if (rnull == true || lnull == true)
-				return false;
+		//public static bool operator ==(EntityComp r, EntityComp l)
+		//{
+		//	bool rnull = (((object)r) == null || r.behavior == null);
+		//	bool lnull = (((object)l) == null || l.behavior == null);
+		//	//rnull = (rnull == false ? r.behavior == null : rnull);
+		//	//lnull = (lnull == false ? l.behavior == null : lnull);
+		//	if (rnull && lnull)
+		//		return true;
+		//	if (rnull == true || lnull == true)
+		//		return false;
 
-			return r.Equals(l);
-		}
+		//	return r.Equals(l);
+		//}
 
 	}
 }

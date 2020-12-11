@@ -20,7 +20,6 @@ namespace Game {
 			EntityComp entitycomp = EntityCompFactory.Instance.Get<T>() as EntityComp;
 			entitycomp.SetBehavior(this);
 			entitiesCompList.Add(type, entitycomp);
-			entitiesCompList[type].OnAdd();
 			return entitycomp;
 		}
 
@@ -68,15 +67,15 @@ namespace Game {
 
 		public void InitComp(bool isBodyCreated)
 		{
-			if (this.entityType < 0) return;
-			//if (isBodyCreated) effectComp = addComp("EffectComp") as EffectComp;
-
-			switch (this.entityType)
+			switch (entityType)
 			{
-				case 1: //self
-					AddEntityComp<MoveComp>();
-					AddEntityComp<RotateComp>();
+				case 1://hero
 					AddEntityComp<AnimComp>();
+					AddEntityComp<InputComp>();
+					AddEntityComp<RotateComp>();
+					AddEntityComp<NavComp>();
+					AddEntityComp<MoveComp>();
+					
 					break;
 				case 2: //player
 					AddEntityComp<RotateComp>();
@@ -89,6 +88,9 @@ namespace Game {
 				case 4: //plant
 					break;
 			}
+			var Enumerator = entitiesCompList.GetEnumerator();
+			while (Enumerator.MoveNext())
+				Enumerator.Current.Value.OnAdd();
 		}
 
 

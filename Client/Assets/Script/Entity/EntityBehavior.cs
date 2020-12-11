@@ -20,9 +20,11 @@ namespace Game
 		private static Vector3 OnRecylePos = new Vector3(-888f, -888f, -888f);
 		private Dictionary<Type, EntityComp> entitiesCompList = new Dictionary<Type, EntityComp> ();
 
-		public Action<EntityComp[]> onBodyCreate;
+		
+		public Action<EntityComp[]> onBodyCreate { get; set; }
 
-		public void UpdateLogic (float fUpdateTime) {
+		public void Update () {
+			float fUpdateTime = Time.deltaTime;
 			var Enumerator = entitiesCompList.GetEnumerator ();
 			while (Enumerator.MoveNext ()) {
 				Enumerator.Current.Value.OnUpdate (fUpdateTime * logicSpeed);
@@ -32,11 +34,15 @@ namespace Game
                 entitycmp.OnUpdate(fUpdateTime * logicSpeed);
             }
 
-            if (characterController != null) {
-				if (characterController.isGrounded) {
+			if (Controller != null)
+			{
+				if (Controller.isGrounded)
+				{
 					if (lastGroundState == false) onLand?.Invoke();
 					lastGroundState = true;
-				} else {
+				}
+				else
+				{
 					if (lastGroundState == true) onJump?.Invoke();
 					lastGroundState = false;
 				}
@@ -44,42 +50,36 @@ namespace Game
 
 		}
 
-		private void FixedUpdate () {
+		public void FixedUpdate () {
 			var Enumerator = entitiesCompList.GetEnumerator ();
 			while (Enumerator.MoveNext ()) {
 				Enumerator.Current.Value.OnFixedUpdate (Time.fixedDeltaTime);
 			}
 		}
 
-        private void Update()
-        {
-            var Enumerator = entitiesCompList.GetEnumerator();
-            while (Enumerator.MoveNext())
-            {
-                Enumerator.Current.Value.OnUpdate(Time.deltaTime);
-            }
-        }
+		public void LateUpdate()
+		{
+			var Enumerator = entitiesCompList.GetEnumerator();
+			while (Enumerator.MoveNext())
+			{
+				Enumerator.Current.Value.OnLateUpdate(Time.fixedDeltaTime);
+			}
+		}
 
-        /// <summary>
-        /// EntityBehavior回收进对象池时被调用
-        /// </summary>
-        /// <returns></returns>
-        public EntityBehavior Downcast()
+		/// <summary>
+		/// EntityBehavior回收进对象池时被调用
+		/// </summary>
+		/// <returns></returns>
+		public EntityBehavior Downcast()
         {
 			if (body != null)
 			{
 				ResourceManager.RecyclePrefab(body);
 				body = null;
 			}
-			if (m_CharacterController != null)
-			{
-				Destroy(m_CharacterController);
-				m_CharacterController = null;
-			}
 			this.gameObject.name = RecycleName;
 			onBodyCreate = null;
 			isSyncable = false;
-			isHero = false;
 			sceneid = 0;
 			entityType = 0;
 			uid = string.Empty;

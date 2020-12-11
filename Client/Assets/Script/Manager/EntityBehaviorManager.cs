@@ -42,7 +42,7 @@ namespace Game
 		private static LinkedList<EntityBehavior> entityBehaviorsQueue = new LinkedList<EntityBehavior>();
 
 		private static GameObject m_EntityContainer;
-		public static GameObject entityContainer
+		private static GameObject entityContainer
 		{
 			get
 			{
@@ -67,10 +67,10 @@ namespace Game
 		{
 			GameObject go = new GameObject("Entity");
 			EntityBehavior behavior = go.AddComponent<EntityBehavior>();
-
 			CharacterController controller = go.AddComponent<CharacterController>();
 			controller.center = new Vector3(0, controller.height * 0.5f, 0);
 			controller.radius = 0.5f;
+			behavior.Controller = controller;
 			return behavior;
 		}
 
@@ -89,27 +89,17 @@ namespace Game
 		/// <returns></returns>
 		public static EntityBehavior CreateEntity(int sceneid, string uid, int res_id, Vector3 bornPos, float orientation, int entityType, Action<EntityComp[]> onBodyCreated = null)
 		{
-			// uid 相同
 			if (entityBehaviors.ContainsKey(uid))
 			{
 				Debug.LogError("CreateEntity error exist uid=" + uid);
 				return null;
 			}
 
-
 			EntityBehavior entity = entitiesPool.Alloc();
-			//GameObject go = new GameObject();
-			//EntityBehavior entity = go.AddComponent<EntityBehavior>();
-
 			if (entity == null)
 				Debug.LogError("entity is nil");
 
 			entity.res_id = res_id;
-			// if (entityType == 1) {
-			// 	entity.isHero = uid == heroUID;
-			// } else {
-			// 	entity.isHero = false;
-			// }
 
 			// 设置父物体
 			GameObject parent = entity.gameObject;
@@ -126,13 +116,10 @@ namespace Game
 			// 把实体放到容器中
 
 			entityBehaviors.Add(uid, entity);
-			//entityBehaviors_p.Add (proxyId, entity);
 			entityBehaviorsQueue.AddFirst(entity);
 
 			entity.transform.rotation = Quaternion.Euler(0, orientation, 0);
 			entity.onBodyCreate = onBodyCreated;
-			//entity.onBodyCreate = null;
-			//entity.InitComp(false);
 
 			return entity;
 		}
@@ -182,72 +169,67 @@ namespace Game
 				entity.bodyLoading = false;
 			}
 		}
-		/// <summary>
-		/// 走帧逻辑
-		/// </summary>
-		/// <param name="fUpdateTime"></param>
-		public static void Update(float fUpdateTime)
+
+
+		public static void Update()
 		{
-			int DeleteDelay = 10; /// 每帧最多删除的数量
-			int CeateResDelay = 10; /// 每帧最多加载的数量
-			int CeateDelay = 3; /// 创建延迟
-			var Enumerator = entityBehaviorsQueue.First; ///Enumertor实体
+			var Enumerator = entityBehaviorsQueue.First;
 			// 遍历队列中的所有实体
 			while (Enumerator != null)
 			{
 				EntityBehavior entity = Enumerator.Value;
-				if (entity.Destroyed)
+				if (entity.Body == null)
 				{
-					Enumerator = Enumerator.Next;
-					// 每帧最多删除
-					if (DeleteDelay > 0)
-					{
-						DestroyEntity(entity);
-						DeleteDelay--;
-					}
+					if (!entity.bodyLoading)
+						CreateBody(entity);
 				}
 				else
 				{
-					if ((CeateResDelay > 0 || entity.isHero == true) && entity.Body == null && entity.bodyLoading == false)
-					{
-						CeateResDelay--;
-						CreateBody(entity);
-					}
-					if (entity.onBodyCreate != null && entity.Body != null && (CeateDelay > 0 || entity.isHero == true))
+					if (entity.onBodyCreate != null)
 					{
 						entity.onBodyCreate(new EntityComp[] {
 							entity.GetEntityComp<AnimComp>(),
 							entity.GetEntityComp<RotateComp>(),
 						});
 						entity.onBodyCreate = null;
-						CeateDelay--;
 					}
-					if (entity.Body != null && entity.onBodyCreate == null)
-						entity.UpdateLogic(fUpdateTime);
-
-					Enumerator = Enumerator.Next;
+					else
+					{
+						entity.Update();
+					}
 				}
+					
+				Enumerator = Enumerator.Next;
 			}
 		}
 
-		
+		public static void LateUpdate()
+		{
+			var Enumerator = entityBehaviorsQueue.First; ///Enumertor实体
+			// 遍历队列中的所有实体
+			while (Enumerator != null)
+			{
+				EntityBehavior entity = Enumerator.Value;
+				if (entity.Body != null && entity.onBodyCreate == null)
+					entity.LateUpdate();
+
+				Enumerator = Enumerator.Next;
+			}
+		}
+
 		/// <summary>
 		/// 删除指定实体
 		/// </summary>
 		/// <param name="entity"></param>
 		private static void DestroyEntity(EntityBehavior entity)
 		{
-			// 从队列移除
+			// 从队列移除(TODO:优化)
 			entityBehaviorsQueue.Remove(entity);
 			if (entity && entity.gameObject)
 			{
 				GameObject body = entity.Body;
 				if (body != null)
-				{
 					body.name = entity.gameObject.name;
-					//ResourceManager.RecyclePrefab(body.gameObject);   // 只回收Body
-				}
-
 				// 从对象池移除
 				if (entity.bodyLoading) //强制删除免得回调重复赋值
 					entitiesPool.Recycle(entity); // TODO 对象池提供一个的方法立即回收的方法
@@ -266,9 +248,7 @@ namespace Game
 			if (entityBehaviors.ContainsKey(uid))
 			{
 				EntityBehavior entity = entityBehaviors[uid];
-				entity.Destroyed = true;
 				entityBehaviors.Remove(uid);
-				//暂时先这样
 				DestroyEntity(entity);
 			}
 			else

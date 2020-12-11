@@ -18,15 +18,15 @@ function AOIController:EnterMap(sceneId)
     {
         sceneId = 1,
         uid = "123",
-        element_id = 10001,
+        element_id = 10003,
         pos = { x = -3.323405, y = -1.17, z = -8.666541 },
         forward = { x = 0, y = 0, z = 0 },
         entityType = 1,
-        modelId = 10001,
+        modelId = 10003,
     }
 
     local entity
-    aoiData.entityType = EntityType.player
+    aoiData.entityType = EntityType.hero
     local entity = Hero.New(aoiData)
     MainCamera:SetTarget(entity.behavior.transform)
 

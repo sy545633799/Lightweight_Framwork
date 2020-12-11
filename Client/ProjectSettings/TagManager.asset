@@ -20,9 +20,9 @@ TagManager:
   - UI
   - 
   - 
-  - BlockingLayer
-  - 
-  - 
+  - Ground
+  - Player
+  - Monster
   - 
   - 
   - 
@@ -57,7 +57,7 @@ TagManager:
   - name: Base
     uniqueID: 3971916991
     locked: 0
-  - name: Pop
+  - name: Notice
     uniqueID: 3614321351
     locked: 0
   - name: Guide

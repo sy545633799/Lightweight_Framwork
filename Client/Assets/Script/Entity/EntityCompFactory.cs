@@ -24,18 +24,13 @@ namespace Game {
 	*/
 
 	public sealed class EntityCompFactory : Singleton<EntityCompFactory> {
-		static Dictionary<Type, IObjectPool> poolMap = new Dictionary<Type, IObjectPool> ();
+		static Dictionary<Type, RecyclePool<EntityComp>> poolMap = new Dictionary<Type, RecyclePool<EntityComp>> ();
 		override public void Init () {
 			poolMap.Add (typeof (AnimComp), new RecyclePool<EntityComp> (() => new AnimComp()));
-			poolMap.Add (typeof (MoveComp), new RecyclePool<EntityComp> (() => new MoveComp()));
-			poolMap.Add (typeof (RotateComp), new RecyclePool<EntityComp> (() => new RotateComp()));
-			// poolMap.Add (typeof (AnimEventComp), new EntityCompPool<AnimEventComp> ());
-			// poolMap.Add (typeof (BulletComp), new EntityCompPool<BulletComp> ());
-			// poolMap.Add (typeof (CameraEffectComp), new EntityCompPool<CameraEffectComp> ());
-			// poolMap.Add (typeof (EffectComp), new EntityCompPool<EffectComp> ());
-			// poolMap.Add (typeof (SpurtComp), new EntityCompPool<SpurtComp> ());
-			// poolMap.Add (typeof (SyncComp), new EntityCompPool<SyncComp> ());
-			// poolMap.Add (typeof (SyncMoveComp), new EntityCompPool<SyncMoveComp>());
+			poolMap.Add(typeof(InputComp), new RecyclePool<EntityComp>(() => new InputComp()));
+			poolMap.Add(typeof(RotateComp), new RecyclePool<EntityComp>(() => new RotateComp()));
+			poolMap.Add(typeof(NavComp), new RecyclePool<EntityComp>(() => new NavComp()));
+			poolMap.Add(typeof(MoveComp), new RecyclePool<EntityComp>(() => new MoveComp()));
 		}
 
 		public T Get<T>()
@@ -44,19 +39,12 @@ namespace Game {
 
 			EntityComp protoData = null;
 			Type protoType = typeof(T);
-			IObjectPool pool = null;
+			RecyclePool<EntityComp> pool = null;
 
 			if (poolMap.TryGetValue(protoType, out pool))
 			{
-				if (protoType == typeof(AnimComp) || protoType == typeof(MoveComp) || protoType == typeof(RotateComp))
-				{
-					RecyclePool<EntityComp> tPool = pool as RecyclePool<EntityComp>;
-					protoData = tPool.Alloc();
-				}
-				else
-				{
-					Debug.LogWarning("请检查 EntityComp 类型！");
-				}
+				//RecyclePool<EntityComp> tPool = pool as RecyclePool<EntityComp>;
+				protoData = pool.Alloc();
 			}
 			return (T)protoData;
 		}
@@ -69,14 +57,10 @@ namespace Game {
 			if (protoData == null) return;
 			Type protoType = protoData.GetType();
 
-			IObjectPool pool;
+			RecyclePool<EntityComp> pool;
 			if (poolMap.TryGetValue(protoType, out pool)) {
-				if (protoType == typeof(AnimComp) || protoType == typeof(MoveComp) || protoType == typeof(RotateComp)) {
-					RecyclePool<EntityComp> tPool = pool as RecyclePool<EntityComp>;
-					((EntityComp)protoData).Recycle();
-				} else {
-					Debug.LogWarning ("请检查 EntityComp 类型！");
-				}				
+				RecyclePool<EntityComp> tPool = pool as RecyclePool<EntityComp>;
+				((EntityComp)protoData).Recycle();
 			} else
 				Debug.LogError ("cant find +" + protoType.Name);
 		}

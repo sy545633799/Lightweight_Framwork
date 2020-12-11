@@ -11,7 +11,7 @@ end
 
 function MainScene:OnPrepare(map_id)
     coroutine.Do(MapManager.LoadMap, nil, "Demo_1")
-    --UIManager:LoadView(UIConfig.HomeUI)
+    UIManager:LoadView(UIConfig.MainUI)
     --UIManager:LoadView(UIConfig.BattleUI)
     AOIController:EnterMap()
 end

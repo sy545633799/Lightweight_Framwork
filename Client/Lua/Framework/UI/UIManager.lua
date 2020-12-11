@@ -16,7 +16,7 @@ local UIConfigClass = {
     ---@type string UI代码路径
     View = "",
     ---@type LayerGroup UI层级
-    Layer = LayerGroup.Pop,
+    Layer = LayerGroup.Base,
     ---@type boolean 关闭时是否销毁(第二优先级)
     DestroyWhenUnload = true,
     ---@type boolean 是否显示金钱条
@@ -79,16 +79,11 @@ function UIManager:CreateView(config, uiView)
     return view
 end
 
-function UIManager:IsInPopGroup(config)
-    return config.Layer == LayerGroup.Base or config.Layer == LayerGroup.Pop
-end
-
-
 ---@private
 ---@param config UIConfigClass
 function UIManager:InnerLoadView(config)
     ---处理货币条
-    --if self:IsInPopGroup(config) then
+    --if config.Layer == LayerGroup.Base then
     --    if config.ShowMoneyBar then
     --        self:LoadView(UIConfig.CurrencyUI, config)
     --    else
@@ -96,7 +91,7 @@ function UIManager:InnerLoadView(config)
     --    end
     --end
     local view = self.cacheView[config]
-    if self:IsInPopGroup(config)  then
+    if config.Layer == LayerGroup.Base  then
         local len = table.length(self.popQueue)
         if len > 0 then
             local lastConfig = self.popQueue[len]
@@ -178,7 +173,7 @@ function UIManager:InnerUnLoadView(config)
     if view then
         local viewInfo = self.viewInfo[config]
         view:UnLoad()
-        if self:IsInPopGroup(config)  then
+        if config.Layer == LayerGroup.Base  then
             local len = #self.popQueue
             if self.popQueue[len] == config then
                 table.remove(self.popQueue, len)

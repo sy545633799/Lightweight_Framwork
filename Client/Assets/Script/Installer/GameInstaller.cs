@@ -80,7 +80,7 @@ namespace Game
 			//TimeManager放在XLuaManager之后，保证OperationLuaTable即使0帧回收，也不会在XLuaUpdate里被利用
 			XLuaManager.Update();
 			TimeManager.Update();
-			EntityBehaviorManager.Update(Time.deltaTime);
+			EntityBehaviorManager.Update();
 		}
 
 		private void LateUpdate()
@@ -107,6 +107,7 @@ namespace Game
 			}
 
 #endif
+			EntityBehaviorManager.LateUpdate();
 		}
 
 		private void FixedUpdate()
