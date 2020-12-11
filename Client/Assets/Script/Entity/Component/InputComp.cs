@@ -58,8 +58,8 @@ namespace Game
 		public Vector3 SelfMovingSpeedByStick = Vector3.zero;
 
 
-		public Vector3 KeyDir { get; private set; } = Vector3.zero;
-		public Vector3 JoySticDir { get; private set; } = Vector3.zero;
+		public Vector2 KeyDir { get; private set; } = Vector2.zero;
+		public Vector2 JoySticDir { get; private set; } = Vector2.zero;
 
 		public override void OnAdd()
 		{
@@ -124,8 +124,7 @@ namespace Game
 				if (isGetKey)
 				{
 					Vector2 tragetDir = new Vector2(x, y);
-					KeyDir = behavior.MainCamera.ConvertDirByCam(tragetDir);
-					KeyDir += Vector3.down * DefaultGravity;
+					KeyDir = tragetDir;
 				}
 				else
 					KeyDir = Vector3.zero;

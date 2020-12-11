@@ -29,7 +29,7 @@ namespace Game {
 
 		public override void OnLateUpdate(float deltaTime)
         {
-			if (m_InputComp.KeyDir == Vector3.zero && m_InputComp.JoySticDir == Vector3.zero)
+			if (m_InputComp.KeyDir == Vector2.zero && m_InputComp.JoySticDir == Vector2.zero)
 			{
 				if (IsMoving)
 				{
@@ -41,11 +41,12 @@ namespace Game {
 			}
 			IsMoving = true;
 
-
-			Vector3 dirAfter = behavior.transform.position + m_InputComp.KeyDir * deltaTime;
+			
+			Vector3 dirAfter = behavior.transform.position + MainCamera.Instance.transform.forward;
 			m_RotateComp.SetLookAt(dirAfter, true);
 			m_AnimComp.Moving(m_InputComp.KeyDir);
-			behavior.Controller.Move(m_InputComp.KeyDir * deltaTime * 4);
+			Vector3 pos = behavior.MainCamera.ConvertDirByCam(m_InputComp.KeyDir) + Vector3.down * 20;
+			behavior.Controller.Move(pos * deltaTime * 4);
 			
 		}
 

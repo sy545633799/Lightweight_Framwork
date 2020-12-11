@@ -23,11 +23,11 @@ namespace Game
 		}
 
 
-		public void Moving(Vector3 dir)
+		public void Moving(Vector2 dir)
 		{
 			animator.SetBool("Moving", true);
 			animator.SetFloat("Velocity X", dir.x);
-			animator.SetFloat("Velocity Y", dir.z);
+			animator.SetFloat("Velocity Z", dir.y);
 		}
 
 		public void StopMoving()
