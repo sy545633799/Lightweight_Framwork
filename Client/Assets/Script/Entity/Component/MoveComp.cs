@@ -20,7 +20,7 @@ namespace Game {
 		private float TargetHorizontalSpeed = 0f;
 		private float CurrentVirticalSpeed = 0f;
 		private float TargetVirticalSpeed = 0f;
-		private Vector3 Current_Dir = Vector3.zero;
+		private Vector3 Target_Dir = Vector3.zero;
 
 		public override void OnAdd()
 		{
@@ -42,31 +42,30 @@ namespace Game {
 			//if (m_InputComp.IsJump && behavior.Controller.isGrounded)
 			//	CurrentVirticalSpeed = behavior.JumpSpeed;
 			//纵向速度
-			CurrentVirticalSpeed = Mathf.MoveTowards(CurrentVirticalSpeed, TargetVirticalSpeed, behavior.Gravity * Time.deltaTime);
-			if (Mathf.Abs(CurrentVirticalSpeed - TargetVirticalSpeed) < 0.1f) CurrentVirticalSpeed = TargetVirticalSpeed;
-			//横向速度
-			Vector3 horizontal = behavior.MainCamera.ConvertDirByCam(m_InputComp.JoySticDir);
+			CurrentVirticalSpeed = MoveHelper.MoveTowards(CurrentVirticalSpeed, TargetVirticalSpeed, behavior.Gravity * Time.deltaTime, 0.1f);
 			//停止输入时进入惯性预测
-			if (horizontal.sqrMagnitude == 0)
+			if (m_InputComp.JoySticDir.sqrMagnitude == 0)
 			{
+				//横向速度
 				TargetHorizontalSpeed = 0;
-				CurrentHorizontalSpeed = Mathf.Lerp(CurrentHorizontalSpeed, TargetHorizontalSpeed, behavior.Decceleration * Time.deltaTime);
+				CurrentHorizontalSpeed = MoveHelper.Lerp(CurrentHorizontalSpeed, TargetHorizontalSpeed, behavior.Decceleration * Time.deltaTime, 0.1f);
 			}
 			else
 			{
-				Current_Dir = horizontal;
+				//横向速度
+				Vector3 horizontal = behavior.MainCamera.ConvertDirByCam(m_InputComp.JoySticDir);
 				TargetHorizontalSpeed = behavior.MaxMoveSpeed;
-				CurrentHorizontalSpeed = Mathf.MoveTowards(CurrentHorizontalSpeed, TargetHorizontalSpeed, behavior.Acceleration * Time.deltaTime);
-				m_RotateComp.SetLookAt(Current_Dir, behavior.RotateSpeed * Time.deltaTime, true);
+				CurrentHorizontalSpeed = MoveHelper.MoveTowards(CurrentHorizontalSpeed, TargetHorizontalSpeed, behavior.Acceleration * Time.deltaTime, 0.1f);
+				//方向
+				Target_Dir = horizontal;
+				m_RotateComp.SetLookAt(Target_Dir, behavior.RotateSpeed * Time.deltaTime, true);
 			}
-			if (Mathf.Abs(CurrentHorizontalSpeed - TargetHorizontalSpeed) < 0.1f) CurrentHorizontalSpeed = TargetHorizontalSpeed;
 
 			//移动
 			float speedX = CurrentHorizontalSpeed / behavior.MaxMoveSpeed;
 			float speedY = CurrentVirticalSpeed / behavior.MaxFallSpeed;
 			m_AnimComp.Moving(speedX, speedY);
-			behavior.Controller.Move(Current_Dir * deltaTime * CurrentHorizontalSpeed + Vector3.up * CurrentVirticalSpeed);
-			//Debug.LogError($"{CurrentHorizontalSpeed}:{CurrentVirticalSpeed}");
+			behavior.Controller.Move(Target_Dir * deltaTime * CurrentHorizontalSpeed + Vector3.up * CurrentVirticalSpeed);
 		}
 
 
