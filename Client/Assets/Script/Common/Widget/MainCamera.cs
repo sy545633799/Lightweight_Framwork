@@ -228,7 +228,7 @@ namespace Game {
 	
 			//Vector3 targetDir = forward * joysticDir.y + verticle * joysticDir.x;
             Vector3 targetDir = forward * joysticDir.y + verticle * joysticDir.x;
-            return targetDir.normalized;
+			return targetDir.normalized;
 		}
 	
 	    public Vector3 GetRotation()

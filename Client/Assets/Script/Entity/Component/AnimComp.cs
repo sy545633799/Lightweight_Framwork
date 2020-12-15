@@ -5,6 +5,7 @@
 // version：1.0
 // ========================================================
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -20,19 +21,24 @@ namespace Game
 		public override void OnAdd()
 		{
 			animator = behavior.Body.GetComponent<Animator>();
+			animator.SetBool("IsGrounded", true);
+			UIAction.OnActionTrigger += OnActionTrigger;
 		}
 
-
-		public void Moving(Vector2 dir)
+		private void OnActionTrigger(string triggerName)
 		{
-			animator.SetBool("Moving", true);
-			animator.SetFloat("Velocity X", dir.x);
-			animator.SetFloat("Velocity Z", dir.y);
+			animator.CrossFade(triggerName, 0.2f);
 		}
 
-		public void StopMoving()
+		public void Moving(float speedX, float speedY)
 		{
-			animator.SetBool("Moving", false);
+			animator.SetFloat("Velocity X", speedX);
+			animator.SetFloat("Velocity Y", speedY);
+		}
+
+		public override void OnUpdate(float deltaTime)
+		{
+			animator.SetBool("IsGrounded", behavior.Controller.isGrounded);
 		}
 
 		public override void OnRemove()
@@ -40,7 +46,7 @@ namespace Game
 			animator = null;
 		}
 
-
+		
 
 		
 	}

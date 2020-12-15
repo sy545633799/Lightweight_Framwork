@@ -6,6 +6,7 @@
 // ========================================================
 
 
+using System;
 using UnityEngine;
 
 namespace Game
@@ -58,8 +59,9 @@ namespace Game
 		public Vector3 SelfMovingSpeedByStick = Vector3.zero;
 
 
-		public Vector2 KeyDir { get; private set; } = Vector2.zero;
+		public bool IsJump = false;
 		public Vector2 JoySticDir { get; private set; } = Vector2.zero;
+		
 
 		public override void OnAdd()
 		{
@@ -72,7 +74,6 @@ namespace Game
 			UIJoyStick.OnJoyStickTouchMove += OnJoyStickTouchMove;
 			UIJoyStick.OnJoyStickTouchEnd += OnJoyStickTouchEnd;
 			
-
 			SelfVerticalSpeed = DefaultVerticalSpeed;
 			SelfHorizontalSpeed = DefaultHorizontalSpeed;
 			SelfGravity = DefaultGravity;
@@ -120,14 +121,22 @@ namespace Game
 					x = 50;
 					isGetKey = true;
 				}
+				if (Input.GetKeyDown(KeyCode.Space))
+				{
+					IsJump = true;
+				}
+				else
+				{
+					IsJump = false;
+				}
 
 				if (isGetKey)
 				{
 					Vector2 tragetDir = new Vector2(x, y);
-					KeyDir = tragetDir;
+					JoySticDir = tragetDir;
 				}
 				else
-					KeyDir = Vector3.zero;
+					JoySticDir = Vector3.zero;
 			}
 		}
 
@@ -137,7 +146,7 @@ namespace Game
 		/// </summary>
 		public override void OnRemove()
 		{
-			KeyDir = Vector3.zero;
+			JoySticDir = Vector3.zero;
 			JoySticDir = Vector3.zero;
 			UIJoyStick.OnJoyStickTouchMove -= OnJoyStickTouchMove;
 			UIJoyStick.OnJoyStickTouchEnd -= OnJoyStickTouchEnd;

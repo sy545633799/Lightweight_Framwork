@@ -107,7 +107,7 @@ namespace Game
 			}
 
 #endif
-			EntityBehaviorManager.LateUpdate();
+			
 		}
 
 		private void FixedUpdate()
@@ -115,6 +115,7 @@ namespace Game
 			TcpManager.FixedUpdate();
 			TimeManager.FixedUpdate();
 			XLuaManager.FixedUpdate();
+			EntityBehaviorManager.FixedUpdate();
 		}
 
 		private void OnLevelWasLoaded()

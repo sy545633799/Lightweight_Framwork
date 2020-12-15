@@ -20,12 +20,13 @@ namespace Game.Editor
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
+			UIButton m_Button = target as UIButton;
 			if (EditorTools.DrawHeader("音效"))
 			{
 				EditorTools.BeginContents();
 				GUILayout.BeginVertical();
 				GUILayout.Space(4f);
-				UIButton m_Button = target as UIButton;
+				
 				m_Button.ClickClip = (EditorGUILayout.ObjectField("ClickClip", m_Button.ClickClip, typeof(AudioClip), true)) as AudioClip;
 				m_Button.EnterClip = (EditorGUILayout.ObjectField("EnterClip", m_Button.EnterClip, typeof(AudioClip), true)) as AudioClip;
 				m_Button.ExitClip = (EditorGUILayout.ObjectField("ExitClip", m_Button.ExitClip, typeof(AudioClip), true)) as AudioClip;
@@ -41,6 +42,7 @@ namespace Game.Editor
 				GUILayout.EndVertical();
 				EditorTools.EndContents();
 			}
+
 		}
 	}
 }

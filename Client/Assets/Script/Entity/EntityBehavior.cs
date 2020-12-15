@@ -20,7 +20,17 @@ namespace Game
 		private static Vector3 OnRecylePos = new Vector3(-888f, -888f, -888f);
 		private Dictionary<Type, EntityComp> entitiesCompList = new Dictionary<Type, EntityComp> ();
 
-		
+		[Header("加速")]
+		public float Acceleration = 5.0f;
+		public float Decceleration = 5.0f;
+		public float MaxMoveSpeed = 5.0f;
+		public float RotateSpeed = 300f;
+
+		[Header("跳跃")]
+		public float Gravity = 0.1f;
+		public float JumpSpeed = 0.1f;
+		public float MaxFallSpeed = 0.1f;
+
 		public Action<EntityComp[]> onBodyCreate { get; set; }
 
 		public void Update () {

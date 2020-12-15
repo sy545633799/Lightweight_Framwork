@@ -203,7 +203,7 @@ namespace Game
 			}
 		}
 
-		public static void LateUpdate()
+		public static void FixedUpdate()
 		{
 			var Enumerator = entityBehaviorsQueue.First; ///Enumertor实体
 			// 遍历队列中的所有实体
@@ -211,7 +211,7 @@ namespace Game
 			{
 				EntityBehavior entity = Enumerator.Value;
 				if (entity.Body != null && entity.onBodyCreate == null)
-					entity.LateUpdate();
+					entity.FixedUpdate();
 
 				Enumerator = Enumerator.Next;
 			}

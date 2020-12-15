@@ -20,40 +20,7 @@ namespace Game {
 		public float rotateSpeed = 10;
 
 		public override void OnUpdate (float deltaTime) {
-			if (hasRotation) {
-				OnRotation ();
-			}
-		}
-		void OnRotation () {
-			if (rotationY < 0) {
-				rotationY += 360;
-			}
-			float curRotY = cacheTransform.rotation.eulerAngles.y;
-			if (curRotY < 0) {
-				curRotY += 360;
-			}
 
-			float angle = rotationY - curRotY;
-			if (Mathf.Abs (angle) < 2) {
-				hasRotation = false;
-				return;
-			}
-			if (angle > 180) {
-				angle = angle - 360;
-			}
-			if (angle < -180) {
-				angle = angle + 360;
-			}
-
-			float rotate = angle * rotateSpeed * Time.deltaTime;
-			if (angle > 0 && rotate > angle) {
-				rotate = angle;
-			}
-			if (angle < 0 && rotate < angle) {
-				rotate = angle;
-			}
-
-			cacheTransform.Rotate (Vector3.up, rotate);
 		}
 
 		void SyncRotation () {
@@ -65,38 +32,23 @@ namespace Game {
 			// }
 		}
 
-		public void SetRotation (Quaternion rotation) {
-			// if (behavior.IsOnSpurt) {
-			// 	return;
-			// }
-			rotationY = rotation.eulerAngles.y;
-			if (behavior.isSyncable) {
-				SyncRotation ();
-			}
-			hasRotation = true;
-		}
 		public Quaternion GetRotation () {
 			Quaternion q = Quaternion.Euler (Vector3.up * rotationY);
 			return q;
 		}
-		public void SetLookAt (Vector3 target, bool smooth = false) {
-			// if (behavior.IsOnSpurt) {
-			// 	return;
-			// }
+		public void SetLookAt (Vector3 dir, float t, bool smooth = false) {
 			if (smooth) {
-				Vector3 foward = target - cacheTransform.position;
+				Vector3 foward = dir;
 				float angle = Mathf.Atan2 (foward.x, foward.z) * Mathf.Rad2Deg;
 				Quaternion euler = Quaternion.Euler (Vector3.up * angle);
-				rotationY = euler.eulerAngles.y;
-				hasRotation = true;
+				Quaternion target = Quaternion.RotateTowards(cacheTransform.rotation, euler, t);
+				cacheTransform.rotation = target;
 			} else {
 				//cacheTransform.LookAt(target);
-				Vector3 foward = target - cacheTransform.position;
+				Vector3 foward = dir;
 				float angle = Mathf.Atan2 (foward.x, foward.z) * Mathf.Rad2Deg;
 				Quaternion q = Quaternion.Euler (Vector3.up * angle);
 				cacheTransform.rotation = q;
-				rotationY = cacheTransform.rotation.eulerAngles.y;
-				hasRotation = false;
 			}
 			// 暂时不进行同步操作
 			// if (behavior.isSyncable) {
