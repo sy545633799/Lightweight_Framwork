@@ -33,10 +33,10 @@ namespace Game {
 
 		public override void OnFixedUpdate(float deltaTime)
 		{
-			//if (m_InputComp.JoySticDir == Vector2.zero && !m_InputComp.IsJump
-			//	&& CurrentVirticalSpeed == TargetVirticalSpeed
-			//	&& CurrentHorizontalSpeed == TargetHorizontalSpeed)
-			//	return;
+			if (m_InputComp.JoySticDir == Vector2.zero && !m_InputComp.IsJump
+				&& CurrentHorizontalSpeed == 0
+				&& CurrentVirticalSpeed == TargetVirticalSpeed)
+				return;
 
 			//这里先不做跳跃了，跳跃必须用blendtree做，因为跳跃时间不确定，只能用跳跃时的纵向速度去混合动画
 			//if (m_InputComp.IsJump && behavior.Controller.isGrounded)
@@ -51,7 +51,6 @@ namespace Game {
 			{
 				TargetHorizontalSpeed = 0;
 				CurrentHorizontalSpeed = Mathf.Lerp(CurrentHorizontalSpeed, TargetHorizontalSpeed, behavior.Decceleration * Time.deltaTime);
-				
 			}
 			else
 			{
