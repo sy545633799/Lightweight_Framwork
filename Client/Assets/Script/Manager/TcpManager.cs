@@ -11,200 +11,281 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using XLua;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Game
 {
-    using NetEventType = KeyValuePair<Action<byte[]>, byte[]>;
+	public struct NetEventElement
+	{
+		public Action<ushort, ushort, byte[]> callBack;
+		public ushort protoID;
+		public ushort RPCID;
+		public byte[] message;
 
-    public enum NetPackageType
-    {
-        BaseLine = 1,       //基于行的解析
-        BaseHead = 2,       //头两字节为包大小
-    }
+		public NetEventElement(Action<ushort, ushort, byte[]> callBack, ushort protoID, ushort RPCID, byte[] message)
+		{
+			this.callBack = callBack;
+			this.protoID = protoID;
+			this.RPCID = RPCID;
+			this.message = message;
+		}
+	}
 
-    public class DisType
-    {
-        public const int ConnectFailed = 1;  //连不上
-        public const int Exception = 2;     //数据解析错误
-        public const int Disconnect = 3;    //客户端或服务端正常断开
-    }
+	public enum NetStateEvent
+	{
+		ConnectSucess = 1,          //连接成功
+		ConnectFailed = 2,          //连接失败
+		Exception = 3,              //异常断开
+		Disconnect = 4,             //客户端或服务端正常断开
+		ReConnectSucess = 5,        //重连成功
+		ReConnectFailed = 6,        //重连失败
+	}
 
-    public class TcpManager
-    {
-        private static readonly object m_lockObject = new object();
-        private static Queue<NetEventType> mEvents = new Queue<NetEventType>();
-        private static TcpClient client = null;
-        private static NetworkStream outStream = null;
-        private static MemoryStream memStream;
-        private static BinaryReader reader;
-        private static NetPackageType curPackageType = NetPackageType.BaseLine;
-        private const int MAX_READ = 8192;
-        // private int session = 0;
-        // private int maxSession = int.MaxValue/2;
-        private static byte[] byteBuffer = new byte[MAX_READ];
-        private static byte[] connectFailedTag = new byte[1] { DisType.ConnectFailed };
-        private static byte[] exceptionTag = new byte[1] { DisType.Exception };
-        private static byte[] disconnectTag = new byte[1] { DisType.Disconnect };
-        // public static bool loggedIn = false;
-        public const int MinLuaNetSessionID = System.Int32.MaxValue / 2;
-        public const int MaxLuaNetSessionID = System.Int32.MaxValue;
-        public static Action<byte[]> onConnectCallBack = null;
-        public static Action<byte[]> onDisConnectCallBack = null;
-        public static Action<byte[]> onReceiveLineCallBack = null;
-        public static Action<byte[]> onReceiveMsgCallBack = null;
-        public static Action<byte[]> OnConnectCallBack
-        {
-            get
-            {
-                return onConnectCallBack;
-            }
-            set
-            {
-                onConnectCallBack = value;
-            }
-        }
-        public static Action<byte[]> OnDisConnectCallBack
-        {
-            get
-            {
-                return onDisConnectCallBack;
-            }
-            set
-            {
-                onDisConnectCallBack = value;
-            }
-        }
-        public static Action<byte[]> OnReceiveLineCallBack
-        {
-            get
-            {
-                return onReceiveLineCallBack;
-            }
-            set
-            {
-                onReceiveLineCallBack = value;
-            }
-        }
-        public static Action<byte[]> OnReceiveMsgCallBack
-        {
-            get
-            {
-                return onReceiveMsgCallBack;
-            }
-            set
-            {
-                onReceiveMsgCallBack = value;
-            }
-        }
+	public class TcpManager
+	{
+		public static bool LogMessageInConsole
+		{
+			get
+			{
+				return GameInstaller.Instance.GameSettings.LogDebug;
+			}
+		}
+		public static long ServerTime = 0;
+		public static long HeartTime = 0;
+		public static long NetworkDelayInMs = 10000;// 最短的一次网络延迟 ms
+		public static bool Heart = false;
+		private static readonly object m_lockObject = new object();
+		private static Queue<NetEventElement> mEvents = new Queue<NetEventElement>();
+		private static TcpClient client = null;
+		private static NetworkStream outStream = null;
+		private static MemoryStream memStream;
+		private static BinaryReader reader;
+		private const int MAX_READ = 8192;
+		// private int session = 0;
+		// private int maxSession = int.MaxValue/2;
+		private static byte[] byteBuffer = new byte[MAX_READ];
+		// public static bool loggedIn = false;
+		public const int MinLuaNetSessionID = System.Int32.MaxValue / 2;
+		public const int MaxLuaNetSessionID = System.Int32.MaxValue;
+		public static Action<ushort, ushort, byte[]> OnConnectEventCallBack = null;
+		public static Action<ushort, ushort, byte[]> OnReceiveMsgCallBack = null;
+		/// <summary>
+		/// 单次连接超时
+		/// </summary>
+		public static int timeoutMiliSecond = 5000;
+		/// <summary>
+		/// 最多重连次数
+		/// </summary>
+		public static int maxReconnectTime = 0;
+		/// <summary>
+		/// 当前重连次数
+		/// </summary>
+		private static int reconnectTime = 0;
 
-		public static double TimeStamp { get; private set; }
+		private static CancellationTokenSource tokenSource;
+
+		public static long TimeStamp;
 
 		public static async Task Init()
-        {
-            memStream = new MemoryStream();
-            reader = new BinaryReader(memStream);
-        }
+		{
+			memStream = new MemoryStream();
+			reader = new BinaryReader(memStream);
+			Heart = false;
+		}
 
-        public static void AddEvent(Action<byte[]> _event, byte[] data)
-        {
-            lock (m_lockObject)
-            {
-                mEvents.Enqueue(new NetEventType(_event, data));
-            }
-        }
+		public static void AddEvent(Action<ushort, ushort, byte[]> _event, ushort protoID, ushort RPCID, byte[] data)
+		{
+			mEvents.Enqueue(new NetEventElement(_event, protoID, RPCID, data));
+		}
 
-        public static void Update()
-        {
-            if (mEvents.Count > 0)
-            {
-                while (mEvents.Count > 0)
-                {
-                    NetEventType _event = mEvents.Dequeue();
-                    _event.Key(_event.Value);
-                }
-            }
-        }
+		private static void StartHeart()
+		{
+			if (!Heart)
+			{
+				Func<System.Threading.Tasks.Task> func = async () =>
+				{
+					try
+					{
+						while (Heart)
+						{
+							SendBytes(1003, null); // 发送心跳包
+							HeartTime = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
+							await System.Threading.Tasks.Task.Delay(System.TimeSpan.FromSeconds(5f));
+						}
+					}
+					catch (System.Exception)
+					{
+						return;
+					}
+				};
+				Heart = true;
+				//ProtoManager.AddListener(ProtoCSharpType.HeartRes, ReceiveHeartMessage);
+				func();
+			}
+		}
+
+		private static void StopHeart()
+		{
+			Heart = false;
+			//ProtoManager.RemoveListener(ProtoCSharpType.HeartRes, ReceiveHeartMessage);
+		}
+
+//		private static void ReceiveHeartMessage(IProtoDataStruct message)
+//		{
+//			HeartRes _message = message as HeartRes;
+//			long newDelayInMs = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
+//			newDelayInMs -= HeartTime; // 网络延迟(毫秒)
+//									   // 网络延迟小于100毫秒 且服务器时间与本地时钟的偏差大于500毫秒, 矫正时钟 || 获得更小延迟的时间戳(更接近服务器时间), 矫正时钟
+//			if ((newDelayInMs < 100 && Mathf.Abs(_message.serverTime - ServerTime) > 500) || newDelayInMs < NetworkDelayInMs)
+//			{
+//				NetworkDelayInMs = newDelayInMs;
+//				ServerTime = _message.serverTime;
+//			}
+//#if UNITY_EDITOR
+//			Debug.LogWarning($"收到心跳:{_message.serverTime}");
+//#endif
+//		}
+
+		public static void Update()
+		{
+			if (mEvents.Count > 0)
+			{
+				while (mEvents.Count > 0)
+				{
+					NetEventElement _event = mEvents.Dequeue();
+					//if (ProtoCSharpList.IsCSharp(_event.protoID))
+					//	ProtoManager.Receive(_event.protoID, _event.message);
+					//else
+						_event.callBack(_event.protoID, _event.RPCID, _event.message);
+				}
+			}
+		}
 
 		public static void FixedUpdate()
 		{
-			if (TimeStamp == 0)
-				TimeStamp = TimeUtility.GetTimeStamp();
-			else
-				TimeStamp += Time.fixedDeltaTime;
+			ServerTime += (long)(Time.fixedDeltaTime * 1000);
 		}
 
-		public static void Connect(string host, int port, NetPackageType type)
-        {
-            Debug.Log("host : " + host + " port:" + port.ToString() + " type:" + type.ToString());
-            Close();
-            curPackageType = type;
-            try
-            {
-                IPAddress[] address = Dns.GetHostAddresses(host);
-                if (address.Length == 0)
-                {
-                    Debug.LogError("host invalid");
-                    return;
-                }
-                if (address[0].AddressFamily == AddressFamily.InterNetworkV6)
-                {
-                    client = new TcpClient(AddressFamily.InterNetworkV6);
-                }
-                else
-                {
-                    client = new TcpClient(AddressFamily.InterNetwork);
-                }
-                client.SendTimeout = 1000;
-                client.ReceiveTimeout = 1000;
-                client.NoDelay = true;
-                //Debug.Log("begin connect socket");
-                client.BeginConnect(host, port, new AsyncCallback(OnConnect), null);
-            }
-            catch (Exception e)
-            {
-                Close();
-                OnDisconnected(DisType.ConnectFailed, connectFailedTag, "ConnectFailed");
-                Debug.LogError(e.Message);
-            }
-        }
 
-        public static void OnConnect(IAsyncResult asr)
-        {
-            //Debug.Log("on connect : " + client.Connected.ToString());
-            if (!client.Connected)
-            {
-                Close();
-                OnDisconnected(DisType.ConnectFailed, connectFailedTag, "ConnectFailed");
-                return;
-            }
-            outStream = client.GetStream();
-            if (curPackageType == NetPackageType.BaseLine)
-            {
-                client.GetStream().BeginRead(byteBuffer, 0, MAX_READ, new AsyncCallback(OnReadLine), null);
-            }
-            else
-            {
-                client.GetStream().BeginRead(byteBuffer, 0, MAX_READ, new AsyncCallback(OnRead), null);
-            }
-            //Debug.Log("onConnectCallBack : " + (onConnectCallBack != null).ToString());
-            AddEvent(onConnectCallBack, null);
-        }
+		public static void ReConnect(string host, int port, int timeoutMiliSecondx, int maxReconnectTimex)
+		{
+			reconnectTime = 0;
+			reconnectTime++;
+			maxReconnectTime = maxReconnectTimex;
+			Connect(host, port, timeoutMiliSecondx);
+		}
 
-		public static void SendBytes(byte[] message)
+		public static void Connect(string host, int port, int timeoutMiliSecondx = 5000)
+		{
+			Close();
+			try
+			{
+				IPAddress[] address = Dns.GetHostAddresses(host);
+				if (address.Length == 0)
+				{
+					Debug.LogError("host invalid");
+					return;
+				}
+				if (address[0].AddressFamily == AddressFamily.InterNetworkV6)
+				{
+					client = new TcpClient(AddressFamily.InterNetworkV6);
+				}
+				else
+				{
+					client = new TcpClient(AddressFamily.InterNetwork);
+				}
+				client.SendTimeout = 1000;
+				client.ReceiveTimeout = 1000;
+				client.NoDelay = true;
+
+				timeoutMiliSecond = timeoutMiliSecondx;
+				var source = new CancellationTokenSource();
+				tokenSource = source;
+				Task.Run(async () =>
+				{
+					await Task.Delay(System.TimeSpan.FromMilliseconds(timeoutMiliSecond));
+					if (source.IsCancellationRequested) return;
+					if (client != null && client.Connected) return;
+					if (reconnectTime > 0)
+					{
+						OnDisconnected(NetStateEvent.ReConnectFailed, "Reconnect Failed");
+						if (reconnectTime < maxReconnectTime)
+						{
+							reconnectTime++;
+							Connect(host, port);
+						}
+						else
+							reconnectTime = 0;
+					}
+					else
+					{
+						OnDisconnected(NetStateEvent.ConnectFailed, "ConnectFailed");
+					}
+
+				}, source.Token);
+
+
+				client.BeginConnect(host, port, new AsyncCallback(OnConnect), null);
+			}
+			catch (Exception e)
+			{
+				tokenSource = null;
+				OnDisconnected(NetStateEvent.ConnectFailed, "ConnectFailed");
+				Debug.LogError(e.Message);
+			}
+		}
+
+		public static void OnConnect(IAsyncResult asr)
+		{
+			if (!client.Connected) return;
+			if (tokenSource != null)
+			{
+				tokenSource.Cancel();
+				tokenSource = null;
+			}
+
+			if (reconnectTime == 0)
+				AddEvent(OnConnectEventCallBack, (int)NetStateEvent.ConnectSucess, 0, null);
+			else
+			{
+				reconnectTime = 0;
+				AddEvent(OnConnectEventCallBack, (int)NetStateEvent.ReConnectSucess, 0, null);
+			}
+
+			outStream = client.GetStream();
+			client.GetStream().BeginRead(byteBuffer, 0, MAX_READ, new AsyncCallback(OnRead), null);
+
+			//StartHeart();
+		}
+
+		public static void SendBytes(ushort protoID, byte[] message, ushort rpcId = 0)
 		{
 			MemoryStream ms = null;
+			int messageLength = message == null ? 2 : message.Length + 2;
 			using (ms = new MemoryStream())
 			{
 				ms.Position = 0;
 				BinaryWriter writer = new BinaryWriter(ms);
-				if (curPackageType == NetPackageType.BaseHead)
+				if (protoID > 20000)
 				{
-                    UInt16 msglen = BytesUtility.SwapUInt16((UInt16)(message.Length));
+					ushort msglen = BytesUtility.SwapUInt16((ushort)(messageLength + 2));
 					writer.Write(msglen);
+					ushort protoid = BytesUtility.SwapUInt16(protoID);
+					writer.Write(protoid);
+					ushort rpcid = BytesUtility.SwapUInt16(rpcId);
+					writer.Write(rpcid);
 				}
-				writer.Write(message);
+				else
+				{
+					ushort msglen = BytesUtility.SwapUInt16((ushort)messageLength);
+					writer.Write(msglen);
+					ushort protoid = BytesUtility.SwapUInt16(protoID);
+					writer.Write(protoid);
+				}
+				
+				if (message != null)
+					writer.Write(message);
 				writer.Flush();
 				if (client != null && client.Connected)
 				{
@@ -213,206 +294,156 @@ namespace Game
 				}
 				else
 				{
-					Debug.LogError("client.connected----->>false");
+					// Debug.LogError("client.connected----->>false");
 				}
 			}
 		}
 
-        public static void SendBytesWithoutSize(byte[] message)
-        {
-            if (client != null && client.Connected)
-            {
-                outStream.BeginWrite(message, 0, message.Length, new AsyncCallback(OnWrite), null);
-            }
-            else
-                Debug.LogError("SendBytesWithoutSize failed:connected----->>false");
-        }
 
-        public static void OnRead(IAsyncResult asr)
-        {
-            int bytesRead = 0;
-            try
-            {
-                lock (client.GetStream())
-                {         //读取字节流到缓冲区
-                    bytesRead = client.GetStream().EndRead(asr);
-                }
-                if (bytesRead < 1)
-                {   
-                    //包尺寸有问题，断线处理
-                    Debug.Log("net manager read empty!");
-                    OnDisconnected(DisType.Disconnect, disconnectTag, "bytesRead < 1");
-                    return;
-                }
-                OnReceive(byteBuffer, bytesRead);   //分析数据包内容，抛给逻辑层
-                lock (client.GetStream())
-                {         //分析完，再次监听服务器发过来的新消息
-                    Array.Clear(byteBuffer, 0, byteBuffer.Length);   //清空数组
-                    client.GetStream().BeginRead(byteBuffer, 0, MAX_READ, new AsyncCallback(OnRead), null);
-                }
-            }
-            catch (Exception ex)
-            {
-                OnDisconnected(DisType.Exception, exceptionTag, ex.Message);
-            }
-        }
+		public static void OnRead(IAsyncResult asr)
+		{
+			int bytesRead = 0;
+			try
+			{
+				if (client != null)
+				{
+					bytesRead = client.GetStream().EndRead(asr);
+					if (bytesRead < 1)
+					{
+						//包尺寸有问题，断线处理
+						Debug.Log("net manager read empty!");
+						OnDisconnected(NetStateEvent.Disconnect, "bytesRead < 1");
 
-        public static void OnReadLine(IAsyncResult asr)
-        {
-            int bytesRead = 0;
-            try
-            {
-                lock (client.GetStream())
-                {
-                    //读取字节流到缓冲区
-                    bytesRead = client.GetStream().EndRead(asr);
-                }
-                if (bytesRead < 1)
-                {
-                    //包尺寸有问题，断线处理
-                    Debug.Log("net manager read empty!");
-                    OnDisconnected(DisType.Disconnect, disconnectTag, "bytesRead < 1");
-                    return;
-                }
-                OnReceiveLine(byteBuffer, bytesRead);   //分析数据包内容，抛给逻辑层
-                lock (client.GetStream())
-                {   //分析完，再次监听服务器发过来的新消息
-                    Array.Clear(byteBuffer, 0, byteBuffer.Length);   //清空数组
-                    client.GetStream().BeginRead(byteBuffer, 0, MAX_READ, new AsyncCallback(OnReadLine), null);
-                }
-            }
-            catch (Exception ex)
-            {
-                //PrintBytes();
-                Debug.Log("net manager GetStream exeption!");
-                OnDisconnected(DisType.Exception, exceptionTag, ex.Message);
-            }
-        }
+						return;
+					}
+					//分析数据包内容，抛给逻辑层
+					OnReceive(byteBuffer, bytesRead);
+					//分析完，再次监听服务器发过来的新消息
+					Array.Clear(byteBuffer, 0, byteBuffer.Length);   //清空数组
+					client.GetStream().BeginRead(byteBuffer, 0, MAX_READ, new AsyncCallback(OnRead), null);
+				}
+				else
+				{
+					//这种情况一般是客户端主动断开
+				}
 
-        public static void OnDisconnected(int dis, byte[] bytes, string msg)
-        {
-            Close();   //关掉客户端链接
-            Debug.Log("networkmanager on disconnect!" + msg + " trace:" + new System.Diagnostics.StackTrace().ToString());
-            AddEvent(onDisConnectCallBack, bytes);
-        }
+			}
+			catch (Exception ex)
+			{
+				OnDisconnected(NetStateEvent.Exception, ex.Message);
+			}
+		}
 
-        public static void PrintBytes()
-        {
-            string returnStr = string.Empty;
-            for (int i = 0; i < byteBuffer.Length; i++)
-            {
-                returnStr += byteBuffer[i].ToString("X2");
-            }
-            Debug.LogError(returnStr);
-        }
+		public static void OnDisconnected(NetStateEvent netState, string msg)
+		{
+			if (client == null) return;
+			Close();   //关掉客户端链接
+			AddEvent(OnConnectEventCallBack, (ushort)netState, (ushort)reconnectTime, null);
+			Debug.Log("networkmanager on disconnect!" + msg + " trace:" + new System.Diagnostics.StackTrace().ToString());
+		}
 
-        public static void OnWrite(IAsyncResult r)
-        {
-            try
-            {
-                outStream.EndWrite(r);
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError("OnWrite--->>>" + ex.Message);
-            }
-        }
+		public static void OnWrite(IAsyncResult r)
+		{
+			try
+			{
+				outStream.EndWrite(r);
+			}
+			catch (Exception ex)
+			{
+				Debug.LogError("OnWrite--->>>" + ex.Message);
+			}
+		}
 
-        public static void OnReceiveLine(byte[] bytes, int length)
-        {
-            int line_start_index = 0;
-            for (int i = 0; i < length; i++)
-            {
-                if (bytes[i] == (int)'\n')
-                {
-                    int can_read_len = i - line_start_index;
-                    if (can_read_len > 0)
-                    {
-                        long msg_len = memStream.Length + can_read_len;
-                        memStream.Seek(0, SeekOrigin.End);
-                        memStream.Write(bytes, line_start_index, can_read_len);
-                        memStream.Seek(0, SeekOrigin.Begin);
-                        OnReceivedMessageLine(reader.ReadBytes((int)msg_len));
-                        memStream.SetLength(0);
-                    }
-                    line_start_index = i + 1;
-                }
-            }
-            int left_len = length - line_start_index;
-            if (left_len > 0)
-            {
-                memStream.Seek(0, SeekOrigin.End);
-                memStream.Write(bytes, line_start_index, left_len);
-            }
-        }
+		public static void OnReceive(byte[] bytes, int length)
+		{
+			
+			memStream.Seek(0, SeekOrigin.End);
+			memStream.Write(bytes, 0, length);
+			memStream.Seek(0, SeekOrigin.Begin);
+			while (RemainingBytes() >= 4)
+			{
+				ushort messageLen = reader.ReadUInt16();
+				messageLen = (ushort)(BytesUtility.SwapUInt16(messageLen) - 2);
+				ushort protoId = reader.ReadUInt16();
+				protoId = BytesUtility.SwapUInt16(protoId);
+				ushort rpcId = 0;
+				if (protoId > 20000)
+				{
+					rpcId = reader.ReadUInt16();
+					rpcId = BytesUtility.SwapUInt16(rpcId);
+					messageLen = (ushort)(messageLen - 2);
+				}
+				if (RemainingBytes() >= messageLen)
+				{
+					//Debug.LogError($"{RemainingBytes()}：{messageLen}");
+					OnReceivedMessage(protoId, rpcId, reader.ReadBytes(messageLen));
+				}
+				else
+				{
+					memStream.Position = memStream.Position;
+					break;
+				}
+			}
+			byte[] leftover = reader.ReadBytes((int)RemainingBytes());
+			memStream.SetLength(0);
+			memStream.Write(leftover, 0, leftover.Length);
+		}
 
-        public static void OnReceive(byte[] bytes, int length)
-        {
-            memStream.Seek(0, SeekOrigin.End);
-            memStream.Write(bytes, 0, length);
-            memStream.Seek(0, SeekOrigin.Begin);
-            //Debug.Log("on receive RemainingBytes len : " + RemainingBytes().ToString()+ "  length len:" + length.ToString());
-            while (RemainingBytes() > 2)
-            {
-                ushort messageLen = reader.ReadUInt16();
-                messageLen = BytesUtility.SwapUInt16((UInt16)(messageLen));
-                if (RemainingBytes() >= messageLen)
-                {
-                    OnReceivedMessage(reader.ReadBytes((int)messageLen));
-                }
-                else
-                {
-                    memStream.Position = memStream.Position - 2;
-                    break;
-                }
-            }
-            //Create a new stream with any leftover bytes
-            byte[] leftover = reader.ReadBytes((int)RemainingBytes());
-            memStream.SetLength(0);     //Clear
-            memStream.Write(leftover, 0, leftover.Length);
-        }
+		public static long RemainingBytes()
+		{
+			return memStream.Length - memStream.Position;
+		}
 
-        public static long RemainingBytes()
-        {
-            return memStream.Length - memStream.Position;
-        }
+		public static void OnReceivedMessage(ushort protoID, ushort RPCID, byte[] cmd_byte)
+		{
+			AddEvent(OnReceiveMsgCallBack, protoID, RPCID, cmd_byte);
+		}
 
-        public static void OnReceivedMessageLine(byte[] cmd_byte)
-        {
-            AddEvent(onReceiveLineCallBack, cmd_byte);
-        }
+		public static void StopReconnect()
+		{
+			if (tokenSource != null)
+			{
+				tokenSource.Cancel();
+				tokenSource = null;
+				reconnectTime = 0;
+			}
+			Close();
+		}
 
-        public static void OnReceivedMessage(byte[] cmd_byte)
-        {
-            AddEvent(onReceiveMsgCallBack, cmd_byte);
-        }
+		public static void Close()
+		{
+			if (client != null)
+			{
+				StopHeart();
+				try
+				{
+					var tcp = client;
+					client = null;
+					if (tcp.Client != null && tcp.Connected)
+						tcp.GetStream().Close();
+					tcp.Close();
+				}
+				catch (Exception ex)
+				{
+					Debug.LogError("关闭报错：" + ex.ToString());
+				}
+			}
+		}
 
-        public static void Close()
-        {
-            if (client != null)
-            {
-                if (client.Connected)
-                    client.Close();
-                client = null;
-            }
-            // loggedIn = false;
-        }
-
-        public static void Dispose()
-        {
-            onConnectCallBack = null;
-            onDisConnectCallBack = null;
-            onReceiveLineCallBack = null;
-            onReceiveMsgCallBack = null;
-            if (client != null)
-            {
-                if (client.Connected) client.Close();
-                client = null;
-            }
-            // loggedIn = false;
-            reader.Close();
-            memStream.Close();
-            Debug.Log("~NetworkManager was destroy");
-        }
-    }
+		public static void Dispose()
+		{
+			OnConnectEventCallBack = null;
+			OnReceiveMsgCallBack = null;
+			if (client != null)
+			{
+				if (client.Connected) client.Close();
+				client = null;
+			}
+			// loggedIn = false;
+			reader.Close();
+			memStream.Close();
+			StopHeart();
+			Debug.Log("~NetworkManager was destroy");
+		}
+	}
 }

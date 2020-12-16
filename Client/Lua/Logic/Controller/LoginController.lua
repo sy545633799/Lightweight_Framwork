@@ -7,7 +7,7 @@ end
 
 ---@public 握手成功
 function LoginController:HandSucess()
-    local roleInfo = NetworkManager:SendRequest("req_roleInfo", {})
+    local roleInfo = NetworkManager:SendRequest(NetMsgId.req_login)
     if not roleInfo or not next(roleInfo) then
         UIManager:LoadView(UIConfig.RegisterUI)
     else

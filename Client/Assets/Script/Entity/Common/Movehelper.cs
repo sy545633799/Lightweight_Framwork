@@ -34,5 +34,19 @@ namespace Game
 			}
 			return pos;
 		}
+
+		public static float MoveTowards(float current, float target, float maxDelta, float minOffset)
+		{
+			float val = Mathf.MoveTowards(current, target, maxDelta);
+			if (Mathf.Abs(val - target) < minOffset) val = target;
+			return val;
+		}
+
+		public static float Lerp(float current, float target, float maxDelta, float minOffset)
+		{
+			float val = Mathf.Lerp(current, target, maxDelta);
+			if (Mathf.Abs(val - target) < minOffset) val = target;
+			return val;
+		}
 	}
 }

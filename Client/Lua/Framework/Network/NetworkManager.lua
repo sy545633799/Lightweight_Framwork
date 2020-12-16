@@ -2,193 +2,143 @@
 --- Created by shenyi.
 --- DateTime: 2020/6/26
 
+require "Framework.Network.Proto.msgId"
 local sproto = require "Framework.Network.Sproto.sproto"
---local core = require "sproto.core"
-local sprotoparser = require "Framework.Network.Sproto.sprotoparser"
-local c2s = require "Framework.Network.Proto.protoc2s"
-local s2c = require "Framework.Network.Proto.protos2c"
-local print_r = require "Framework.Network.Sproto.print_r"
 local crypt = require "crypt"
 ---@class NetworkManager:Updatable
 local NetworkManager = BaseClass("NetworkManager", Updatable)
-local DisType = CS.Game.DisType
 local tcpManager = TcpManager
 
-local LoginConst =
-{
-    WaitForLoginServerChanllenge = 1,   --刚连接上登录服务器后就等收challenge了
-    WaitForLoginServerHandshakeKey = 2, --等待接收登录服务器的handshake key
-    WaitForLoginServerAuthorResult = 3, --等待登录服务器的验证结果
-    WaitForGameServerConnect = 4,       --等待连接上游戏服务器
-    WaitForGameServerHandshake = 5,     --等待游戏服务器的握手验证
-}
+local msgProto
+local Id2ProtoDic = {}
+local rpcId = 1
 
-local Error_Map = {
-    [400] = "握手失败",
-    [401] = "自定义的 auth_handler 不认可 token",
-    [403] = "自定义的 login_handler 执行失败",
-    [406] = "该用户已经在登陆中",
+local NetStateEvent =
+{
+    ConnectSucess = 1,
+    ConnectFailed = 2,
+    Exception = 3,
+    Disconnect = 4,
+    ReConnectSucess = 5,
+    ReConnectFailed = 6
 }
 
 function NetworkManager:ctor()
-    self.session = 0
-    self.sessionId2CBs = {}
-    self.srvReqHandler = {}
-    self.isLineMsg = true
-    self.sproto_host = sproto.new(sprotoparser.parse(s2c)):host "package"
-    self.sproto_request =  self.sproto_host:attach(sproto.new(sprotoparser.parse(c2s)))
-    tcpManager.onConnectCallBack = function(bytes) self:OnConnectCallBack(bytes) end
-    tcpManager.onDisConnectCallBack = function(bytes) self:OnDisConnectCallBack(bytes) end
-    tcpManager.onReceiveLineCallBack = function(bytes) self:OnReceiveLineCallBack(bytes) end
-    tcpManager.onReceiveMsgCallBack = function(bytes) self:OnReceiveMsgCallBack(bytes) end
-end
-
-function NetworkManager:Login(ip, loginport, gameport, server, account)
-    if self.loginLock then log("已登录或正在登陆中") return end
-
-    self.loginLock = true
-    self.ip = ip
-    self.loginport = loginport
-    self.gameport = gameport
-    self.server = server
-    self.account = account
-    self.secret = nil
-    self.subid = nil
-    self.handshakeSucess = false
-    self.login_state = LoginConst.WaitForLoginServerChanllenge
-    tcpManager.Connect(ip, loginport, CS.Game.NetPackageType.BaseLine)
-end
-
-function NetworkManager:OnConnectCallBack(bytes)
-    if self.login_state == LoginConst.WaitForLoginServerChanllenge then
-        --print("登录认证服务器成功")
-    elseif self.login_state == LoginConst.WaitForGameServerConnect then
-        --print("登录游戏服务器成功", self.token.user, self.token.server, self.subid, crypt.hexencode(self.secret))
-        local handshake = string.format("%s@%s#%s:%d", crypt.base64encode(self.account),
-                crypt.base64encode(self.server),crypt.base64encode(self.subid) , 1)
-        local hmac = crypt.hmac64(crypt.hashkey(handshake), self.secret)
-        local handshake_str = handshake .. ":" .. crypt.base64encode(hmac)
-        tcpManager.SendBytes(handshake_str)
-        self.login_state = LoginConst.WaitForGameServerHandshake
+    self.loginLock = false -- 登录锁
+    for protoName, id in pairs(NetMsgId) do
+        Id2ProtoDic[id] = protoName
     end
+    msgProto = sproto.parse(require("Framework.Network.Proto.msg"))
+    tcpManager.OnConnectEventCallBack = function(state, count) self:OnConnectCallBack(state, count) end
+    tcpManager.OnReceiveMsgCallBack = function(protoID, RPCID, bytes) self:OnReceiveMsgCallBack(protoID, RPCID, bytes) end
+end
+
+---@登录
+function NetworkManager:Login(ip, port)
+    if self.loginLock then logError("已登录或正在登陆中") return end
+    self.loginLock = true
+    self.isConnect = false
+    self.ip = ip
+    self.port = port
+    self.sessionId2CBs = {}
+    tcpManager.Connect(self.ip, self.port)
+end
+
+function NetworkManager:onDisConnect()
+    self.isConnect = false
+    self.loginLock = false
+    EventManager:Broadcast(EventNames.Login.DisConnect)
+end
+
+function NetworkManager:OnConnectCallBack(state, count)
+    coroutine.start(function ()
+        if state == NetStateEvent.ConnectSucess then
+            logError("连接成功")
+            --UIManager:UnLoadView(UIConfig.ReconnectionUI)
+            LoginController:HandSucess()
+        elseif state == NetStateEvent.ConnectFailed then
+            logError("连接失败")
+            --UIManager:UnLoadView(UIConfig.ReconnectionUI)
+            --TipsManager:ShowTips(TipsConfig.CommonTips, "连不上服务器")
+            self:onDisConnect()
+        elseif state == NetStateEvent.Exception then
+            self:onDisConnect()
+            --UIManager:LoadView(UIConfig.ReconnectionUI)
+            logError("开始短线重连")
+            self:Reconnect()
+        elseif state == NetStateEvent.Disconnect then
+            logError("断开连接")
+        elseif state == NetStateEvent.ReConnectSucess then
+            logNetMsg("重连成功")
+            --UIManager:UnLoadView(UIConfig.ReconnectionUI)
+            LoginUIController:HandSucess()
+        elseif state == NetStateEvent.ReConnectFailed then
+            logError(string.format("当前重连失败第%d次数", count))
+            if count == common_para.commonPara[39].figure then
+                --UIManager:UnLoadView(UIConfig.ReconnectionUI)
+            end
+        end
+        --EventManager:Broadcast(EventNames.Network.NetworkEvent, state)
+    end)
 end
 
 function NetworkManager:Close()
     tcpManager.Close()
 end
 
-function NetworkManager:OnDisConnectCallBack(bytes)
-    local disType = string.byte(bytes)
-    if disType == DisType.ConnectFailed then
-        logError("连不上服务器")
-    elseif disType == DisType.Exception then
-        logError("网络错误")
-    else
-        if self.handshakeSucess then
-            logError("服务器断开")
-        else
-            log("服务器断开")
-        end
-    end
-    self.loginLock = false
-    self.handshakeSucess = false
-    --if SceneManager.current_config ~= SceneConfig.LoginScene then
-    --    coroutine.start(function () LoginController:Disconnect() end)
-    --end
-end
-
 ---注册服务器单方向客户端发送的信息
-function NetworkManager:RegSrvReqHandler(protoName, callback, handle)
-    assert(type(protoName) == "string")
+function NetworkManager:RegSrvReqHandler(protoId, callback, handle)
+    assert(type(protoId) == "number")
     assert(type(callback) == "function")
-    self.srvReqHandler[protoName] = { callback = callback, handle = handle}
+    self.srvReqHandler[protoId] = { callback = callback, handle = handle}
 end
 
 ---客户端主动向服务器发送请求
 function NetworkManager:SendMessage(protoName, args)
-    local str = self.sproto_request(protoName, args or {}, 0)
-    tcpManager.SendBytes(str)
+    --local str = self.sproto_request(protoName, args or {}, 0)
+    --tcpManager.SendBytes(str)
 end
 
-function NetworkManager:SendRequest(protoName, args)
-    self.session = self.session + 1
-    self.sessionId2CBs[self.session] = coroutine.running()
-    local str = self.sproto_request(protoName, args or {}, self.session)
-    tcpManager.SendBytes(str)
+
+function NetworkManager:SendRequest(protoId, args)
+    local protoName = Id2ProtoDic[protoId]
+    if protoName and args then
+
+    else
+        rpcId = rpcId + 1
+        tcpManager.SendBytes(protoId, nil, rpcId)
+        if rpcId == 65535 then rpcId = 1 end
+        self.sessionId2CBs[rpcId] = coroutine.running()
+    end
     return coroutine.yield()
 end
 
----登录验证阶段
-function NetworkManager:OnReceiveLineCallBack(bytes)
-    local code = tostring(bytes)
-
-    --log('Cat:LoginController.lua[145] code|'..code.."|login state:"..self.login_state)
-    if self.login_state == LoginConst.WaitForLoginServerChanllenge then
-        self.challenge = crypt.base64decode(code)
-        self.clientkey = crypt.randomkey()
-        local handshake_client_key = crypt.base64encode(crypt.dhexchange(self.clientkey))
-        local buffer = handshake_client_key.."\n"
-        tcpManager.SendBytes(buffer)
-        self.login_state = LoginConst.WaitForLoginServerHandshakeKey
-    elseif self.login_state == LoginConst.WaitForLoginServerHandshakeKey then
-        self.secret = crypt.dhsecret(crypt.base64decode(code), self.clientkey)
-        local hmac = crypt.hmac64(self.challenge, self.secret)
-        local hmac_base = crypt.base64encode(hmac)
-        tcpManager.SendBytes(hmac_base.."\n")
-        local token = string.format("%s@%s:%s",
-                crypt.base64encode(self.account),
-                crypt.base64encode(self.server),
-                crypt.base64encode("password"))
-        local etoken = crypt.desencode(self.secret, token)
-        local etoken_base = crypt.base64encode(etoken)
-        tcpManager.SendBytes(etoken_base.."\n")
-        self.login_state = LoginConst.WaitForLoginServerAuthorResult
-    elseif self.login_state == LoginConst.WaitForLoginServerAuthorResult then
-        local result = tonumber(string.sub(code, 1, 3))
-
-        if result == 200 then
-            self.subid = crypt.base64decode(string.sub(code, 5))
-            self.login_state = LoginConst.WaitForGameServerConnect
-            self:Close()
-            tcpManager.Connect(self.ip, self.gameport, CS.Game.NetPackageType.BaseHead)
-        else
-            error('Cat:LoginController.lua[147] self.error_map[result]' .. (Error_Map[result] or "未知错误"))
-        end
+function NetworkManager:OnReceiveMsgCallBack(protoID, rpcId, bytes)
+    logError(protoID)
+    logError(rpcId)
+    local args
+    if bytes and #bytes > 0 then
+        local protoName = Id2ProtoDic[protoID]
+        if not protoName then logError("can't find protoId" .. protoID) return end
+        args = msgProto:decode(protoName, bytes)
     end
-end
 
-function NetworkManager:OnReceiveMsgCallBack(bytes)
-    if not self.handshakeSucess then
-        local code = tostring(bytes)
-        local result = string.sub(code, 1, 3)
-        if tonumber(result) == 200 then
-            self.handshakeSucess = true
-            log("与游戏服务器握手成功")
-            PlayerPrefs.SetString("Account", self.account)
-            coroutine.start(function () LoginController:HandSucess() end)
-        else
-            logError("与游戏服务器握手失败:" .. result)
-        end
+    if rpcId > 0 then
+        local co = self.sessionId2CBs[rpcId]
+        coroutine.resumeex(co, args)
+        self.sessionId2CBs[rpcId] = nil
     else
-        local type, session, args = self.sproto_host:dispatch(bytes)
-        if type =="REQUEST" then
-            local handler = self.srvReqHandler[session]
-            if handler then
-                coroutine.start(function () if handler then handler(handler.handler, args) else handler(args) end end)
-            end
-        else
-            local co = self.sessionId2CBs[session]
-            coroutine.resumeex(co, args)
-            self.sessionId2CBs[session] = nil
+        local handler = self.srvReqHandler[protoID]
+        if handler then
+            coroutine.start(function () if handler then handler(handler.handler, args) else handler(args) end end)
         end
     end
+
 end
 
 function NetworkManager:dtor()
-    tcpManager.onConnectCallBack = nil
-    tcpManager.onDisConnectCallBack = nil
-    tcpManager.onReceiveLineCallBack = nil
-    tcpManager.onReceiveMsgCallBack = nil
+    tcpManager.OnConnectEventCallBack = nil
+    tcpManager.OnReceiveMsgCallBack = nil
 end
 
 return NetworkManager

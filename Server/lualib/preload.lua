@@ -13,4 +13,4 @@ require "base.order"
 require "base.class"
 require "base.log"
 
-ERROR_CODE = require "proto.errcode"
+ERROR_CODE = require "proto.msgId"

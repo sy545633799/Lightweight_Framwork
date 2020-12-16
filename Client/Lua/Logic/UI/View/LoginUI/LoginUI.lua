@@ -25,7 +25,7 @@ function LoginUI:Login(...)
         return
     end
 
-    networkManager:Login("127.0.0.1", 8003, 8890, "DevelopServer", account)
+    networkManager:Login("127.0.0.1",8890)
 end
 
 function LoginUI:OnLoad(...)

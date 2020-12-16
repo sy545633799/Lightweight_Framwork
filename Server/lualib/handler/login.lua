@@ -25,7 +25,7 @@ local role_attrib
 
 handler:onInit (function (user_info)
     user = user_info
-    snax_account = snax.uniqueservice("game/account")
+    --snax_account = snax.uniqueservice("game/account")
 
     --create_role = snax.uniqueservice ("game/role/create_role")
     --uuid_inst = uuid.New()
@@ -46,10 +46,13 @@ handler:onLogout (function ()
 end)
 
 ---@public 客户端点击登录调用, 返回玩家信息，如果没有，则返回空
-function RPC.req_roleInfo()
-    role_attrib = snax_account.req.get_roleInfo(user.uid)
+function RPC.req_login()
+    skynet.error("req_login")
+    --role_attrib = snax_account.req.get_roleInfo(user.uid)
+    --
+    --return { roleInfo = role_attrib }
 
-    return { roleInfo = role_attrib }
+    return NetMsgId.ack_login
 end
 
 ---@public 如果客户端得到的玩家信息为空，则调用这个方法注册，并返回玩家信息

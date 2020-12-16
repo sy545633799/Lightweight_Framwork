@@ -1,38 +1,32 @@
 local skynet = require "skynet"
 local queue = require "skynet.queue"
 local crypt = require "skynet.crypt"
-local sprotoparser = require "sprotoparser"
 local sproto = require "sproto"
-local c2s = require "proto.protoc2s"
-local s2c = require "proto.protos2c"
 local handlers = {
     "handler.login",
     "handler.chat",
     "handler.role",
 }
 
+local msgProto
+local id2ProtoDic = {}
 local cs = queue()
 local gate
-local user_info
+local fd
 ---@class CMD
 local CMD = {}
 ---@class RPC
 local RPC = {}
-local sproto_host, sproto_request
+local user_info
 
-function CMD.login(source, uid, sid, secret, platform, server_id)
-    skynet.error(string.format("%s is login", uid))
+function CMD.connect(source, platform, server_id, fd1)
     gate = source
+    fd = fd1
     user_info = {
-        uid = uid,
-        subid = sid,
-        secret = secret,
         platform = platform,
         server_id = server_id,
         RPC = RPC,
         CMD = CMD,
-        agent = skynet.self(),
-        sendmessage = function(ret) skynet.send(gate, "lua", "send", user_info.uid, user_info.subid, ret) end
     }
     for _,v in ipairs(handlers) do
         local handler = require(v)
@@ -40,45 +34,61 @@ function CMD.login(source, uid, sid, secret, platform, server_id)
     end
 end
 
----玩家主动登出
-function CMD.logout(source)
+function CMD.disconnect(source)
+    skynet.error("disconnect")
+    fd = nil
     for _,v in ipairs(handlers) do
         local handler = require(v)
         handler:unregister(user_info)
     end
-    if gate then
-        skynet.call(gate, "lua", "logout", user_info.uid, user_info.subid)
-    end
 end
 
----将玩家踢出登录
-function CMD.afk(source)
-    for _,v in ipairs(handlers) do
-        local handler = require(v)
-        handler:unregister(user_info)
-    end
-    skynet.error("玩家被踢离线")
+function CMD.doDisconnect(ret)
+    skynet.send(gate, "lua", "doDisconnect", fd, ret)
+    CMD.disconnect()
 end
 
+
+function CMD.send(retId, ret)
+    assert(retId and type(retId) == "number")
+    local result = string.pack(">H", retId)
+    if ret then
+        result = result .. ret
+    end
+    skynet.send(gate, "lua", "send", fd, result)
+end
 
 local function dorequest(data)
-    local ok, type, session, args, response = pcall(sproto_host.dispatch, sproto_host, data)
-    if not ok then
-        LOG_ERROR("sproto parser error") return
-    end
-
-    local f = RPC[session]
-    if f then
-        local r = f(args)
-        if r and response then
-            local ret = response(r)
-            if ret then
-                skynet.send(gate, "lua", "send", user_info.uid, user_info.subid, ret)
+    local protoId = string.unpack(">H", data)
+    local protoName = id2ProtoDic[protoId]
+    if protoName then
+        local f = RPC[protoName]
+        if not f then skynet.error("can't find protoName:" .. protoName) return end
+        if protoId > 20000 then
+            local retId, retTb
+            if #data > 4 then
+                local str = string.sub(data, 5)
+                retTb = f(msgProto:decode(protoName, str))
+            else
+                retId, retTb = f()
+            end
+            if not retId then skynet.error("can't find retId:" .. protoName) return end
+            local retName = id2ProtoDic[retId]
+            local ret =  string.sub(data, 3, 4)
+            if retTb then ret = ret .. msgProto:encode(retName, retTb) end
+            CMD.send(retId, ret)
+        else
+            if #data > 2 then
+                local str = string.sub(data, 3)
+                f(msgProto:decode(protoName, str))
+            else
+                f()
             end
         end
     else
-        LOG_ERROR("request whith nil type : %s", session)
+        skynet.error("can't find protoId:" .. protoId)
     end
+
 end
 
 skynet.register_protocol {
@@ -88,8 +98,10 @@ skynet.register_protocol {
 }
 
 skynet.start(function()
-    sproto_host = sproto.new(sprotoparser.parse(c2s)):host "package"
-    sproto_request = sproto_host:attach(sproto.new(sprotoparser.parse(s2c)))
+    for protoName, id in pairs(NetMsgId) do
+        id2ProtoDic[id] = protoName
+    end
+    msgProto = sproto.parse(require("proto.msg"))
     skynet.dispatch("lua", function(session, source, command, ...)
         local f = assert(CMD[command])
         cs(skynet.ret, skynet.pack(f(source, ...)))

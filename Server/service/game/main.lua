@@ -12,14 +12,12 @@ skynet.start(function()
 		skynet.newservice("console")
 	end
 
-	local loginserver = skynet.newservice("game/logind")
-
-	local gate = skynet.newservice("game/gated", loginserver, config.platform_id, config.server_id)
+	local gate = skynet.newservice("game/gated", config.platform_id, config.server_id)
 	skynet.call(gate, "lua", "open" , config.gateconfig)
 
-	local mongod = snax.uniqueservice("common/mongod")
-	snax.uniqueservice("common/uid")
-	snax.uniqueservice("game/account")
+	--local mongod = snax.uniqueservice("common/mongod")
+	--snax.uniqueservice("common/uid")
+	--snax.uniqueservice("game/account")
 
 
 	--skynet.newservice("debug_console", config.consoleport)
@@ -32,9 +30,6 @@ skynet.start(function()
 	--skynet.call(gate, "lua", "open" , config.gateconfig)
 
 	--local s2c = require "proto.prototest"
-
-
-
 
 	skynet.exit()
 end)

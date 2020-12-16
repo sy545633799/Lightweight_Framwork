@@ -31,10 +31,11 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 8, 0, 0);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 9, 0, 0);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "Init", _m_Init_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "CreateEntity", _m_CreateEntity_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "Update", _m_Update_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "FixedUpdate", _m_FixedUpdate_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "DestroyEntity", _m_DestroyEntity_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "DestroyAllEntity", _m_DestroyAllEntity_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "GetEntity", _m_GetEntity_xlua_st_);
@@ -166,9 +167,31 @@ namespace XLua.CSObjectWrap
             
                 
                 {
-                    float _fUpdateTime = (float)LuaAPI.lua_tonumber(L, 1);
                     
-                    //Game.EntityBehaviorManager.Update( _fUpdateTime );
+                    Game.EntityBehaviorManager.Update(  );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_FixedUpdate_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+            
+            
+                
+                {
+                    
+                    Game.EntityBehaviorManager.FixedUpdate(  );
                     
                     
                     

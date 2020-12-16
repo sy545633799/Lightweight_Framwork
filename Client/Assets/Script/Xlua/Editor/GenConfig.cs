@@ -135,8 +135,9 @@ using Game;
         typeof(Action<float>),
         typeof(Action<float, float>),
         typeof(Action<byte[]>),
+		typeof(Action<ushort, ushort, byte[]>),
 
-        typeof(UnityEngine.Event),
+		typeof(UnityEngine.Event),
         typeof(System.Collections.IEnumerator),
         //typeof(System.Func<LoopListView, int, LoopListViewItem>),
 

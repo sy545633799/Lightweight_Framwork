@@ -1,122 +1,80 @@
-local msgserver = require "snax.msg_server"
-local crypt = require "skynet.crypt"
 local skynet = require "skynet"
+local gateserver = require "snax.gateserver"
+local netpack = require "skynet.netpack"
+local crypt = require "skynet.crypt"
+local socketdriver = require "skynet.socketdriver"
+local assert = assert
 
 local start_arge = {...}
-local loginservice = tonumber(start_arge[1])
-local platform = tonumber(start_arge[2])
-local server_id = tonumber(start_arge[3])
+local platform = tonumber(start_arge[1])
+local server_id = tonumber(start_arge[2])
 
-local server = {}
-local users = {}
-local username_map = {}
-local internal_id = 0
+local connection = {}
 local pool = {}
 
--- login server disallow multi login, so login_handler never be reentry
--- call by login server
-function server.login_handler(uid, secret)
-    if users[uid] then
-        error(string.format("%s is already login", uid))
-    end
+skynet.register_protocol {
+    name = "client",
+    id = skynet.PTYPE_CLIENT,
+}
 
-    internal_id = internal_id + 1
-    local id = internal_id
-    local username = msgserver.username(uid, id, servername)
-    if username_map[username] then
-        error(string.format("%s is already login", username))
-    end
+local handler = {}
 
-    users[uid] = {
-        username = username,
-        uid = uid,
-        subid = id,
-    }
+function handler.command(cmd, source, ...)
+    local f = assert(handler[cmd])
+    return f(...)
+end
 
+function handler.open(source, gateconf)
+    --local n = 10
+    --for _ = 1, n do
+    --    table.insert (pool, skynet.newservice "game/msgagent")
+    --end
+end
+
+function handler.connect(fd, addr)
+    gateserver.openclient(fd)
+
+    connection[fd] = { fd = fd }
     if #pool == 0 then
-        users[uid].agent = skynet.newservice "game/msgagent"
+        connection[fd].agent = skynet.newservice "game/msgagent"
     else
-        users[uid].agent = table.remove(pool, 1)
+        connection[fd].agent = table.remove(pool, 1)
     end
-
-    skynet.call(users[uid].agent, "lua", "login", uid, id, secret, platform, server_id)
-    username_map[username] = users[uid]
-    msgserver.login(username, secret)
-    return id
+    skynet.call(connection[fd].agent, "lua", "connect", platform, server_id, fd)
 end
 
--- call by agent
-function server.logout_handler(uid, subid)
-    local u = users[uid]
-    if u then
-        local username = msgserver.username(uid, subid, servername)
-        assert(u.username == username)
-        msgserver.logout(u.username)
-        users[uid] = nil
-        skynet.call(loginservice, "lua", "logout", uid, subid)
-        if username_map[u.username] and username_map[u.username].agent then
-            table.insert(pool, username_map[u.username].agent)
-        end
-        username_map[u.username] = nil
+function handler.disconnect(fd)
+    local c = connection[fd]
+    if c then
+        skynet.call(c.agent, "lua", "disconnect")
+        table.insert(pool, c.agent)
+        connection[fd] = nil
     end
 end
 
--- call by login server
-function server.kick_handler(uid, subid)
-    local u = users[uid]
-    if u then
-        local username = msgserver.username(uid, subid, servername)
-        assert(u.username == username)
-        msgserver.logout(u.username)
-        users[uid] = nil
-        pcall(skynet.call, u.agent, "lua", "afk")
-        if username_map[u.username] and username_map[u.username].agent then
-            table.insert(pool, username_map[u.username].agent)
-        end
-        username_map[u.username] = nil
+function handler.doDisconnect(fd)
+    local c = connection[fd]
+    if c then
+        gateserver.closeclient(c.fd)
+        connection[fd] = nil
     end
 end
 
--- call by self (when socket disconnect)
-function server.disconnect_handler(username)
-    local u = username_map[username]
-    if u then
-        msgserver.logout(u.username)
-        users[u.uid] = nil
-        skynet.call(u.agent, "lua", "afk")
-        if username_map[u.username] and username_map[u.username].agent then
-            table.insert(pool, username_map[u.username].agent)
-        end
-        username_map[u.username] = nil
+function handler.message(fd, msg, sz)
+    local message = netpack.tostring(msg, sz)
+    local c = connection[fd]
+    if c and c.agent then
+        pcall(skynet.rawsend, c.agent, "client", skynet.pack(message))
     end
 end
 
---给客户端发消息
-function server.send_handler(uid, subid, msg)
-    local u = users[uid]
-    if u then
-        local username = msgserver.username(uid, subid, servername)
-        msgserver.sendmessage(username, msg)
+function handler.send(fd, msg)
+    local c = connection[fd]
+    if c and c.fd then
+        pcall(socketdriver.send(c.fd, netpack.pack(msg)))
     end
 end
 
--- call by self (when recv a request from client)
-function server.request_handler(username, msg)
-    local u = username_map[username]
-    if u and users[u.uid] then
-        pcall(skynet.rawsend, u.agent, "client", skynet.pack(msg))
-    end
-end
 
--- call by self (when gate open)
-function server.register_handler(name)
-    servername = name
-    skynet.call(loginservice, "lua", "register_gate", servername, skynet.self())
+gateserver.start(handler)
 
-    local n = 10
-    for _ = 1, n do
-        table.insert (pool, skynet.newservice "game/msgagent")
-    end
-end
-
-msgserver.start(server)

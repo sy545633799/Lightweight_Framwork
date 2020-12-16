@@ -78,5 +78,5 @@ local code = sp:encode("foobar", obj)
 obj = sp:decode("foobar", code)
 
 -- core.dumpproto only for debug use
-local core = require "sproto.core"
-core.dumpproto(sp.__cobj)
+--local core = require "sproto.core"
+--core.dumpproto(sp.__cobj)
