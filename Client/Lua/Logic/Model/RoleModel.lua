@@ -11,7 +11,7 @@ function RoleModel:ctor()
 end
 
 function RoleModel:OnLogin(data)
-    self.RoleData:UpdateData(data.roleInfo.attrib)
+    self.RoleData:UpdateData(data.attrib)
 end
 
 function RoleModel:OnLogout()

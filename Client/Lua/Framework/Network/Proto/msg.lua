@@ -57,9 +57,22 @@ local msg = [[
 	itemPackage 2 : *item(id)
 }
 
+.req_login {
+	uid 0 : string
+}
+
+.ack_login {
+	roleInfo 0 : roleInfo
+}
+
 .req_register {
 	nickname 0 : string
 	channel 1 : integer
+}
+
+.ack_register {
+	error 0 : integer
+	roleInfo 1 : roleInfo
 }
 
 

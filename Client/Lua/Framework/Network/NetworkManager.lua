@@ -2,6 +2,7 @@
 --- Created by shenyi.
 --- DateTime: 2020/6/26
 
+require "Framework/Network/NetStateEvent"
 require "Framework.Network.Proto.msgId"
 local sproto = require "Framework.Network.Sproto.sproto"
 local crypt = require "crypt"
@@ -13,15 +14,6 @@ local msgProto
 local Id2ProtoDic = {}
 local rpcId = 1
 
-local NetStateEvent =
-{
-    ConnectSucess = 1,
-    ConnectFailed = 2,
-    Exception = 3,
-    Disconnect = 4,
-    ReConnectSucess = 5,
-    ReConnectFailed = 6
-}
 
 function NetworkManager:ctor()
     self.loginLock = false -- 登录锁
@@ -41,6 +33,7 @@ function NetworkManager:Login(ip, port)
     self.ip = ip
     self.port = port
     self.sessionId2CBs = {}
+    self.srvReqHandler = {}
     tcpManager.Connect(self.ip, self.port)
 end
 
@@ -55,7 +48,7 @@ function NetworkManager:OnConnectCallBack(state, count)
         if state == NetStateEvent.ConnectSucess then
             logError("连接成功")
             --UIManager:UnLoadView(UIConfig.ReconnectionUI)
-            LoginController:HandSucess()
+            --LoginController:HandSucess()
         elseif state == NetStateEvent.ConnectFailed then
             logError("连接失败")
             --UIManager:UnLoadView(UIConfig.ReconnectionUI)
@@ -71,14 +64,14 @@ function NetworkManager:OnConnectCallBack(state, count)
         elseif state == NetStateEvent.ReConnectSucess then
             logNetMsg("重连成功")
             --UIManager:UnLoadView(UIConfig.ReconnectionUI)
-            LoginUIController:HandSucess()
+            --LoginUIController:HandSucess()
         elseif state == NetStateEvent.ReConnectFailed then
             logError(string.format("当前重连失败第%d次数", count))
             if count == common_para.commonPara[39].figure then
                 --UIManager:UnLoadView(UIConfig.ReconnectionUI)
             end
         end
-        --EventManager:Broadcast(EventNames.Network.NetworkEvent, state)
+        EventManager:Broadcast(EventNames.Network.NetworkEvent, state)
     end)
 end
 
@@ -94,28 +87,47 @@ function NetworkManager:RegSrvReqHandler(protoId, callback, handle)
 end
 
 ---客户端主动向服务器发送请求
-function NetworkManager:SendMessage(protoName, args)
-    --local str = self.sproto_request(protoName, args or {}, 0)
-    --tcpManager.SendBytes(str)
+function NetworkManager:SendMessage(protoId, args)
+    assert(protoId and type(protoId) == "number")
+    if protoId > 20000 then
+        logError("protoId 大于 20000")
+        return
+    end
+    local protoName = Id2ProtoDic[protoId]
+    if protoName and args then
+        local msg = msgProto:encode(protoName, args)
+        tcpManager.SendBytes(protoId, msg, 0)
+    else
+        tcpManager.SendBytes(protoId, nil, 0)
+    end
 end
 
 
 function NetworkManager:SendRequest(protoId, args)
-    local protoName = Id2ProtoDic[protoId]
-    if protoName and args then
+    assert(protoId and type(protoId) == "number")
+    if protoId <= 20000 then
+        logError("protoId 小于 20000")
+        return
+    end
 
+    if rpcId == 65535 then
+        rpcId = 1
     else
         rpcId = rpcId + 1
-        tcpManager.SendBytes(protoId, nil, rpcId)
-        if rpcId == 65535 then rpcId = 1 end
-        self.sessionId2CBs[rpcId] = coroutine.running()
     end
+
+    local protoName = Id2ProtoDic[protoId]
+    if protoName and args then
+        local msg = msgProto:encode(protoName, args)
+        tcpManager.SendBytes(protoId, msg, rpcId)
+    else
+        tcpManager.SendBytes(protoId, nil, rpcId)
+    end
+    self.sessionId2CBs[rpcId] = coroutine.running()
     return coroutine.yield()
 end
 
 function NetworkManager:OnReceiveMsgCallBack(protoID, rpcId, bytes)
-    logError(protoID)
-    logError(rpcId)
     local args
     if bytes and #bytes > 0 then
         local protoName = Id2ProtoDic[protoID]

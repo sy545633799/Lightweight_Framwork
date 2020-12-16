@@ -9,6 +9,9 @@ EventNames =
     },
     Scene = {
         LoadProcess = "LoadProcess"
-    }
+    },
 
+    Network = {
+        NetworkEvent = "NetworkEvent"
+    }
 }

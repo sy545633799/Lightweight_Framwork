@@ -267,7 +267,7 @@ namespace Game
 			{
 				ms.Position = 0;
 				BinaryWriter writer = new BinaryWriter(ms);
-				if (protoID > 20000)
+				if (rpcId > 0)
 				{
 					ushort msglen = BytesUtility.SwapUInt16((ushort)(messageLength + 2));
 					writer.Write(msglen);

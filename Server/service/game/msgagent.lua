@@ -65,17 +65,19 @@ local function dorequest(data)
         local f = RPC[protoName]
         if not f then skynet.error("can't find protoName:" .. protoName) return end
         if protoId > 20000 then
-            local retId, retTb
+            local retTb
             if #data > 4 then
                 local str = string.sub(data, 5)
                 retTb = f(msgProto:decode(protoName, str))
             else
-                retId, retTb = f()
+                retTb = f()
             end
-            if not retId then skynet.error("can't find retId:" .. protoName) return end
+            local retId = protoId + 1
             local retName = id2ProtoDic[retId]
             local ret =  string.sub(data, 3, 4)
-            if retTb then ret = ret .. msgProto:encode(retName, retTb) end
+            if retTb and retName then
+                ret = ret .. msgProto:encode(retName, retTb)
+            end
             CMD.send(retId, ret)
         else
             if #data > 2 then

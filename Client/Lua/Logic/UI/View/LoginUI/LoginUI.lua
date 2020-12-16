@@ -9,11 +9,11 @@ local networkManager = NetworkManager
 
 
 function LoginUI:ctor()
-    self.btn_login:AddClick(self.Login, self)
+    self.btn_login:AddClick(self.DoLogin, self)
 
 end
 
-function LoginUI:Login(...)
+function LoginUI:DoLogin(...)
     local account = self.input_Account:GetText()
     if string.haschinese(account) then
         logError("包含汉字")
@@ -33,10 +33,16 @@ function LoginUI:OnLoad(...)
     if account and #account > 0 then
         self.input_Account:SetText(account)
     end
+    self:AddEventListener(EventNames.Network.NetworkEvent, self.NetworkEvent, self)
 end
 
-function LoginUI:OnUnLoad()
-
+function LoginUI:NetworkEvent(event)
+    if event == NetStateEvent.ConnectSucess then
+        local account = self.input_Account:GetText()
+        PlayerPrefs.SetString("Account", account)
+        LoginController:HandSucess(account)
+    end
 end
+
 
 return LoginUI

@@ -6,11 +6,13 @@ function LoginController:ctor()
 end
 
 ---@public 握手成功
-function LoginController:HandSucess()
-    local roleInfo = NetworkManager:SendRequest(NetMsgId.req_login)
+function LoginController:HandSucess(account)
+    local ret = NetworkManager:SendRequest(NetMsgId.req_login, { uid = account })
+    local roleInfo = ret.roleInfo
     if not roleInfo or not next(roleInfo) then
         UIManager:LoadView(UIConfig.RegisterUI)
     else
+
         Model:Login(roleInfo)
         Controller:Login()
         SceneManager:SwitchScene(SceneConfig.MainScene)
@@ -18,7 +20,6 @@ function LoginController:HandSucess()
 end
 
 function LoginController:Disconnect()
-    logError("Disconnect")
     Model:Logout()
     Controller:Logout()
     SceneManager:SwitchScene(SceneConfig.LoginScene)

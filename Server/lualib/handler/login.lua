@@ -16,7 +16,7 @@ local CMD = {}
 handler = handler.New (RPC, CMD)
 ---------------------------------------------------------------------
 
-local user
+local uid
 ---@type accountd
 local snax_account
 
@@ -24,8 +24,7 @@ local snax_account
 local role_attrib
 
 handler:onInit (function (user_info)
-    user = user_info
-    --snax_account = snax.uniqueservice("game/account")
+    snax_account = snax.uniqueservice("game/account")
 
     --create_role = snax.uniqueservice ("game/role/create_role")
     --uuid_inst = uuid.New()
@@ -46,18 +45,15 @@ handler:onLogout (function ()
 end)
 
 ---@public 客户端点击登录调用, 返回玩家信息，如果没有，则返回空
-function RPC.req_login()
-    skynet.error("req_login")
-    --role_attrib = snax_account.req.get_roleInfo(user.uid)
-    --
-    --return { roleInfo = role_attrib }
-
-    return NetMsgId.ack_login
+function RPC.req_login(arg)
+    uid = arg.uid
+    role_attrib = snax_account.req.get_roleInfo(uid)
+    return { roleInfo = role_attrib }
 end
 
 ---@public 如果客户端得到的玩家信息为空，则调用这个方法注册，并返回玩家信息
 function RPC.req_register(args)
-    local ok, roleInfo = snax_account.req.create_role(user.uid, args.nickname)
+    local ok, roleInfo = snax_account.req.create_role(uid, args.nickname)
     local result = {}
     if ok then
         result.error = 0
