@@ -20,10 +20,7 @@ handler = handler.New (RPC, CMD)
 local user
 local mongod
 
-handler:onInit (function (user) 
-    user = user
-
-
+handler:OnRegister (function ()
 
     -- mongod = snax.uniqueservice("common/mongod")
     -- local account = mongod.req.findOne("account", { userid = user.account })
@@ -33,11 +30,7 @@ handler:onInit (function (user)
     -- end
 end)
 
----注册登陆方法
-handler:onLogin (function () end)
-
----注册登出方法
-handler:onLogout (function () end)
+handler:OnRegister (function () end)
 
 function RPC.req_changeName(args)
 	--TODO 验证名字合法性

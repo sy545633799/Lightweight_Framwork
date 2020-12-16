@@ -4,7 +4,6 @@ local crypt = require "skynet.crypt"
 local sproto = require "sproto"
 local handlers = {
     "handler.login",
-    "handler.chat",
     "handler.role",
 }
 
@@ -17,12 +16,12 @@ local fd
 local CMD = {}
 ---@class RPC
 local RPC = {}
-local user_info
+local User
 
 function CMD.connect(source, platform, server_id, fd1)
     gate = source
     fd = fd1
-    user_info = {
+    User = {
         platform = platform,
         server_id = server_id,
         RPC = RPC,
@@ -30,22 +29,22 @@ function CMD.connect(source, platform, server_id, fd1)
     }
     for _,v in ipairs(handlers) do
         local handler = require(v)
-        handler:register(user_info)
+        handler:register(User)
     end
 end
 
 function CMD.disconnect(source)
-    skynet.error("disconnect")
     fd = nil
     for _,v in ipairs(handlers) do
         local handler = require(v)
-        handler:unregister(user_info)
+        handler:unregister(User)
     end
+    User = nil
 end
 
 function CMD.doDisconnect(ret)
     skynet.send(gate, "lua", "doDisconnect", fd, ret)
-    CMD.disconnect()
+    CMD.disconnect(nil)
 end
 
 

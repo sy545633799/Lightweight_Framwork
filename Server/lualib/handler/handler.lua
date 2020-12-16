@@ -3,14 +3,13 @@
     time:2019-02-09 13:48:27
 ]]
 
-local handler = class("handler_base")
+local handler = class("handler")
 
 function handler:__init (rpc, cmd)
-    self.init_func = {}
     self.rpc = rpc
     self.cmd = cmd
-    self.login_func = {}
-    self.logout_func = {}
+    self.register_func = {}
+    self.unregister_func = {}
 end
 
 function handler:onInit (f)
@@ -32,25 +31,15 @@ local function merge_safe (dest, t) -- 复制表元素，并检查
     end
 end
 
-function handler:onLogin (f)
-	table.insert (self.login_func, f)
+function handler:OnRegister (f)
+	table.insert (self.register_func, f)
 end
 
-function handler:login ()
-	for _, f in pairs (self.login_func) do
-		f ()
-	end
+
+function handler:OnUnRegister (f)
+	table.insert (self.unregister_func, f)
 end
 
-function handler:onLogout (f)
-	table.insert (self.logout_func, f)
-end
-
-function handler:logout ()
-	for _, f in pairs (self.logout_func) do
-		f ()
-	end
-end
 
 function handler:register (user)
 	for _, f in pairs (self.init_func) do
@@ -69,6 +58,9 @@ local function clean (dest, t)
 end
 
 function handler:unregister (user)
+	for _, f in pairs (self.unregister_func) do
+		f (user)
+	end
 	clean (user.RPC, self.rpc)
 	clean (user.CMD, self.cmd)
 end
