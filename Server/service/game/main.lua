@@ -18,6 +18,7 @@ skynet.start(function()
 	local mongod = snax.uniqueservice("common/mongod")
 	snax.uniqueservice("common/uid")
 	snax.uniqueservice("game/account")
+	snax.uniqueservice("game/world")
 
 
 	--skynet.newservice("debug_console", config.consoleport)

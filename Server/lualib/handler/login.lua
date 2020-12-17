@@ -38,7 +38,8 @@ end)
 
 
 handler:OnUnRegister (function ()
-
+    User.uid = nil
+    User.roleInfo = nil
 end)
 
 ---@public 客户端点击登录调用, 返回玩家信息，如果没有，则返回空

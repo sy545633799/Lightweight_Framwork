@@ -63,7 +63,7 @@ MonoBehaviour:
   reflectionIntensity: 1
   reflectionBounces: 1
   fog: 1
-  fogColor: {r: 1, g: 0, b: 0, a: 1}
+  fogColor: {r: 0.9716981, g: 0.931231, b: 0.5729352, a: 1}
   fogMode: 3
   fogStartDistance: 0
   fogEndDistance: 300

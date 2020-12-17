@@ -14,15 +14,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SceneName: Demo_1
   Bounds:
-    m_Center: {x: 1.425765, y: 3.1433368, z: 4.2049828}
-    m_Extent: {x: 4.5537596, y: 5.7754445, z: 5.053171}
+    m_Center: {x: 16.808117, y: 1.0308232, z: -2.608676}
+    m_Extent: {x: 19.936111, y: 7.8879576, z: 11.86683}
   preload:
   - ResId: 53
     position: {x: -0.76732445, y: -1.17, z: -5.308254}
     rotation: {x: -0, y: 90, z: -0}
-    scale: {x: 5, y: 5, z: 5}
+    scale: {x: 20, y: 20, z: 20}
   grass: []
   content:
+  - ID: 2
+    order: 2
+    ResId: 54
+    position: {x: 32.17, y: 1.53, z: -6.7470665}
+    rotation: {x: -0, y: 0, z: 0}
+    scale: {x: 9.148458, y: 5.4047346, z: 15.456879}
+    lightmapIndex: ffffffffffffffff
+    lightmapOffset:
+    - {x: 1, y: 1, z: 0, w: 0}
+    - {x: 1, y: 1, z: 0, w: 0}
+    m_Bounds:
+      m_Center: {x: 24.631302, y: -1.3123832, z: -6.7470665}
+      m_Extent: {x: 12.112927, y: 5.544751, z: 7.7284393}
   - ID: 3
     order: 2
     ResId: 51

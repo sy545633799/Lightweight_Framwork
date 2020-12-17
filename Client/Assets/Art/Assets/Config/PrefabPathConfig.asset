@@ -117,3 +117,5 @@ MonoBehaviour:
     Path: Assets/Art/SceneRes/Stone/prefab/login_stone_02.prefab
   - ID: 53
     Path: Assets/Art/SceneRes/Terrain/Terrain01.prefab
+  - ID: 54
+    Path: Assets/Art/SceneRes/Stone/prefab/Stone.prefab
