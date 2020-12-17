@@ -13,6 +13,7 @@ NetMsgId = {
     ack_login = 20102,
     req_register = 20103,
     ack_register = 20104,
-
+    req_enter_game = 20105,
+    ack_enter_game = 20106,
     
 }

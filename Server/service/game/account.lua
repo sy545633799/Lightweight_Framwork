@@ -12,8 +12,8 @@ function init( ... )
 end
 
 local function getDefaultAttrib(attrib)
-    if not attrib.scene then
-        attrib.scene = setting.DefaultScene
+    if not attrib.sceneId then
+        attrib.sceneId = setting.DefaultScene
     end
 end
 
@@ -47,38 +47,48 @@ end
          local roleId = tostring(snax_uid.req.gen("role"))
          ---@class RoleAttrib
          local attrib = {
-             roleId = roleId,
-             name = name,
-             level = 1,
-             exp = 0,
-             vip = 0,
-             totalFight = 0,
-             progress = 0,
-             pVPScore = 0,
-             headIconId = 1,
-             headFrameId = 1,
-             crystal = 0,
-             gold = 0,
-             silver = 0,
-             energy = 0,
-             achive = 0,
-             guide = 0,
-             vipExp = 0,
-             vipGift = 0,
-             mouthCard = 0,
-             emotion = 0,
-             guildId = 0,
-             daySign = 0,
-             scene = setting.DefaultScene,
+             roleId         = roleId,
+             name           = name,
+             level          = 1,
+             exp            = 0,
+             vip            = 0,
+             totalFight     = 0,
+             progress       = 0,
+             pVPScore       = 0,
+             headIconId     = 1,
+             headFrameId    = 1,
+             crystal        = 0,
+             gold           = 0,
+             silver         = 0,
+             energy         = 0,
+             achive         = 0,
+             guide          = 0,
+             vipExp         = 0,
+             vipGift        = 0,
+             mouthCard      = 0,
+             emotion        = 0,
+             guildId        = 0,
+             daySign        = 0,
+             sceneId          = setting.DefaultScene,
          }
          getDefaultAttrib(attrib)
+
+         ---@class aoiData
+         local aoiData =
+         {
+             pos_x          = -9.848041,
+             pos_y          = -1.09,
+             pos_z          = -2.997883,
+             --cur_hp         = hpData.cur,
+             --max_hp         = hpData.max,
+         }
 
          
          ---@class RoleInfo
          local roleInfo = {
              account = account,
+             aoi = aoiData,
              attrib = attrib,
-             heroPackage = {},
              itemPackage = {}
          }
          snax_mongod.req.insert("role", roleInfo)

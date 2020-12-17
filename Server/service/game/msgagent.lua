@@ -2,6 +2,7 @@ local skynet = require "skynet"
 local queue = require "skynet.queue"
 local crypt = require "skynet.crypt"
 local sproto = require "sproto"
+--local mc = require "skynet.multicast"
 local handlers = {
     "handler.login",
     "handler.role",

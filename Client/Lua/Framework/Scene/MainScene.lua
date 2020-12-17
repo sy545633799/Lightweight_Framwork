@@ -10,10 +10,13 @@ function MainScene:OnCreate()
 end
 
 function MainScene:OnPrepare(map_id)
+    local args = NetworkManager:SendRequest(NetMsgId.req_enter_game, { sceneId = 10101 })
+    logError(args)
+
     coroutine.Do(MapManager.LoadMap, nil, "Demo_1")
     UIManager:LoadView(UIConfig.MainUI)
     --UIManager:LoadView(UIConfig.BattleUI)
-    
+
 
     AOIController:EnterMap()
 end

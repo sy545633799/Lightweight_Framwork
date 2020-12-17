@@ -15,29 +15,31 @@ function init( ... )
     for id, config in pairs(worldConfig) do
         local sceneName = config.Resource
         local service = snax.newservice("game/scene", id, sceneName)
-        all_scenes[id] = service
+        local channelId = service.req.get_channel_id()
+        all_scenes[id] = { service = service, channelId = channelId}
     end
 end
 
 ---@param roleInfo RoleInfo
 ---@param sceneId number
-function response.role_enter_game(roleInfo, sceneId)
-    local service = all_scenes[sceneId]
-    if not service then
+function response.role_enter_game(agent, roleInfo, sceneId)
+    local sceneInfo = all_scenes[sceneId]
+    if not sceneInfo then
         return false
     end
-    online_roles[roleInfo.attrib.roleId] = service
-    local ok = service.req.role_enter_scene(roleInfo)
-    return ok
+    online_roles[roleInfo.attrib.roleId] = { sceneId = sceneId, ser = service, agent = agent}
+    local ok = sceneInfo.service.req.role_enter_scene(agent, roleInfo.attrib, roleInfo.aoi)
+    return ok, sceneInfo.channelId
 end
 
 function response.role_leave_game(roleInfo)
-    local service = all_scenes[roleInfo.attrib.scene]
-    if not service then
+    local sceneInfo = all_scenes[roleInfo.attrib.sceneId]
+    if not sceneInfo then
         return false
     end
     online_roles[roleInfo.attrib.roleId] = nil
-    local ok = service.req.role_leave_scene(roleInfo)
+    local ok = sceneInfo.service.req.role_leave_scene(roleInfo.attrib.roleId)
+
     return ok
 end
 

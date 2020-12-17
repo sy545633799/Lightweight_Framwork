@@ -18,11 +18,7 @@ handler = handler.New (RPC, CMD)
 local User
 ---@type accountd
 local snax_account, anax_world
-
-local sync2world =
-{
-
-}
+local channel
 
 handler:OnRegister (function (user)
     User = user
@@ -72,19 +68,34 @@ function RPC.req_register(args)
     return result
 end
 
+---推送给客户端的消息
+local function recvChannel(channel, source, msg, ...)
+    skynet.error("channel ID:",channel, "source:", skynet.address(source), "msg:",msg)
+
+
+end
+
 function RPC.req_enter_game(args)
-    local ok = anax_world.req.role_enter_game(User.roleInfo, args.sceneId)
+    local ok, channelId = anax_world.req.role_enter_game(skynet.self(), User.roleInfo, args.sceneId)
+    --local mc = require "skynet.multicast"
+    --channel = mc.new {
+    --    channel = channelId, -- 绑定上一个频道
+    --    dispatch = recvChannel,  -- 设置这个频道的消息处理函数
+    --}
+    --channel:subscribe()
+
     return { ok = ok }
 end
 
 function RPC.req_leave_game(args)
+    --channel:unsubscribe()
     local ok = anax_world.req.role_leave_game(User.roleInfo)
     return { ok = ok }
 end
 
 function RPC.req_switch_scene(args)
     local ok = anax_world.req.role_switch_scene(User.roleInfo, args.sceneId)
-    User.roleInfo.attrib.scene = args.sceneId
+    User.roleInfo.attrib.sceneId = args.sceneId
     return { ok = ok }
 end
 
