@@ -2,7 +2,6 @@ local skynet = require "skynet"
 local snax = require "skynet.snax"
 local mc = require "skynet.multicast"
 
-
 ---@type entityMgr
 local entityMgr
 
@@ -19,14 +18,15 @@ function init( ... )
     snax_uid = snax.uniqueservice("common/uid")
     snax_mongod = snax.uniqueservice("common/mongod")
 
-    channel = mc.new()
-
     entityMgr = require "entity.entityMgr".New()
 
     local start_arge = {...}
     sceneId = start_arge[1]
     sceneName = start_arge[2]
     sceneConfig = require("config/" .. sceneName)
+
+    channel = mc.new()
+    --channel:publish(...)
 end
 
 function response.get_channel_id()

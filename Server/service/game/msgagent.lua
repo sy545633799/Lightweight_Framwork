@@ -2,7 +2,8 @@ local skynet = require "skynet"
 local queue = require "skynet.queue"
 local crypt = require "skynet.crypt"
 local sproto = require "sproto"
---local mc = require "skynet.multicast"
+local mc = require "skynet.multicast"
+
 local handlers = {
     "handler.login",
     "handler.role",
@@ -25,6 +26,7 @@ function CMD.connect(source, platform, server_id, fd1)
     User = {
         platform = platform,
         server_id = server_id,
+        mc = mc,
         RPC = RPC,
         CMD = CMD,
     }
@@ -112,6 +114,7 @@ skynet.start(function()
     end)
 
     skynet.dispatch("client", function(session, source, data)
+
         cs(dorequest, data)
     end)
 end)

@@ -77,12 +77,11 @@ end
 
 function RPC.req_enter_game(args)
     local ok, channelId = anax_world.req.role_enter_game(skynet.self(), User.roleInfo, args.sceneId)
-    --local mc = require "skynet.multicast"
-    --channel = mc.new {
-    --    channel = channelId, -- 绑定上一个频道
-    --    dispatch = recvChannel,  -- 设置这个频道的消息处理函数
-    --}
-    --channel:subscribe()
+    channel = User.mc.new {
+        channel = channelId,
+        dispatch = recvChannel,
+    }
+    channel:subscribe()
 
     return { ok = ok }
 end
@@ -94,6 +93,7 @@ function RPC.req_leave_game(args)
 end
 
 function RPC.req_switch_scene(args)
+
     local ok = anax_world.req.role_switch_scene(User.roleInfo, args.sceneId)
     User.roleInfo.attrib.sceneId = args.sceneId
     return { ok = ok }
