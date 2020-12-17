@@ -27,7 +27,7 @@ function response.role_enter_game(agent, roleInfo, sceneId)
     if not sceneInfo then
         return false
     end
-    online_roles[roleInfo.attrib.roleId] = { sceneId = sceneId, ser = service, agent = agent}
+    online_roles[roleInfo.attrib.roleId] = { sceneId = sceneId, sceneInfo = sceneInfo, agent = agent}
     local ok = sceneInfo.service.req.role_enter_scene(agent, roleInfo.attrib, roleInfo.aoi)
     return ok, sceneInfo.channelId
 end
