@@ -26,6 +26,7 @@ function init( ... )
     sceneConfig = require("config/" .. sceneName)
 
     channel = mc.new()
+
     --channel:publish(...)
 end
 
@@ -38,7 +39,7 @@ function response.role_enter_scene(agent, roleAttrib, aoiData)
     local roleId = roleAttrib.roleId
     if role_map[roleId] then skynet.error("玩家已经在场景中") return false end
     local role = entityMgr:create_entity(roleAttrib, aoiData)
-
+    
 
     role_map[roleId] = { agent = agent, role = role}
     skynet.error(roleAttrib.name .. " enter game")

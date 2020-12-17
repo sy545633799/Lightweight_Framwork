@@ -76,7 +76,7 @@ local function recvChannel(channel, source, msg, ...)
 end
 
 function RPC.req_enter_game(args)
-    local ok, channelId = anax_world.req.role_enter_game(skynet.self(), User.roleInfo, args.sceneId)
+    local ok, channelId = anax_world.req.role_enter_game(skynet.self(), User.roleInfo, User.roleInfo.attrib.sceneId)
     channel = User.mc.new {
         channel = channelId,
         dispatch = recvChannel,

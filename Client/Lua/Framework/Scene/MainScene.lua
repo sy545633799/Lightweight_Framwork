@@ -10,7 +10,7 @@ function MainScene:OnCreate()
 end
 
 function MainScene:OnPrepare(map_id)
-    local args = NetworkManager:SendRequest(NetMsgId.req_enter_game, { sceneId = 10101 })
+    local args = NetworkManager:SendRequest(NetMsgId.req_enter_game)
     logError(args)
 
     coroutine.Do(MapManager.LoadMap, nil, "Demo_1")

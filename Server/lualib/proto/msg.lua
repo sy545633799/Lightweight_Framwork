@@ -76,10 +76,6 @@ local msg = [[
 	roleInfo 1 : roleInfo
 }
 
-.req_enter_game {
-    sceneId 1 : integer
-}
-
 .ack_enter_game {
     ok 1 : boolean
 }
