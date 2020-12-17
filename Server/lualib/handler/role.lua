@@ -10,6 +10,7 @@ local handler = require "handler.handler"
 
 
 --------------------------------------------------------------------
+local User
 ---@type RPC
 local RPC = {}
 ---@type CMD
@@ -17,10 +18,11 @@ local CMD = {}
 handler = handler.New (RPC, CMD)
 ---------------------------------------------------------------------
 
-local user
 local mongod
 
-handler:OnRegister (function ()
+handler:OnRegister (function (user)
+	User = user
+
 
     -- mongod = snax.uniqueservice("common/mongod")
     -- local account = mongod.req.findOne("account", { userid = user.account })
@@ -30,7 +32,9 @@ handler:OnRegister (function ()
     -- end
 end)
 
-handler:OnRegister (function () end)
+handler:OnUnRegister (function ()
+
+end)
 
 function RPC.req_changeName(args)
 	--TODO 验证名字合法性

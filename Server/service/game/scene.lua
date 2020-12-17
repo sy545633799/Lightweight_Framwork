@@ -18,13 +18,19 @@ function init( ... )
     sceneConfig = require("config/" .. sceneName)
 end
 
+---@param roleInfo RoleInfo
+function response.role_enter_scene(roleInfo)
 
-function response.role_enter_scene(account)
 
+
+
+    return true
 end
 
 function response.role_leave_scene()
 
+
+    return true
 end
 
 function exit( ... )

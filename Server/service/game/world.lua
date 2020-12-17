@@ -3,7 +3,8 @@ local snax = require "skynet.snax"
 
 local config
 local snax_mongod, snax_uid
-local scene_services = {}
+local all_scenes = {}
+local online_roles = {}
 
 function init( ... )
     config = require(skynet.getenv("config"))
@@ -14,16 +15,33 @@ function init( ... )
     for id, config in pairs(worldConfig) do
         local sceneName = config.Resource
         local service = snax.newservice("game/scene", id, sceneName)
-        scene_services[id] = service
+        all_scenes[id] = service
     end
 end
 
-
-function response.role_enter_game(roleId, roleAttrib)
-    
+---@param roleInfo RoleInfo
+---@param sceneId number
+function response.role_enter_game(roleInfo, sceneId)
+    local service = all_scenes[sceneId]
+    if not service then
+        return false
+    end
+    online_roles[roleInfo.attrib.roleId] = service
+    local ok = service.req.role_enter_scene(roleInfo)
+    return ok
 end
 
-function response.role_leave_game()
+function response.role_leave_game(roleInfo)
+    local service = all_scenes[roleInfo.attrib.scene]
+    if not service then
+        return false
+    end
+    online_roles[roleInfo.attrib.roleId] = nil
+    local ok = service.req.role_leave_scene(roleInfo)
+    return ok
+end
+
+function response.role_switch_scene(roleInfo, sceneId)
 
 end
 

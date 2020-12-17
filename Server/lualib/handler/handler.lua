@@ -13,7 +13,7 @@ function handler:__init (rpc, cmd)
 end
 
 function handler:onInit (f)
-	table.insert (self.init_func, f)
+	table.insert (self.register_func, f)
 end
 
 local function merge (dest, t) -- 复制表元素
@@ -42,7 +42,7 @@ end
 
 
 function handler:register (user)
-	for _, f in pairs (self.init_func) do
+	for _, f in pairs (self.register_func) do
 		f (user)
 	end
 

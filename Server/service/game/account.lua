@@ -11,26 +11,19 @@ function init( ... )
     snax_mongod = snax.uniqueservice("common/mongod")
 end
 
-function exit( ... )
-
-end
-
 local function getDefaultAttrib(attrib)
     if not attrib.scene then
-        attrib.scene = config.DefaultScene
+        attrib.scene = setting.DefaultScene
     end
-
-
 end
-
 
 function response.get_roleInfo(account)
     local roleInfo = snax_mongod.req.findOne("role", { account = account })
     if roleInfo then
-        roleInfo.account = nil
-    else
         getDefaultAttrib(roleInfo.attrib)
     end
+
+    --TODO 保存到数据库
     return roleInfo
 end
 
@@ -52,6 +45,7 @@ end
      local role_attrib = snax_mongod.req.findOne("role", { account = account })
      if not role_attrib then
          local roleId = tostring(snax_uid.req.gen("role"))
+         ---@class RoleAttrib
          local attrib = {
              roleId = roleId,
              name = name,
@@ -74,10 +68,13 @@ end
              mouthCard = 0,
              emotion = 0,
              guildId = 0,
-             daySign = 0
+             daySign = 0,
+             scene = setting.DefaultScene,
          }
          getDefaultAttrib(attrib)
 
+         
+         ---@class RoleInfo
          local roleInfo = {
              account = account,
              attrib = attrib,
@@ -85,9 +82,12 @@ end
              itemPackage = {}
          }
          snax_mongod.req.insert("role", roleInfo)
-         roleInfo.account = nil
          return true, roleInfo
     else
          return false
     end
+end
+
+function exit( ... )
+
 end

@@ -133,6 +133,7 @@ function NetworkManager:OnReceiveMsgCallBack(protoID, rpcId, bytes)
         local protoName = Id2ProtoDic[protoID]
         if not protoName then logError("can't find protoId" .. protoID) return end
         args = msgProto:decode(protoName, bytes)
+        log("receive:" .. tostring(args))
     end
 
     if rpcId > 0 then

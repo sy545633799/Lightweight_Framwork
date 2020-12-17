@@ -75,8 +75,10 @@ local function dorequest(data)
             local retName = id2ProtoDic[retId]
             local ret =  string.sub(data, 3, 4)
             if retTb and retName then
+                --skynet.error(tostring(retTb))
                 ret = ret .. msgProto:encode(retName, retTb)
             end
+
             CMD.send(retId, ret)
         else
             if #data > 2 then

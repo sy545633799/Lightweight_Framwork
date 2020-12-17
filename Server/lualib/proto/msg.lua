@@ -52,9 +52,10 @@ local msg = [[
 }
 
 .roleInfo {
-    attrib 0 : mainAttrib
-	heroPackage 1 : *hero(id)
-	itemPackage 2 : *item(id)
+    account 0 : string
+    attrib 1 : mainAttrib
+	heroPackage 2 : *hero(id)
+	itemPackage 3 : *item(id)
 }
 
 .req_login {
