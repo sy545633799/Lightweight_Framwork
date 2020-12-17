@@ -14,8 +14,6 @@ registerModule("Logic/Entity/Entity")
 TestModel = registerGlobalModule("Logic/Model/TestModel")
 ---@type RoleModel
 RoleModel = registerGlobalModule("Logic/Model/RoleModel")
----@type ChapterModel
-ChapterModel = registerGlobalModule("Logic/Model/ChapterModel")
 
 ---Controller
 ---@type TestController

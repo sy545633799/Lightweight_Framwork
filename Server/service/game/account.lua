@@ -1,5 +1,6 @@
 local skynet = require "skynet"
 local snax = require "skynet.snax"
+local setting = require "config.Setting"
 
 local config
 local snax_mongod, snax_uid
@@ -14,10 +15,21 @@ function exit( ... )
 
 end
 
+local function getDefaultAttrib(attrib)
+    if not attrib.scene then
+        attrib.scene = config.DefaultScene
+    end
+
+
+end
+
+
 function response.get_roleInfo(account)
     local roleInfo = snax_mongod.req.findOne("role", { account = account })
     if roleInfo then
         roleInfo.account = nil
+    else
+        getDefaultAttrib(roleInfo.attrib)
     end
     return roleInfo
 end
@@ -40,33 +52,35 @@ end
      local role_attrib = snax_mongod.req.findOne("role", { account = account })
      if not role_attrib then
          local roleId = tostring(snax_uid.req.gen("role"))
+         local attrib = {
+             roleId = roleId,
+             name = name,
+             level = 1,
+             exp = 0,
+             vip = 0,
+             totalFight = 0,
+             progress = 0,
+             pVPScore = 0,
+             headIconId = 1,
+             headFrameId = 1,
+             crystal = 0,
+             gold = 0,
+             silver = 0,
+             energy = 0,
+             achive = 0,
+             guide = 0,
+             vipExp = 0,
+             vipGift = 0,
+             mouthCard = 0,
+             emotion = 0,
+             guildId = 0,
+             daySign = 0
+         }
+         getDefaultAttrib(attrib)
 
          local roleInfo = {
              account = account,
-             attrib = {
-                 roleId = roleId,
-                 name = name,
-                 level = 1,
-                 exp = 0,
-                 vip = 0,
-                 totalFight = 0,
-                 progress = 0,
-                 pVPScore = 0,
-                 headIconId = 1,
-                 headFrameId = 1,
-                 crystal = 0,
-                 gold = 0,
-                 silver = 0,
-                 energy = 0,
-                 achive = 0,
-                 guide = 0,
-                 vipExp = 0,
-                 vipGift = 0,
-                 mouthCard = 0,
-                 emotion = 0,
-                 guildId = 0,
-                 daySign = 0,
-             },
+             attrib = attrib,
              heroPackage = {},
              itemPackage = {}
          }

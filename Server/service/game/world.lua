@@ -19,7 +19,7 @@ function init( ... )
 end
 
 
-function response.role_enter_game(account)
+function response.role_enter_game(roleId, roleAttrib)
     
 end
 
