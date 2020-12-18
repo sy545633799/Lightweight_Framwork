@@ -15,7 +15,7 @@ namespace Game
 {
 	public partial class EntityBehavior : EventObject, IMonoPoolObject<EntityBehavior>
 	{
-		public string uid = null;
+		public int aoiId = 0;
 		public int sceneid = 0;
 		public int entityType = 0;
 		public bool isSyncable = false;

@@ -92,7 +92,7 @@ namespace Game
 			isSyncable = false;
 			sceneid = 0;
 			entityType = 0;
-			uid = string.Empty;
+			aoiId = 0;
 			sceneid = 0;
 			destroyed = false;
 			bodyLoading = false;

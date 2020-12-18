@@ -7,6 +7,7 @@ local player = class("player", entity)
 function player:ctor(attrib, status, aoiId)
     self.aoiData.aoiId = aoiId
     self.aoiData.paramId = attrib.roleId
+    self.aoiData.modelId = attrib.modelId
     self.aoiData.name = attrib.name
     self.aoiData.type = entity_types.player
     --状态

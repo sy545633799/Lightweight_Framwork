@@ -48,7 +48,6 @@ local init_increase_info = function ( type_name )
 end
 
 function response.gen(type_name)
-    skynet.error(type_name)
     type_name = type_name or "empty string"
     local increase_info = this.increase_info[type_name]
     if not increase_info then

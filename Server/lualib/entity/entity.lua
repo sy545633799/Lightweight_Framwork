@@ -12,6 +12,7 @@ local aoiData =
 {
     aoiId = nil,
     paramId = nil,--- 对于玩家来说是roleId, 对于配表单位来说是elementId
+    modelId = nil,
     type = nil,
     name = nil,
     ---@type AOIStatus

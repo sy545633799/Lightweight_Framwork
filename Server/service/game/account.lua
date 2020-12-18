@@ -59,7 +59,6 @@ end
              vip            = 0,
              totalFight     = 0,
              progress       = 0,
-             pVPScore       = 0,
              headIconId     = 1,
              headFrameId    = 1,
              crystal        = 0,
@@ -71,11 +70,13 @@ end
              vipExp         = 0,
              vipGift        = 0,
              mouthCard      = 0,
-             emotion        = 0,
              guildId        = 0,
              daySign        = 0,
-             sceneId          = setting.DefaultScene,
+             sceneId        = setting.DefaultScene,
+             ---这里先写死
+             modelId        = 10003,
          }
+
          getDefaultAttrib(attrib)
 
          ---@class RoleStatus

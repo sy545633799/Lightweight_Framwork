@@ -116,33 +116,33 @@ namespace XLua.CSObjectWrap
             
 			    int gen_param_count = LuaAPI.lua_gettop(L);
             
-                if(gen_param_count == 7&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& translator.Assignable<UnityEngine.Vector3>(L, 4)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 5)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 6)&& translator.Assignable<System.Action<Game.EntityComp[]>>(L, 7)) 
+                if(gen_param_count == 7&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 1)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& translator.Assignable<UnityEngine.Vector3>(L, 4)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 5)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 6)&& translator.Assignable<System.Action<Game.EntityComp[]>>(L, 7)) 
                 {
                     int _sceneid = LuaAPI.xlua_tointeger(L, 1);
-                    string _uid = LuaAPI.lua_tostring(L, 2);
+                    int _aoiId = LuaAPI.xlua_tointeger(L, 2);
                     int _res_id = LuaAPI.xlua_tointeger(L, 3);
                     UnityEngine.Vector3 _bornPos;translator.Get(L, 4, out _bornPos);
                     float _orientation = (float)LuaAPI.lua_tonumber(L, 5);
                     int _entityType = LuaAPI.xlua_tointeger(L, 6);
                     System.Action<Game.EntityComp[]> _onBodyCreated = translator.GetDelegate<System.Action<Game.EntityComp[]>>(L, 7);
                     
-                        Game.EntityBehavior gen_ret = Game.EntityBehaviorManager.CreateEntity( _sceneid, _uid, _res_id, _bornPos, _orientation, _entityType, _onBodyCreated );
+                        Game.EntityBehavior gen_ret = Game.EntityBehaviorManager.CreateEntity( _sceneid, _aoiId, _res_id, _bornPos, _orientation, _entityType, _onBodyCreated );
                         translator.Push(L, gen_ret);
                     
                     
                     
                     return 1;
                 }
-                if(gen_param_count == 6&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 1)&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& translator.Assignable<UnityEngine.Vector3>(L, 4)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 5)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 6)) 
+                if(gen_param_count == 6&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 1)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& translator.Assignable<UnityEngine.Vector3>(L, 4)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 5)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 6)) 
                 {
                     int _sceneid = LuaAPI.xlua_tointeger(L, 1);
-                    string _uid = LuaAPI.lua_tostring(L, 2);
+                    int _aoiId = LuaAPI.xlua_tointeger(L, 2);
                     int _res_id = LuaAPI.xlua_tointeger(L, 3);
                     UnityEngine.Vector3 _bornPos;translator.Get(L, 4, out _bornPos);
                     float _orientation = (float)LuaAPI.lua_tonumber(L, 5);
                     int _entityType = LuaAPI.xlua_tointeger(L, 6);
                     
-                        Game.EntityBehavior gen_ret = Game.EntityBehaviorManager.CreateEntity( _sceneid, _uid, _res_id, _bornPos, _orientation, _entityType );
+                        Game.EntityBehavior gen_ret = Game.EntityBehaviorManager.CreateEntity( _sceneid, _aoiId, _res_id, _bornPos, _orientation, _entityType );
                         translator.Push(L, gen_ret);
                     
                     
@@ -213,9 +213,9 @@ namespace XLua.CSObjectWrap
             
                 
                 {
-                    string _uid = LuaAPI.lua_tostring(L, 1);
+                    int _aoiId = LuaAPI.xlua_tointeger(L, 1);
                     
-                    Game.EntityBehaviorManager.DestroyEntity( _uid );
+                    Game.EntityBehaviorManager.DestroyEntity( _aoiId );
                     
                     
                     
@@ -262,7 +262,7 @@ namespace XLua.CSObjectWrap
             
                 
                 {
-                    string _uid = LuaAPI.lua_tostring(L, 1);
+                    int _uid = LuaAPI.xlua_tointeger(L, 1);
                     
                         Game.EntityBehavior gen_ret = Game.EntityBehaviorManager.GetEntity( _uid );
                         translator.Push(L, gen_ret);

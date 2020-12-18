@@ -11,26 +11,20 @@ function AOIController:ctor()
     self.entites = {}
 end
 
-function AOIController:EnterMap(sceneId)
+---@param aoi_map table<number, AOIData>
+function AOIController:EnterMap(aoi_map)
+    local roleId  = RoleModel.RoleData.roleId
+    for aoidId, aoiData in pairs(aoi_map) do
+        local entity
+        if aoiData.paramId == roleId then
+            aoiData.type = EntityType.hero
+            entity = Hero.New(aoiData)
+            MainCamera:SetTarget(entity.behavior.transform)
+        else
 
-    ---@class AOIData
-    local aoiData =
-    {
-        sceneId = 1,
-        uid = "123",
-        element_id = 10003,
-        pos = { x = -3.323405, y = -1.17, z = -8.666541 },
-        forward = { x = 0, y = 0, z = 0 },
-        entityType = 1,
-        modelId = 10003,
-    }
-
-    local entity
-    aoiData.entityType = EntityType.hero
-    local entity = Hero.New(aoiData)
-    MainCamera:SetTarget(entity.behavior.transform)
-
-    self.entites["123"] = entity
+        end
+        self.entites[aoidId] = entity
+    end
 
 end
 
@@ -42,11 +36,11 @@ function AOIController:GetBornPosition()
 end
 
 ---@return Entity
-function AOIController:GetEntityByUID(uid)
+function AOIController:GetEntityByAoiId(uid)
     return self.entites[uid]
 end
 
-function AOIController:DestroyEntityByUID(uid)
+function AOIController:DestroyEntityByAoiId(uid)
     local entity = self.entites[uid]
     if entity then
         entity:Delete()

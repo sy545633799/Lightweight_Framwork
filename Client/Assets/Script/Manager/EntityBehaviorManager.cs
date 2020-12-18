@@ -32,7 +32,7 @@ namespace Game
 		/// <typeparam name="string"></typeparam>
 		/// <typeparam name="EntityBehavior"></typeparam>
 		/// <returns></returns>
-		private static Dictionary<string, EntityBehavior> entityBehaviors = new Dictionary<string, EntityBehavior>();
+		private static Dictionary<int, EntityBehavior> entityBehaviors = new Dictionary<int, EntityBehavior>();
 
 		/// <summary>
 		/// 用于按照顺序遍历
@@ -87,11 +87,11 @@ namespace Game
 		/// <param name="entityType">实体类型</param>
 		/// <param name="onBodyCreated">实体的组件</param>
 		/// <returns></returns>
-		public static EntityBehavior CreateEntity(int sceneid, string uid, int res_id, Vector3 bornPos, float orientation, int entityType, Action<EntityComp[]> onBodyCreated = null)
+		public static EntityBehavior CreateEntity(int sceneid, int aoiId, int res_id, Vector3 bornPos, float orientation, int entityType, Action<EntityComp[]> onBodyCreated = null)
 		{
-			if (entityBehaviors.ContainsKey(uid))
+			if (entityBehaviors.ContainsKey(aoiId))
 			{
-				Debug.LogError("CreateEntity error exist uid=" + uid);
+				Debug.LogError("CreateEntity error exist uid=" + aoiId);
 				return null;
 			}
 
@@ -109,13 +109,13 @@ namespace Game
 			parent.transform.SetParent(entityContainer.transform, false);
 			parent.transform.position = bornPos;
 
-			entity.uid = uid;
+			entity.aoiId = aoiId;
 			entity.onBodyCreate = null;
 			entity.sceneid = sceneid;
 			entity.entityType = entityType;
 			// 把实体放到容器中
 
-			entityBehaviors.Add(uid, entity);
+			entityBehaviors.Add(aoiId, entity);
 			entityBehaviorsQueue.AddFirst(entity);
 
 			entity.transform.rotation = Quaternion.Euler(0, orientation, 0);
@@ -129,19 +129,19 @@ namespace Game
 		private static async void CreateBody(EntityBehavior entity)
 		{
 			entity.bodyLoading = true;
-			string uid = entity.uid;
+			int uid = entity.aoiId;
 			ModelConfig config;
 			if (!Id2ModelCondig.TryGetValue(entity.res_id, out config))
 				return;
 			var obj = await ResourceManager.LoadPrefabFromePool(config.Resource);
 			if (!obj) return;
-			if (entity == null || uid != entity.uid || entity.bodyLoading == false)
+			if (entity == null || uid != entity.aoiId || entity.bodyLoading == false)
 			{
 				ResourceManager.RecyclePrefab(obj);
 				return;
 			}
 
-			EntityBehavior p = GetEntity(entity.uid);
+			EntityBehavior p = GetEntity(entity.aoiId);
 			if (p != null && p != entity)
 			{
 				Debug.LogError("这个错误可以无视 保留查看而已 entity create error");
@@ -242,18 +242,18 @@ namespace Game
 		/// <summary>
 		/// 通过uid删除指定的实体
 		/// </summary>
-		/// <param name="uid"></param>
-		public static void DestroyEntity(string uid)
+		/// <param name="aoiId"></param>
+		public static void DestroyEntity(int aoiId)
 		{
-			if (entityBehaviors.ContainsKey(uid))
+			if (entityBehaviors.ContainsKey(aoiId))
 			{
-				EntityBehavior entity = entityBehaviors[uid];
-				entityBehaviors.Remove(uid);
+				EntityBehavior entity = entityBehaviors[aoiId];
+				entityBehaviors.Remove(aoiId);
 				DestroyEntity(entity);
 			}
 			else
 			{
-				Debug.Log("DestroyEntity error not found uid=" + uid);
+				Debug.Log("DestroyEntity error not found uid=" + aoiId);
 			}
 		}
 
@@ -263,13 +263,13 @@ namespace Game
 		/// <param name="uid"></param>
 		public static void DestroyAllEntity()
 		{
-			List<string> ids = new List<string>();
+			List<int> ids = new List<int>();
 			foreach (var item in entityBehaviors)
 				ids.Add(item.Key);
 			ids.ForEach(p => DestroyEntity(p));
 		}
 
-		public static EntityBehavior GetEntity(string uid)
+		public static EntityBehavior GetEntity(int uid)
 		{
 			EntityBehavior entity = null;
 			entityBehaviors.TryGetValue(uid, out entity);

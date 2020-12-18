@@ -15,7 +15,7 @@ local msg = [[
 	vip 4 : integer
 	totalFight 5 : integer
 	progress 6 : integer
-	pVPScore 7 : integer
+	sceneId 7 : integer
 	headIconId 8 : integer
 	headFrameId 9 : integer
 
@@ -29,7 +29,7 @@ local msg = [[
 	vipExp 17 : integer
 	vipGift 18 : integer
 	mouthCard 19 : integer
-	emotion 20 : integer
+	modelId 20 : integer
 	guildId 21 : integer
 	daySign 22 : integer
 }
@@ -94,7 +94,8 @@ local msg = [[
     paramId 1 : string
     type 2 : integer
     name 3 : string
-    status 4 : status
+    modelId 4 : integer
+    status 5 : status
 }
 
 .ack_enter_game {
