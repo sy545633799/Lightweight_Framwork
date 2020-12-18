@@ -8,7 +8,7 @@ local sync_pos =
     pos_x = nil,
     pos_y = nil,
     pos_z = nil,
-    fowrad = nil
+    forward = nil
 }
 
 ---@param args AOIStatus

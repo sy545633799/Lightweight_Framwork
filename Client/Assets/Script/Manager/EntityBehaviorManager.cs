@@ -108,6 +108,7 @@ namespace Game
 			parent.transform.localScale = Vector3.one;
 			parent.transform.SetParent(entityContainer.transform, false);
 			parent.transform.position = bornPos;
+			parent.transform.rotation = Quaternion.Euler(0, orientation, 0);
 
 			entity.aoiId = aoiId;
 			entity.onBodyCreate = null;
@@ -118,7 +119,7 @@ namespace Game
 			entityBehaviors.Add(aoiId, entity);
 			entityBehaviorsQueue.AddFirst(entity);
 
-			entity.transform.rotation = Quaternion.Euler(0, orientation, 0);
+			
 			entity.onBodyCreate = onBodyCreated;
 
 			return entity;

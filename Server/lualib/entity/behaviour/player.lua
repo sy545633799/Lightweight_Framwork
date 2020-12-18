@@ -22,7 +22,7 @@ function player:sync_pos(args)
     self.aoiData.status.pos_x = args.pos_x
     self.aoiData.status.pos_y = args.pos_y
     self.aoiData.status.pos_z = args.pos_z
-    self.aoiData.status.foward = args.fowrad
+    self.aoiData.status.forward = args.forward
     self.aoiData.dirty = true
 end
 

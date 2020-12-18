@@ -4,7 +4,7 @@ local msg = [[
     pos_x 0 :double
     pos_y 1 :double
     pos_z 2 :double
-    foward 3 :double
+    forward 3 :double
 }
 
 .mainAttrib {

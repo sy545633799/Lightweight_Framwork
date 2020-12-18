@@ -42,7 +42,6 @@ local function recvChannel(channel, source, eventId, data)
     end
 
 
-
 end
 
 function RPC:req_enter_game(args)
@@ -60,7 +59,6 @@ function RPC:req_enter_game(args)
     user.scene_req = snax_scene.req
     ---@type Scene_Post
     user.scene_post = snax_scene.post
-
     return { ok = ok, aoi_map = aoi_map }
 end
 
