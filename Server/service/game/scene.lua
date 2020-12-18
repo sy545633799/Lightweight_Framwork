@@ -12,13 +12,10 @@ local sceneConfig
 local response = response
 ---@class Scene_Post
 local accept = accept
----@class SceneInfo
+---@class SceneParam
 local sceneInfo = {}
 
 local role_map = {}
-
-local snax_mongod, snax_uid
-
 
 local function update()
     while true do
@@ -30,9 +27,6 @@ end
 
 function init( ... )
     config = require(skynet.getenv("config"))
-    snax_uid = snax.uniqueservice("common/uid")
-    snax_mongod = snax.uniqueservice("common/mongod")
-
     entityMgr = require "entity.entityMgr".New()
 
     channel = mc.new()
@@ -51,7 +45,7 @@ function init( ... )
     skynet.fork(update)
 end
 
-function response.get_scene_info()
+function response.get_scene_param()
     return sceneInfo
 end
 

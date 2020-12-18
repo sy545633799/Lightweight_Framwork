@@ -4,9 +4,9 @@ local snax = require "skynet.snax"
 local config
 
 local snax_mongod, snax_uid
----@type table<number, SceneServiceInfo>
-local all_scene_service = {}
----@type table<string, SceneRoleInfo>
+---@type table<number, WorldSceneInfo>
+local scene_services = {}
+---@type table<string, WorldRoleInfo>
 local online_roles = {}
 ---@class World_Req
 local response = response
@@ -22,55 +22,57 @@ function init( ... )
     for id, config in pairs(worldConfig) do
         local sceneName = config.Resource
         local service = snax.newservice("game/scene", id, sceneName)
-        local scene_info = service.req.get_scene_info()
-        ---@class SceneServiceInfo
+        local scene_param = service.req.get_scene_param()
+        ---@class WorldSceneInfo
         local sceneInfo =
         {
-            scene_info = scene_info,
+            scene_param = scene_param,
+            ---@type Scene_Req
             service_req = service.req,
+            ---@type Scene_Post
             service_post = service.post
         }
-        all_scene_service[id] = sceneInfo
+        scene_services[id] = sceneInfo
     end
 end
 
 ---@param roleInfo RoleInfo
 ---@param sceneId number
----@return boolean, SceneInfo
+---@return boolean, SceneParam
 function response.role_enter_game(agent, roleInfo, sceneId)
-    local serv_scene_info = all_scene_service[sceneId]
-    if not serv_scene_info then
+    local scene_Info = scene_services[sceneId]
+    if not scene_Info then
         return false
     end
 
-    ---@class SceneRoleInfo
+    ---@class WorldRoleInfo
     local sceneRole =
     {
         sceneId = sceneId,
-        sceneInfo = serv_scene_info,
+        sceneInfo = scene_Info,
         agent = agent
     }
 
     online_roles[roleInfo.attrib.roleId] = sceneRole
-    local ok = serv_scene_info.service_req.role_enter_scene(agent, roleInfo.attrib, roleInfo.status)
-    return ok, serv_scene_info.scene_info
+    local ok = scene_Info.service_req.role_enter_scene(agent, roleInfo.attrib, roleInfo.status)
+    return ok, scene_Info.scene_param
 end
 
 ---@param roleInfo RoleInfo
-function response.role_leave_game(roleInfo)
-    local serv_scene_info = all_scene_service[roleInfo.attrib.sceneId]
-    if not serv_scene_info then
-
+function response.role_leave_game(roleId)
+    local roleInfo = online_roles[roleId]
+    if not roleInfo then
         return false
     end
-    online_roles[roleInfo.attrib.roleId] = nil
-    local ok = serv_scene_info.service_req.role_leave_scene(roleInfo.attrib.roleId)
 
+    local sceneInfo = roleInfo.sceneInfo
+    local ok = sceneInfo.service_req.role_leave_scene(roleId)
+    online_roles[roleId] = nil
     return ok
 end
 
 ---@param roleInfo RoleInfo
-function response.role_switch_scene(roleInfo, sceneId)
+function response.role_switch_scene(roleId, sceneId)
 
 end
 

@@ -52,12 +52,12 @@ end
 function RPC:req_leave_game(args)
     user.channels["scene"]:unsubscribe()
     user.channels["scene"] = nil
-    local ok = user.world_req.role_leave_game(user.roleInfo)
+    local ok = user.world_req.role_leave_game(user.roleInfo.attrib.roleId)
     return { ok = ok }
 end
 
 function RPC:req_switch_scene(args)
-    local ok = user.world_req.role_switch_scene(user.roleInfo, args.sceneId)
+    local ok = user.world_req.role_switch_scene(user.roleInfo.attrib.roleId, args.sceneId)
     user.roleInfo.attrib.sceneId = args.sceneId
     return { ok = ok }
 end

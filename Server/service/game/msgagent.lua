@@ -46,7 +46,7 @@ function CMD:disconnect(source)
     for name, channel in pairs(user.channels) do
         channel:unsubscribe()
     end
-    user.world_req.role_leave_game(user.roleInfo)
+    user.world_req.role_leave_game(user.roleInfo.attrib.roleId)
 
     for k, v in pairs(user) do
         if not type(v) == "function" then
