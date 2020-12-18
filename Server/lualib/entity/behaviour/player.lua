@@ -4,12 +4,19 @@ local player = class("player", entity)
 -----------------------------------------------------------
 ---@param status RoleStatus
 ---@param attrib RoleAttrib
-function entity:ctor(status, attrib)
-    self.aoiData.roleId = attrib.roleId
+function player:ctor(attrib, status, aoiId)
+    ---@type AOIData
+    self.aoiData = {}
+    self.aoiData.aoiId = aoiId
+    self.aoiData.paramId = attrib.roleId
     self.aoiData.name = attrib.name
     self.aoiData.type = entity_types.player
 
-end
+    ---@type SyncData
+    self.entityData = status
+    self.entityData.aoiId = aoiId
 
+
+end
 
 return player

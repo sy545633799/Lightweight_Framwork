@@ -1,25 +1,34 @@
-
----@class entity
-local entity = class("entity")
------------------------------------------------------------
----@class AOIData
-local aoiData =
+---@class SyncData
+local syncData =
 {
-    roleId = nil,
-    type = nil,
-    name = nil,
+    aoiId = nil,
     pos_x = nil,
     pos_y = nil,
     pos_z = nil,
     foward = nil
 }
 
-function entity:ctor(status)
-    ---@type AOIData
-    self.aoiData = status
+-----------------------------------------------------------
+---@class AOIData
+local aoiData =
+{
+    aoiId = nil,
+    --- 对于玩家来说是roleId, 对于配表单位来说是elementId
+    paramId = nil,
+    type = nil,
+    name = nil,
+
+}
+-----------------------------------------------------------
+
+---@class entity
+local entity = class("entity")
+-----------------------------------------------------------
+
+function entity:ctor(...)
+    --self.aoiData = nil
+    --self.syncData = nil
 end
-
-
 
 
 return entity

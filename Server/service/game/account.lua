@@ -84,6 +84,7 @@ end
              pos_x          = -9.848041,
              pos_y          = -1.09,
              pos_z          = -2.997883,
+             foward         = 0,
              --cur_hp         = hpData.cur,
              --max_hp         = hpData.max,
          }

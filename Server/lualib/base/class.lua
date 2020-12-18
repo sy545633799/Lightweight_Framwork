@@ -19,8 +19,8 @@ function class(classname, super)
 	local class_type = {}
 	
 	-- 在创建对象的时候自动调用
-	class_type.__init = false
-	class_type.__delete = false
+	class_type.ctor = false
+	class_type.dtor = false
 	class_type.__cname = classname
 	class_type.__ctype = ClassType.class
 	
@@ -35,15 +35,15 @@ function class(classname, super)
 		setmetatable(obj, { 
 			__index = _class[class_type],
 		})
-		-- 调用初始化方法(循环调用父类的__init())
+		-- 调用初始化方法(循环调用父类的ctor())
 		do
 			local create
 			create = function(c, ...)
 				if c.super then
 					create(c.super, ...)
 				end
-				if c.__init then
-					c.__init(obj, ...)
+				if c.ctor then
+					c.ctor(obj, ...)
 				end
 			end
 
@@ -54,8 +54,8 @@ function class(classname, super)
 		obj.Delete = function(self)
 			local now_super = self._class_type 
 			while now_super ~= nil do	
-				if now_super.__delete then
-					now_super.__delete(self)
+				if now_super.dtor then
+					now_super.dtor(self)
 				end
 				now_super = now_super.super
 			end
