@@ -6,12 +6,19 @@ local mc = require "skynet.multicast"
 local entityMgr
 
 local config
-local snax_mongod, snax_uid
 local channel
-
-local sceneId, sceneName, sceneConfig
+local sceneConfig
+---@class Scene_Req
+local response = response
+---@class Scene_Post
+local accept = accept
+---@class SceneInfo
+local sceneInfo = {}
 
 local role_map = {}
+
+local snax_mongod, snax_uid
+
 
 local function update()
     while true do
@@ -28,18 +35,24 @@ function init( ... )
 
     entityMgr = require "entity.entityMgr".New()
 
-    local start_arge = {...}
-    sceneId = start_arge[1]
-    sceneName = start_arge[2]
-    sceneConfig = require("config/" .. sceneName)
-
     channel = mc.new()
+
+    local start_arge = {...}
+    sceneInfo.sceneId = start_arge[1]
+    sceneInfo.sceneName = start_arge[2]
+    sceneInfo.serviceName = SERVICE_NAME
+    sceneInfo.handle = skynet.self()
+    sceneInfo.channel = channel.channel
+
+    sceneConfig = require("config/" .. sceneInfo.sceneName)
+
+
 
     skynet.fork(update)
 end
 
-function response.get_channel_id()
-    return channel.channel
+function response.get_scene_info()
+    return sceneInfo
 end
 
 ---@param roleAttrib RoleAttrib
@@ -63,6 +76,7 @@ end
 
 
 function accept.sync_pos(roleId, info)
+
     --print(tostring(info))
 end
 
