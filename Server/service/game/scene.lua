@@ -67,7 +67,6 @@ function accept.sync_pos(roleId, info)
 end
 
 
-
 function exit( ... )
 
 end

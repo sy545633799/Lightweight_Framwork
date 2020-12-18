@@ -1,58 +1,65 @@
 local skynet = require "skynet"
+local snax = require "skynet.snax"
 local queue = require "skynet.queue"
 local crypt = require "skynet.crypt"
 local sproto = require "sproto"
 local mc = require "skynet.multicast"
 
-local handlers = {
-    "handler.login",
-    "handler.role",
-    "handler.sync",
-}
+---@class User
+User = {}
+---@class CMD : User
+CMD = {}
+---@class RPC : User
+RPC = {}
+require "handler.login"
+require "handler.sync"
 
+local user = User
+local cmd = CMD
+local rpc = RPC
 local msgProto
 local id2ProtoDic = {}
 local cs = queue()
 local gate
 local fd
----@class CMD
-local CMD = {}
----@class RPC
-local RPC = {}
-local User
 
-function CMD.connect(source, platform, server_id, fd1)
+function CMD:connect(source, platform, server_id, fd1)
     gate = source
     fd = fd1
-    User = {
-        platform = platform,
-        server_id = server_id,
-        mc = mc,
-        RPC = RPC,
-        CMD = CMD,
-    }
-    for _,v in ipairs(handlers) do
-        local handler = require(v)
-        handler:register(User)
-    end
+    user.platform = platform
+    user.server_id = server_id
+    user.mc = mc
+    user.channels = {}
+    local account = snax.uniqueservice("game/account")
+    ---@type Account_Req
+    user.account_req = account.req
+    ---@type Account_Post
+    user.account_post = account.post
+    local world = snax.uniqueservice("game/world")
+    ---@type World_Req
+    user.world_req = world.req
+    ---@type World_Post
+    user.world_post = world.post
 end
 
-function CMD.disconnect(source)
+function CMD:disconnect(source)
     fd = nil
-    for _,v in ipairs(handlers) do
-        local handler = require(v)
-        handler:unregister(User)
+    gate = nil
+    for _, channel in ipairs(user.channels) do
+        channel:unsubscribe()
     end
-    User = nil
+    user.channels = nil
+    user.world_req.role_leave_game(user.roleInfo)
+    user.roleInfo = nil
 end
 
-function CMD.doDisconnect(ret)
+function CMD:doDisconnect(ret)
     skynet.send(gate, "lua", "doDisconnect", fd, ret)
-    CMD.disconnect(nil)
+    self:disconnect(nil)
 end
 
 
-function CMD.send(retId, ret)
+function RPC:send(retId, ret)
     assert(retId and type(retId) == "number")
     local result = string.pack(">H", retId)
     if ret then
@@ -61,19 +68,19 @@ function CMD.send(retId, ret)
     skynet.send(gate, "lua", "send", fd, result)
 end
 
-local function dorequest(data)
+function RPC:dorequest(data)
     local protoId = string.unpack(">H", data)
     local protoName = id2ProtoDic[protoId]
     if protoName then
-        local f = RPC[protoName]
+        local f = self[protoName]
         if not f then skynet.error("can't find protoName:" .. protoName) return end
         if protoId > 20000 then
             local retTb
             if #data > 4 then
                 local str = string.sub(data, 5)
-                retTb = f(msgProto:decode(protoName, str))
+                retTb = f(self, msgProto:decode(protoName, str))
             else
-                retTb = f()
+                retTb = f(self)
             end
             local retId = protoId + 1
             local retName = id2ProtoDic[retId]
@@ -82,20 +89,18 @@ local function dorequest(data)
                 --skynet.error(tostring(retTb))
                 ret = ret .. msgProto:encode(retName, retTb)
             end
-
-            CMD.send(retId, ret)
+            self:send(retId, ret)
         else
             if #data > 2 then
                 local str = string.sub(data, 3)
-                f(msgProto:decode(protoName, str))
+                f(self, msgProto:decode(protoName, str))
             else
-                f()
+                f(self)
             end
         end
     else
         skynet.error("can't find protoId:" .. protoId)
     end
-
 end
 
 skynet.register_protocol {
@@ -110,12 +115,11 @@ skynet.start(function()
     end
     msgProto = sproto.parse(require("proto.msg"))
     skynet.dispatch("lua", function(session, source, command, ...)
-        local f = assert(CMD[command])
-        cs(skynet.ret, skynet.pack(f(source, ...)))
+        local f = assert(cmd[command])
+        cs(skynet.ret, skynet.pack(f(cmd, source, ...)))
     end)
 
     skynet.dispatch("client", function(session, source, data)
-
-        cs(dorequest, data)
+        cs(rpc.dorequest, rpc, data)
     end)
 end)

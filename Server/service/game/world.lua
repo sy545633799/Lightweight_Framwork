@@ -6,6 +6,11 @@ local snax_mongod, snax_uid
 local all_scenes = {}
 local online_roles = {}
 
+---@class World_Req
+local response = response
+---@class World_Post
+local accept = accept
+
 function init( ... )
     config = require(skynet.getenv("config"))
     snax_uid = snax.uniqueservice("common/uid")

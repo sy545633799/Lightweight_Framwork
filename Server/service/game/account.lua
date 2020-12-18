@@ -5,6 +5,11 @@ local setting = require "config.Setting"
 local config
 local snax_mongod, snax_uid
 
+---@class Account_Req
+local response = response
+---@class Account_Post
+local accept = accept
+
 function init( ... )
     config = require(skynet.getenv("config"))
     snax_uid = snax.uniqueservice("common/uid")
