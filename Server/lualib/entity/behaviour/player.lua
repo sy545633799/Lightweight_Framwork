@@ -5,18 +5,26 @@ local player = class("player", entity)
 ---@param status RoleStatus
 ---@param attrib RoleAttrib
 function player:ctor(attrib, status, aoiId)
-    ---@type AOIData
-    self.aoiData = {}
     self.aoiData.aoiId = aoiId
     self.aoiData.paramId = attrib.roleId
     self.aoiData.name = attrib.name
     self.aoiData.type = entity_types.player
-
-    ---@type SyncData
-    self.entityData = status
-    self.entityData.aoiId = aoiId
-
-
+    --状态
+    self.aoiData.status = status
+    self.aoiData.aoiId = aoiId
+    self.aoiData.dirty = false
 end
+
+---@param args Sync_Pos
+function player:sync_pos(args)
+    --TODO 距离校验
+    self.aoiData.status.pos_x = args.pos_x
+    self.aoiData.status.pos_y = args.pos_y
+    self.aoiData.status.pos_z = args.pos_z
+    self.aoiData.status.foward = args.fowrad
+    self.aoiData.dirty = true
+end
+
+
 
 return player

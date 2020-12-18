@@ -1,23 +1,24 @@
----@class SyncData
-local syncData =
-{
-    aoiId = nil,
+-----------------------------------------------------------
+------@class AOIStatus
+local status = {
+    ---状态
     pos_x = nil,
     pos_y = nil,
     pos_z = nil,
-    foward = nil
+    forward = nil,
 }
-
------------------------------------------------------------
----@class AOIData
+------@class AOIData
 local aoiData =
 {
     aoiId = nil,
-    --- 对于玩家来说是roleId, 对于配表单位来说是elementId
-    paramId = nil,
+    paramId = nil,--- 对于玩家来说是roleId, 对于配表单位来说是elementId
     type = nil,
     name = nil,
+    ---@type AOIStatus
+    status = nil,
 
+    ---服务端用，标记有没有修改
+    dirty = false
 }
 -----------------------------------------------------------
 
@@ -26,8 +27,8 @@ local entity = class("entity")
 -----------------------------------------------------------
 
 function entity:ctor(...)
-    --self.aoiData = nil
-    --self.syncData = nil
+    ---@type AOIData
+    self.aoiData = {}
 end
 
 

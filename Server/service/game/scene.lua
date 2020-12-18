@@ -2,6 +2,7 @@ local skynet = require "skynet"
 local snax = require "skynet.snax"
 local mc = require "skynet.multicast"
 
+local event_names = event_names
 ---@type entityMgr
 local entityMgr
 
@@ -21,9 +22,9 @@ local function update()
     while true do
         local entity_map = entityMgr:get_sync_info()
         if table.size(entity_map) > 0 then
-            channel:publish(entity_map)
+            channel:publish(event_names.scene.sync_pos, entity_map)
         end
-        skynet.sleep(10)
+        skynet.sleep(100)
     end
 end
 
@@ -41,8 +42,6 @@ function init( ... )
     sceneInfo.channel = channel.channel
 
     sceneConfig = require("config/" .. sceneInfo.sceneName)
-
-
 
     skynet.fork(update)
 end
@@ -64,16 +63,17 @@ function response.role_enter_scene(agent, roleAttrib, status)
     }
     role_map[roleId] = roleInfo
 
-
     --通知其他玩家
-    --channel:publish(entity_map)
-
-
-    return true
+    channel:publish(event_names.scene.create_role, { aoiData = role.aoiData, syncData = role.battleData })
+    local aoi_map = entityMgr:get_all_aoiData()
+    return true, aoi_map
 end
 
 function response.role_leave_scene(roleId)
-    if not role_map[roleId] then skynet.error("玩家不在场景中") return false end
+    local roleInfo = role_map[roleId]
+    if not roleInfo then skynet.error("玩家不在场景中") return false end
+    entityMgr:remove_entity(roleInfo.role.aoiData.aoiId)
+
     role_map[roleId] = nil
     skynet.error(" exit game")
     return true
@@ -83,7 +83,7 @@ end
 function accept.sync_pos(roleId, args)
     local roleInfo = role_map[roleId]
     if not roleInfo then skynet.error("玩家不在场景中") return false end
-    entityMgr.sync_pos(roleInfo.role.aoiData.aoiId, args)
+    entityMgr:sync_pos(roleInfo.role.aoiData.aoiId, args)
 end
 
 

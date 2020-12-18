@@ -16,6 +16,7 @@ function MainScene:OnPrepare(map_id)
         return
     end
 
+    --logError(args)
     coroutine.Do(MapManager.LoadMap, nil, "Demo_1")
     UIManager:LoadView(UIConfig.MainUI)
     --UIManager:LoadView(UIConfig.BattleUI)

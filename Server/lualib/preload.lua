@@ -13,4 +13,6 @@ require "base.order"
 require "base.class"
 require "base.log"
 
+require "event.event_names"
+
 ERROR_CODE = require "proto.msgId"

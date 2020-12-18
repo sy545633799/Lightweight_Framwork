@@ -1,6 +1,11 @@
 local msg = [[
 
-.empty {}
+.asyn_pos {
+    pos_x 0 :double
+    pos_y 1 :double
+    pos_z 2 :double
+    foward 3 :double
+}
 
 .mainAttrib {
 	roleId 0 : string
@@ -76,14 +81,26 @@ local msg = [[
 	roleInfo 1 : roleInfo
 }
 
-.req_enter_game {
-    sceneId 1 : integer
+.status {
+    aoiId 0 : integer
+    pos_x 1 : double
+    pos_y 2 : double
+    pos_z 3 : double
+    forward 4 : double
+}
+
+.aoiData {
+    aoiId 0 : integer
+    paramId 1 : string
+    type 2 : integer
+    name 3 : string
+    status 4 : status
 }
 
 .ack_enter_game {
-    ok 1 : boolean
+    ok 0 : boolean
+    aoi_map 1 : *aoiData(aoiId)
 }
-
 
 ]]
 

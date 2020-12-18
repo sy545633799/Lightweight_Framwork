@@ -1,5 +1,7 @@
 local skynet = require "skynet"
 local snax = require "skynet.snax"
+
+local event_names = event_names
 local user = User
 
 ---@public 客户端点击登录调用, 返回玩家信息，如果没有，则返回空
@@ -26,13 +28,18 @@ function RPC:req_register(args)
 end
 
 ---推送给客户端的消息
-local function recvChannel(channel, source, msg, ...)
-    skynet.error("channel ID:",channel, "source:", skynet.address(source), "msg:",msg)
+local function recvChannel(channel, source, eventId, data)
+    if eventId == event_names.scene.create_role then
+
+    elseif eventId == event_names.scene.sync_pos then
+
+    end
+    --skynet.error("channel ID:",channel, "source:", skynet.address(source), "msg:",eventId)
 
 end
 
 function RPC:req_enter_game(args)
-    local ok, sceneInfo = user.world_req.role_enter_game(skynet.self(), user.roleInfo, user.roleInfo.attrib.sceneId)
+    local ok, aoi_map, sceneInfo = user.world_req.role_enter_game(skynet.self(), user.roleInfo, user.roleInfo.attrib.sceneId)
     local channel = user.mc.new {
         channel = sceneInfo.channel,
         dispatch = recvChannel,
@@ -46,7 +53,7 @@ function RPC:req_enter_game(args)
     ---@type Scene_Post
     user.scene_post = snax_scene.post
 
-    return { ok = ok }
+    return { ok = ok, aoi_map = aoi_map }
 end
 
 function RPC:req_leave_game(args)

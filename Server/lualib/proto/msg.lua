@@ -81,10 +81,26 @@ local msg = [[
 	roleInfo 1 : roleInfo
 }
 
-.ack_enter_game {
-    ok 1 : boolean
+.status {
+    aoiId 0 : integer
+    pos_x 1 : double
+    pos_y 2 : double
+    pos_z 3 : double
+    forward 4 : double
 }
 
+.aoiData {
+    aoiId 0 : integer
+    paramId 1 : string
+    type 2 : integer
+    name 3 : string
+    status 4 : status
+}
+
+.ack_enter_game {
+    ok 0 : boolean
+    aoi_map 1 : *aoiData(aoiId)
+}
 
 ]]
 
