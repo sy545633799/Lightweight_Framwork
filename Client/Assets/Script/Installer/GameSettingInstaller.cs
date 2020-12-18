@@ -26,5 +26,8 @@ namespace Game {
 		public bool MiniMode = false;
 		public bool LogDebug = false;
 		public bool UwaMode = false;
+
+		public int PCFrameRate = 60;
+		public int MobileFrameRate = 30;
 	}
 }

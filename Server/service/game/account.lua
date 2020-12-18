@@ -73,8 +73,8 @@ end
          }
          getDefaultAttrib(attrib)
 
-         ---@class aoiData
-         local aoiData =
+         ---@class RoleStatus
+         local status =
          {
              pos_x          = -9.848041,
              pos_y          = -1.09,
@@ -87,7 +87,7 @@ end
          ---@class RoleInfo
          local roleInfo = {
              account = account,
-             aoi = aoiData,
+             status = status,
              attrib = attrib,
              itemPackage = {}
          }

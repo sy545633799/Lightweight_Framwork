@@ -38,6 +38,7 @@ end)
 
 handler:OnUnRegister (function ()
     if User.roleInfo then
+        channel:unsubscribe()
         anax_world.req.role_leave_game(User.roleInfo)
 
         --TODO:保存玩家数据到数据库
@@ -70,7 +71,7 @@ end
 
 ---推送给客户端的消息
 local function recvChannel(channel, source, msg, ...)
-    skynet.error("channel ID:",channel, "source:", skynet.address(source), "msg:",msg)
+    --skynet.error("channel ID:",channel, "source:", skynet.address(source), "msg:",msg)
 
 
 end
@@ -87,7 +88,8 @@ function RPC.req_enter_game(args)
 end
 
 function RPC.req_leave_game(args)
-    --channel:unsubscribe()
+    skynet.error("leave")
+    channel:unsubscribe()
     local ok = anax_world.req.role_leave_game(User.roleInfo)
     return { ok = ok }
 end

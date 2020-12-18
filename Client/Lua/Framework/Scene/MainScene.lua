@@ -11,12 +11,14 @@ end
 
 function MainScene:OnPrepare(map_id)
     local args = NetworkManager:SendRequest(NetMsgId.req_enter_game)
-    logError(args)
+    if not args.ok then
+        logError("进入游戏失败")
+        return
+    end
 
     coroutine.Do(MapManager.LoadMap, nil, "Demo_1")
     UIManager:LoadView(UIConfig.MainUI)
     --UIManager:LoadView(UIConfig.BattleUI)
-
 
     AOIController:EnterMap()
 end

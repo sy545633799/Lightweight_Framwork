@@ -1,6 +1,11 @@
 local msg = [[
 
-.empty {}
+.asyn_pos {
+    pos_x 0 :double
+    pos_y 1 :double
+    pos_z 2 :double
+    foward 3 :double
+}
 
 .mainAttrib {
 	roleId 0 : string

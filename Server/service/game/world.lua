@@ -28,13 +28,14 @@ function response.role_enter_game(agent, roleInfo, sceneId)
         return false
     end
     online_roles[roleInfo.attrib.roleId] = { sceneId = sceneId, sceneInfo = sceneInfo, agent = agent}
-    local ok = sceneInfo.service.req.role_enter_scene(agent, roleInfo.attrib, roleInfo.aoi)
+    local ok = sceneInfo.service.req.role_enter_scene(agent, roleInfo.attrib, roleInfo.status)
     return ok, sceneInfo.channelId
 end
 
 function response.role_leave_game(roleInfo)
     local sceneInfo = all_scenes[roleInfo.attrib.sceneId]
     if not sceneInfo then
+
         return false
     end
     online_roles[roleInfo.attrib.roleId] = nil
@@ -46,6 +47,13 @@ end
 function response.role_switch_scene(roleInfo, sceneId)
 
 end
+
+function accept.sync_pos(roleId, info)
+    local roleInfo = online_roles[roleId]
+    if not roleInfo then return end
+    roleInfo.sceneInfo.service.post.sync_pos(roleId, info)
+end
+
 
 
 function exit( ... )

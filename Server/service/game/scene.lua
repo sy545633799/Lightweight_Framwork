@@ -13,6 +13,14 @@ local sceneId, sceneName, sceneConfig
 
 local role_map = {}
 
+local function update()
+    while true do
+        local entity_map = entityMgr:get_aoi_data()
+        channel:publish(entity_map)
+        skynet.sleep(10)
+    end
+end
+
 function init( ... )
     config = require(skynet.getenv("config"))
     snax_uid = snax.uniqueservice("common/uid")
@@ -27,7 +35,7 @@ function init( ... )
 
     channel = mc.new()
 
-    --channel:publish(...)
+    skynet.fork(update)
 end
 
 function response.get_channel_id()
@@ -35,11 +43,11 @@ function response.get_channel_id()
 end
 
 ---@param roleAttrib RoleAttrib
-function response.role_enter_scene(agent, roleAttrib, aoiData)
+function response.role_enter_scene(agent, roleAttrib, status)
     local roleId = roleAttrib.roleId
     if role_map[roleId] then skynet.error("玩家已经在场景中") return false end
-    local role = entityMgr:create_entity(roleAttrib, aoiData)
-    
+    local role = entityMgr:create_player(roleAttrib, status)
+
 
     role_map[roleId] = { agent = agent, role = role}
     skynet.error(roleAttrib.name .. " enter game")
@@ -52,6 +60,12 @@ function response.role_leave_scene(roleId)
     skynet.error(" exit game")
     return true
 end
+
+
+function accept.sync_pos(roleId, info)
+    --print(tostring(info))
+end
+
 
 
 function exit( ... )

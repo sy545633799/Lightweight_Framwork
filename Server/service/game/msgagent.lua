@@ -7,6 +7,7 @@ local mc = require "skynet.multicast"
 local handlers = {
     "handler.login",
     "handler.role",
+    "handler.sync",
 }
 
 local msgProto

@@ -14,9 +14,9 @@ namespace Game
 		private void Awake()
 		{
 #if UNITY_EDITOR || UNITY_STANDALONE
-			Application.targetFrameRate = 60;
+			Application.targetFrameRate = GameSettings.PCFrameRate;
 #else
-			Application.targetFrameRate = 30;
+			Application.targetFrameRate = GameSettings.MobileFrameRate;
 			int width = Screen.width;
 			int high = Screen.height;
 			if (width > 1920)
