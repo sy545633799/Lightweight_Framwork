@@ -36,16 +36,16 @@ end
  function response.create_role(account, name)
      ---TODO 验证名字合法性
      -----插入
-     --mongod.req.insert("test", { userid = 1, money = 123, age = 28 , test = {
+     --mongod.req.insert("role", { account = 1, money = 123, age = 28 , test = {
      --	["1001"] = { id = "1001", star = 1, level = 1},
      --	["1002"] = { id = "1002", star = 1, level = 1}
      --}})
      -----增加
-     --mongod.post.update("test", { userid = 1 }, { ["$set"] = { ["test.1003"] = { id = "1003", star = 1, level = 1} } })
+     --mongod.post.update("role", { account = 1 }, { ["$set"] = { ["test.1003"] = { id = "1003", star = 1, level = 1} } })
      -----删除
-     --mongod.post.update("test", { userid = 1 }, { ["$unset"] = { ["test.1003"] = 1 } })
+     --mongod.post.update("role", { account = 1 }, { ["$unset"] = { ["test.1003"] = 1 } })
      -----更改
-     --mongod.post.update("test", { userid = 1 }, { ["$set"] = { ["test.1001.star"] = 3 } })
+     --mongod.post.update("role", { account = 1 }, { ["$set"] = { ["test.1001.star"] = 3 } })
      ---再确认一次
      local role_attrib = snax_mongod.req.findOne("role", { account = account })
      if not role_attrib then
@@ -103,6 +103,11 @@ end
     else
          return false
     end
+end
+
+
+function accept.save_role(account, roleInfo)
+    snax_mongod.req.replace("role", { account = account }, roleInfo)
 end
 
 function exit( ... )

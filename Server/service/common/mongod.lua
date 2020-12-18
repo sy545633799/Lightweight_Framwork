@@ -156,6 +156,15 @@ function response.delete( tableName, tbl, single )
 	return ret
 end
 
+function response.replace( tableName, tbl, tb2)
+	local ret = db[db_name][tableName]:delete(tbl, 1)
+	if not ret then
+		ret = db[db_name][tableName]:safe_insert(tb2)
+	end
+	return ret
+end
+
+
 -- 大量删除数据，同步删表重建
 function accept.drop( tableName )
 	local ret = db[db_name][tableName]:drop()
@@ -175,6 +184,7 @@ function accept.ensureIndex( tableName, tbl, options )
 
 	return ret
 end
+
 
 -- 关闭服务器的时候调用
 function response.stop( ... )

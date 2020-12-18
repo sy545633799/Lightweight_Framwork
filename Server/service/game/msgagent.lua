@@ -43,11 +43,11 @@ function CMD:connect(source, platform, server_id, fd1)
 end
 
 function CMD:disconnect(source)
-    for name, channel in pairs(user.channels) do
+    user.world_post.role_leave_game(user.roleInfo.attrib.roleId)
+    user.account_post.save_role(user.account, user.roleInfo)
+    for _, channel in pairs(user.channels) do
         channel:unsubscribe()
     end
-    user.world_req.role_leave_game(user.roleInfo.attrib.roleId)
-
     for k, v in pairs(user) do
         if not type(v) == "function" then
             user[k] = nil

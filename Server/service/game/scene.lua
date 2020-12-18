@@ -22,9 +22,9 @@ local function update()
     while true do
         local entity_map = entityMgr:get_sync_info()
         if table.size(entity_map) > 0 then
-            channel:publish(event_names.scene.sync_pos, entity_map)
+            channel:publish(event_names.scene.sync_status, entity_map)
         end
-        skynet.sleep(100)
+        skynet.sleep(10)
     end
 end
 
@@ -66,7 +66,7 @@ function response.role_enter_scene(agent, roleAttrib, status)
     --通知其他玩家
     channel:publish(event_names.scene.create_role, { aoiData = role.aoiData, syncData = role.battleData })
     local aoi_map = entityMgr:get_all_aoiData()
-    return true, aoi_map
+    return true, role.aoiData.aoiId, aoi_map
 end
 
 function response.role_leave_scene(roleId)

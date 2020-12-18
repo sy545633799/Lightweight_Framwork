@@ -54,12 +54,12 @@ function response.role_enter_game(agent, roleInfo, sceneId)
     }
 
     online_roles[roleInfo.attrib.roleId] = sceneRole
-    local ok, aoi_map = scene_Info.service_req.role_enter_scene(agent, roleInfo.attrib, roleInfo.status)
-    return ok, aoi_map, scene_Info.scene_param
+    local ok, aoiId, aoi_map = scene_Info.service_req.role_enter_scene(agent, roleInfo.attrib, roleInfo.status)
+    return ok, aoiId, aoi_map, scene_Info.scene_param
 end
 
 ---@param roleInfo RoleInfo
-function response.role_leave_game(roleId)
+function accept.role_leave_game(roleId)
     local roleInfo = online_roles[roleId]
     if not roleInfo then
         return false

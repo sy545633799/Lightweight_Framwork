@@ -29,17 +29,24 @@ end
 
 ---推送给客户端的消息
 local function recvChannel(channel, source, eventId, data)
+    --skynet.error("channel ID:",channel, "source:", skynet.address(source), "msg:",eventId)
     if eventId == event_names.scene.create_role then
 
-    elseif eventId == event_names.scene.sync_pos then
+    elseif eventId == event_names.scene.sync_status then
+        for aoiId, aoiStatus in pairs(data) do
+            if aoiId == user.aoiId then
+                user.roleInfo.status = aoiStatus
+            end
+        end
 
     end
-    --skynet.error("channel ID:",channel, "source:", skynet.address(source), "msg:",eventId)
+
+
 
 end
 
 function RPC:req_enter_game(args)
-    local ok, aoi_map, sceneInfo = user.world_req.role_enter_game(skynet.self(), user.roleInfo, user.roleInfo.attrib.sceneId)
+    local ok, aoiId, aoi_map, sceneInfo = user.world_req.role_enter_game(skynet.self(), user.roleInfo, user.roleInfo.attrib.sceneId)
     local channel = user.mc.new {
         channel = sceneInfo.channel,
         dispatch = recvChannel,
@@ -48,6 +55,7 @@ function RPC:req_enter_game(args)
     user.channels["scene"] = channel
 
     local snax_scene = snax.bind(sceneInfo.handle, sceneInfo.serviceName)
+    user.aoiId = aoiId
     ---@type Scene_Req
     user.scene_req = snax_scene.req
     ---@type Scene_Post
