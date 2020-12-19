@@ -4,17 +4,18 @@ local player = class("player", entity)
 -----------------------------------------------------------
 ---@param status RoleTrans
 ---@param attrib RoleAttrib
-function player:ctor(attrib, status, aoiId)
+function player:ctor(attrib, trans, aoiId)
     self.aoiData.aoiId = aoiId
     self.aoiData.paramId = attrib.roleId
     self.aoiData.modelId = attrib.modelId
     self.aoiData.name = attrib.name
     self.aoiData.type = entity_types.player
-    --状态
-    self.aoiData.trans = status
+    --位置
+    self.aoiData.trans = trans
     self.aoiData.trans.aoiId = aoiId
     self.aoiData.aoiId = aoiId
     self.aoiData.dirty = false
+    --状态
 end
 
 ---@param args Sync_Trans

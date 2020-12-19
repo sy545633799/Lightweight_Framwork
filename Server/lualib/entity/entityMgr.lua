@@ -56,14 +56,20 @@ function entityMgr:get_sync_info()
     return info
 end
 
+---@public 获取一次就置空
 ---@return table<number, AOIData>
 function entityMgr:get_create_map()
-    return create_map
+    local t = create_map
+    create_map = {}
+    return t
 end
 
+---@public 获取一次就置空
 ---@return table<number, number>
-function entityMgr:get_deltete_map()
-    return delete_map
+function entityMgr:get_delete_map()
+    local t = create_map
+    create_map = {}
+    return t
 end
 
 function entityMgr:remove_entity(aoiId)

@@ -28,17 +28,11 @@ local function update()
         local create_map = entityMgr:get_create_map()
         if table.size(create_map) > 0 then
             channel:publish(event_names.scene.create_entities, create_map)
-            for k, _ in pairs(create_map) do
-                create_map[k] = nil
-            end
         end
 
-        local delete_map = entityMgr:get_deltete_map()
+        local delete_map = entityMgr:get_delete_map()
         if table.size(delete_map) > 0 then
             channel:publish(event_names.scene.create_entities, delete_map)
-            for k, _ in pairs(delete_map) do
-                delete_map[k] = nil
-            end
         end
 
         skynet.sleep(10)

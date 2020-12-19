@@ -17,6 +17,12 @@ function table.empty(t)
     return not next(t)
 end
 
+function table.clear(t)
+	for k, _ in pairs(t) do
+		t[k] = 0
+	end
+end
+
 function table.keys(hashtable)
     local keys = {}
     for k, v in pairs(hashtable) do
