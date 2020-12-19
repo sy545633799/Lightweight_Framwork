@@ -23,10 +23,6 @@ namespace Game {
 		private Vector3 Target_Dir = Vector3.zero;
 
 		/// <summary>
-		/// 组件自己的帧数
-		/// </summary>
-		private int compFrame = 0;
-		/// <summary>
 		/// 同步帧率（SyncFrame帧同步一次）
 		/// </summary>
 		private int syncFrame;
@@ -70,9 +66,6 @@ namespace Game {
 		
 		public override void OnFixedUpdate(float deltaTime)
 		{
-			//添加组件的第一帧不做计算, 否则Controller貌似会有问题
-			if (compFrame++ < 1) return;
-
 			if (m_InputComp.JoySticDir == Vector2.zero && !m_InputComp.IsJump
 				&& CurHSpeed == 0
 				&& CurVSpeed == TarVSpeed
@@ -123,7 +116,6 @@ namespace Game {
 			m_AnimComp.Moving(speedX, speedY);
 			behavior.Controller.Move(Target_Dir * deltaTime * CurHSpeed + Vector3.up * CurVSpeed);
 
-
 			//发送同步信息
 			SyncPos();
 		}
@@ -131,7 +123,6 @@ namespace Game {
 
 		public override void OnRemove()
 		{
-			compFrame = 0;
 			m_AnimComp = null;
 			m_InputComp = null;
 			m_RotateComp = null;

@@ -119,3 +119,5 @@ MonoBehaviour:
     Path: Assets/Art/SceneRes/Terrain/Terrain01.prefab
   - ID: 54
     Path: Assets/Art/SceneRes/Stone/prefab/Stone.prefab
+  - ID: 55
+    Path: Assets/Art/SceneRes/Terrain/collider.prefab
