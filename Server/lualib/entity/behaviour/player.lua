@@ -12,6 +12,7 @@ function player:ctor(attrib, status, aoiId)
     self.aoiData.type = entity_types.player
     --状态
     self.aoiData.status = status
+    self.aoiData.status.aoiId = aoiId
     self.aoiData.aoiId = aoiId
     self.aoiData.dirty = false
 end

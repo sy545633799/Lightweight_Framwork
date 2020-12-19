@@ -151,7 +151,7 @@ namespace XLua.CSObjectWrap
                     ushort _RPCID = (ushort)LuaAPI.xlua_tointeger(L, 3);
                     byte[] _data = LuaAPI.lua_tobytes(L, 4);
                     
-                    Game.TcpManager.AddEvent( __event, _protoID, _RPCID, _data );
+                    //Game.TcpManager.AddEvent( __event, _protoID, _RPCID, _data );
                     
                     
                     

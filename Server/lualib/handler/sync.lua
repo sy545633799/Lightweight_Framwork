@@ -12,6 +12,6 @@ local sync_pos =
 }
 
 ---@param args AOIStatus
-function RPC:asyn_pos(args)
+function RPC:sync_pos(args)
     user.scene_post.sync_pos(user.roleInfo.attrib.roleId, args)
 end

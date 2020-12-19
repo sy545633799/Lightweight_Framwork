@@ -15,7 +15,7 @@ using UnityEngine;
 namespace Game {
 	public class msgId
 	{
-	
-		public const ushort client_asyn_pos = 10101;
+		public const ushort sync_pos = 10101;
+		public const ushort sync_status = 10102;
 	}
 }

@@ -1,6 +1,7 @@
 -----------------------------------------------------------
 ------@class AOIStatus
 local status = {
+    aoiId = nil,
     ---状态
     pos_x = nil,
     pos_y = nil,

@@ -3,8 +3,8 @@
 --- DateTime: 2020/6/26
 
 require "Framework/Network/NetStateEvent"
-require "Framework.Network.Proto.msgId"
-local sproto = require "Framework.Network.Sproto.sproto"
+require "Framework/Network/Proto/msgId"
+local sproto = require "Framework/Network/Sproto/sproto"
 local crypt = require "crypt"
 ---@class NetworkManager:Updatable
 local NetworkManager = BaseClass("NetworkManager", Updatable)
@@ -20,7 +20,7 @@ function NetworkManager:ctor()
     for protoName, id in pairs(NetMsgId) do
         Id2ProtoDic[id] = protoName
     end
-    msgProto = sproto.parse(require("Framework.Network.Proto.msg"))
+    msgProto = sproto.parse(require("Framework/Network/Proto/msg"))
     tcpManager.OnConnectEventCallBack = function(state, count) self:OnConnectCallBack(state, count) end
     tcpManager.OnReceiveMsgCallBack = function(protoID, RPCID, bytes) self:OnReceiveMsgCallBack(protoID, RPCID, bytes) end
 end
@@ -40,7 +40,7 @@ end
 function NetworkManager:onDisConnect()
     self.isConnect = false
     self.loginLock = false
-    EventManager:Broadcast(EventNames.Login.DisConnect)
+    --EventManager:Broadcast(EventNames.Login.DisConnect)
 end
 
 function NetworkManager:OnConnectCallBack(state, count)
@@ -86,7 +86,7 @@ function NetworkManager:RegSrvReqHandler(protoId, callback, handle)
     self.srvReqHandler[protoId] = { callback = callback, handle = handle}
 end
 
----客户端主动向服务器发送请求
+---客户端向服务端同步消息
 function NetworkManager:SendMessage(protoId, args)
     assert(protoId and type(protoId) == "number")
     if protoId > 20000 then
@@ -102,7 +102,7 @@ function NetworkManager:SendMessage(protoId, args)
     end
 end
 
-
+---客户端向服务端发送请求
 function NetworkManager:SendRequest(protoId, args)
     assert(protoId and type(protoId) == "number")
     if protoId <= 20000 then

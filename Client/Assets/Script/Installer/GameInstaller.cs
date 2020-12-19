@@ -51,6 +51,7 @@ namespace Game
 			initFunctions.Add(TcpManager.Init);
 			initFunctions.Add(MapManager.Init);
 			initFunctions.Add(EntityBehaviorManager.Init);
+			initFunctions.Add(AOIManager.Init);
 			for (int i = 0; i < initFunctions.Count; i++)
 			{
 				await initFunctions[i].Invoke();
@@ -67,10 +68,6 @@ namespace Game
 		private void OnEnable()
 		{
 			AtlasManager.Init();
-		}
-		private void OnDisable()
-		{
-			XLuaManager.Dispose();
 		}
 
 		private void Update()
@@ -126,7 +123,8 @@ namespace Game
 		private async void OnApplicationQuit()
 		{
 			AtlasManager.Dispose();
-			XLuaManager.OnApplicationQuit();
+			XLuaManager.Dispose();
+			AOIManager.Dispose();
 			TcpManager.Dispose();
 			TimeManager.Dispose();
 			MapManager.Release();

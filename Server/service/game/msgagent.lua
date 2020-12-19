@@ -43,9 +43,12 @@ function CMD:connect(source, platform, server_id, fd1)
 end
 
 function CMD:disconnect(source)
-    user.world_post.role_leave_game(user.roleInfo.attrib.roleId)
-    user.account_post.save_role(user.account, user.roleInfo)
-    for _, channel in pairs(user.channels) do
+    if user.roleInfo then
+        user.world_post.role_leave_game(user.roleInfo.attrib.roleId)
+        user.account_post.save_role(user.account, user.roleInfo)
+    end
+
+    for _, channel in pairs(user.channels or {}) do
         channel:unsubscribe()
     end
     for k, v in pairs(user) do
@@ -61,8 +64,14 @@ function CMD:doDisconnect(ret)
     self:disconnect(nil)
 end
 
+function RPC:sendmessage(retId, args)
+    assert(retId and type(retId) == "number")
+    local retName = id2ProtoDic[retId]
+    local ret = msgProto:encode(retName, args)
+    self:send2client(retId, ret)
+end
 
-function RPC:send(retId, ret)
+function RPC:send2client(retId, ret)
     assert(retId and type(retId) == "number")
     local result = string.pack(">H", retId)
     if ret then
@@ -92,7 +101,7 @@ function RPC:dorequest(data)
                 --skynet.error(tostring(retTb))
                 ret = ret .. msgProto:encode(retName, retTb)
             end
-            self:send(retId, ret)
+            self:send2client(retId, ret)
         else
             if #data > 2 then
                 local str = string.sub(data, 3)

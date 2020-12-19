@@ -13,6 +13,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Threading;
+using Sproto;
 
 namespace Game
 {
@@ -70,6 +71,8 @@ namespace Game
 		public const int MaxLuaNetSessionID = System.Int32.MaxValue;
 		public static Action<ushort, ushort, byte[]> OnConnectEventCallBack = null;
 		public static Action<ushort, ushort, byte[]> OnReceiveMsgCallBack = null;
+
+		private static Dictionary<ushort, Action<byte[]>> m_ListenerMap = new Dictionary<ushort, Action<byte[]>>();
 		/// <summary>
 		/// 单次连接超时
 		/// </summary>
@@ -94,7 +97,7 @@ namespace Game
 			Heart = false;
 		}
 
-		public static void AddEvent(Action<ushort, ushort, byte[]> _event, ushort protoID, ushort RPCID, byte[] data)
+		private static void AddEvent(Action<ushort, ushort, byte[]> _event, ushort protoID, ushort RPCID, byte[] data)
 		{
 			mEvents.Enqueue(new NetEventElement(_event, protoID, RPCID, data));
 		}
@@ -299,6 +302,18 @@ namespace Game
 			}
 		}
 
+		public static void AddListener(ushort msgId, Action<byte[]> callback)
+		{
+			if (m_ListenerMap.ContainsKey(msgId))
+				Debug.LogError($"覆盖了消息: {msgId}");
+			m_ListenerMap[msgId] = callback;
+		}
+
+		public static void RemoveListener(ushort msgId)
+		{
+			if (m_ListenerMap.ContainsKey(msgId))
+				m_ListenerMap[msgId] = null;
+		}
 
 		public static void OnRead(IAsyncResult asr)
 		{
@@ -375,8 +390,13 @@ namespace Game
 				}
 				if (RemainingBytes() >= messageLen)
 				{
+					byte[] bytes1 = reader.ReadBytes(messageLen);
+					Action<byte[]> callback;
+					if (m_ListenerMap.TryGetValue(protoId, out callback))
+						callback.Invoke(bytes1);
+					else
+						OnReceivedMessage(protoId, rpcId, bytes1);
 					//Debug.LogError($"{RemainingBytes()}：{messageLen}");
-					OnReceivedMessage(protoId, rpcId, reader.ReadBytes(messageLen));
 				}
 				else
 				{

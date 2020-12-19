@@ -3,6 +3,7 @@ local snax = require "skynet.snax"
 
 local event_names = event_names
 local user = User
+local rpc = RPC
 
 ---@public 客户端点击登录调用, 返回玩家信息，如果没有，则返回空
 function RPC:req_login(arg)
@@ -31,14 +32,17 @@ end
 local function recvChannel(channel, source, eventId, data)
     --skynet.error("channel ID:",channel, "source:", skynet.address(source), "msg:",eventId)
     if eventId == event_names.scene.create_role then
-
+        rpc:sendmessage(NetMsgId.sync_create_role, { data = data })
+    elseif eventId == event_names.scene.delete_role then
+        rpc:sendmessage(NetMsgId.sync_delete_role, { id = data })
     elseif eventId == event_names.scene.sync_status then
         for aoiId, aoiStatus in pairs(data) do
             if aoiId == user.aoiId then
                 user.roleInfo.status = aoiStatus
+                --TODO 如果只是位置朝向发生改变，就不同步给客户端了
             end
         end
-
+        rpc:sendmessage(NetMsgId.sync_status, { list = data })
     end
 
 

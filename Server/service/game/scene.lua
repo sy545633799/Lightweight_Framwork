@@ -24,7 +24,7 @@ local function update()
         if table.size(entity_map) > 0 then
             channel:publish(event_names.scene.sync_status, entity_map)
         end
-        skynet.sleep(10)
+        skynet.sleep(100)
     end
 end
 
@@ -64,7 +64,7 @@ function response.role_enter_scene(agent, roleAttrib, status)
     role_map[roleId] = roleInfo
 
     --通知其他玩家
-    channel:publish(event_names.scene.create_role, { aoiData = role.aoiData, syncData = role.battleData })
+    channel:publish(event_names.scene.create_role, role.aoiData)
     local aoi_map = entityMgr:get_all_aoiData()
     return true, role.aoiData.aoiId, aoi_map
 end
@@ -72,10 +72,11 @@ end
 function response.role_leave_scene(roleId)
     local roleInfo = role_map[roleId]
     if not roleInfo then skynet.error("玩家不在场景中") return false end
-    entityMgr:remove_entity(roleInfo.role.aoiData.aoiId)
-
+    local aoiId = roleInfo.role.aoiData.aoiId
+    entityMgr:remove_entity(aoiId)
     role_map[roleId] = nil
-    skynet.error(" exit game")
+    channel:publish(event_names.scene.delete_role, aoiId)
+    --skynet.error(" exit game")
     return true
 end
 
@@ -89,4 +90,5 @@ end
 
 function exit( ... )
 
+    --TODO 处理channel
 end

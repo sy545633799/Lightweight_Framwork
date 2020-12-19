@@ -1,6 +1,6 @@
 local msg = [[
 
-.asyn_pos {
+.sync_pos {
     pos_x 0 :double
     pos_y 1 :double
     pos_z 2 :double
@@ -102,6 +102,20 @@ local msg = [[
     ok 0 : boolean
     aoi_map 1 : *aoiData(aoiId)
 }
+
+.sync_create_role{
+    data 0 : aoiData
+}
+
+.sync_delete_role{
+    id 0 : integer
+}
+
+.sync_status {
+    list 0 : *status(aoiId)
+}
+
+
 
 ]]
 

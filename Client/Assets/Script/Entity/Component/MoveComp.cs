@@ -57,7 +57,7 @@ namespace Game {
 				proto.pos_z = behavior.transform.position.z;
 				proto.forward = behavior.transform.eulerAngles.y;
 				byte[] bys = proto.encode();
-				TcpManager.SendBytes(msgId.client_asyn_pos, bys);
+				TcpManager.SendBytes(msgId.sync_pos, bys);
 				intervalFrame = 0;
 			}
 		}
@@ -108,6 +108,7 @@ namespace Game {
 				//方向
 				Target_Dir = horizontal;
 				m_RotateComp.SetLookAt(Target_Dir, behavior.RotateSpeed * Time.deltaTime, true);
+				
 			}
 
 			//移动
