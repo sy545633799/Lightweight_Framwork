@@ -15,7 +15,7 @@ function MainScene:OnPrepare()
     local args = NetworkManager:SendRequest(NetMsgId.req_enter_game)
     if not args.ok then
         logError("进入游戏失败")
-        return
+        return false
     end
 
     local sceneId = RoleModel.RoleData.sceneId
@@ -23,6 +23,7 @@ function MainScene:OnPrepare()
     coroutine.Do(MapManager.LoadMap, nil, sceneName)
     AOIController:CreateEntities(args.aoi_map)
     UIManager:LoadView(UIConfig.MainUI)
+    return true
 end
 
 function MainScene:OnEnter()

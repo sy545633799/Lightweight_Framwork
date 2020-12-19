@@ -57,7 +57,11 @@ function SceneManager:SwitchScene(scene_config, ...)
     coroutine.Do(loadManager.Load,  scene_config.ShowLoading and ShowLoadProcess or nil, sceneName, nil)
     self.scene_config = scene_config
     self.current_scene = self.scenes[sceneName]
-    self.current_scene:Prepare(...)
+    local ok = self.current_scene:Prepare(...)
+    if not ok then
+        logError("加载场景失败")
+        return
+    end
     if inLaunchScene then
         launchUI.Dispose()
     else

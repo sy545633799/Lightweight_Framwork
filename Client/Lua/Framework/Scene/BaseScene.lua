@@ -15,7 +15,7 @@ end
 ---预加载资源，预加载结束之后再关闭loadingui
 function BaseScene:OnPrepare(...) end
 function BaseScene:Prepare(...)
-	self:OnPrepare(...)
+	return self:OnPrepare(...)
 end
 
 function BaseScene:OnEnter() end

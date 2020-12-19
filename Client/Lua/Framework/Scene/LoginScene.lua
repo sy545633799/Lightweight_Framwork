@@ -12,6 +12,8 @@ end
 --预加载资源
 function LoginScene:OnPrepare()
     UIManager:LoadView(UIConfig.LoginUI)
+
+    return true
 end
 
 function LoginScene:OnEnter()
