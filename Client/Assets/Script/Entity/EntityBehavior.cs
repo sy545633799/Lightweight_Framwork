@@ -94,7 +94,6 @@ namespace Game
 			sceneid = 0;
 			entityType = 0;
 			aoiId = 0;
-			sceneid = 0;
 			destroyed = false;
 			bodyLoading = false;
 			logicSpeed = 1f;
@@ -104,16 +103,6 @@ namespace Game
 			root = null;
 			transform.position = OnRecylePos;
 			transform.localScale = Vector3.one;
-			if (transform.childCount > 0)
-			{
-				int max = transform.childCount;
-				for (int index = 0; index < max; index++)
-				{
-					Transform trans = transform.GetChild(index);
-					if (trans != null)
-						GameObject.Destroy(trans.gameObject);
-				}
-			}
 			return this;
         }
 

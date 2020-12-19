@@ -77,12 +77,16 @@ namespace Game {
 					AddEntityComp<SyncStatusComp>(aoiId);
 					break;
 				case 2: //player
-					AddEntityComp<RotateComp>(aoiId);
 					AddEntityComp<AnimComp>(aoiId);
+					AddEntityComp<RotateComp>(aoiId);
+					AddEntityComp<SyncTransComp>(aoiId);
+					AddEntityComp<SyncStatusComp>(aoiId);
 					break;
 				case 3: //monster
-					AddEntityComp<RotateComp>(aoiId);
 					AddEntityComp<AnimComp>(aoiId);
+					AddEntityComp<RotateComp>(aoiId);
+					AddEntityComp<SyncTransComp>(aoiId);
+					AddEntityComp<SyncStatusComp>(aoiId);
 					break;
 				case 4: //plant
 					break;

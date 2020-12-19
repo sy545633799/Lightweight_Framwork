@@ -17,7 +17,7 @@ function table.empty(t)
     return not next(t)
 end
 
-function table.clear(t)
+function table.zore(t)
 	for k, _ in pairs(t) do
 		t[k] = 0
 	end

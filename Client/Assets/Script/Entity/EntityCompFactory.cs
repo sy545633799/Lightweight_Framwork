@@ -27,8 +27,8 @@ namespace Game {
 			poolMap.Add(typeof(RotateComp), new RecyclePool<EntityComp>(() => new RotateComp()));
 			poolMap.Add(typeof(NavComp), new RecyclePool<EntityComp>(() => new NavComp()));
 			poolMap.Add(typeof(MoveComp), new RecyclePool<EntityComp>(() => new MoveComp()));
+			poolMap.Add(typeof(SyncTransComp), new RecyclePool<EntityComp>(() => new SyncTransComp()));
 			poolMap.Add(typeof(SyncStatusComp), new RecyclePool<EntityComp>(() => new SyncStatusComp()));
-			poolMap.Add(typeof(SyncPropertyComp), new RecyclePool<EntityComp>(() => new SyncPropertyComp()));
 
 
 			compListMap.Add(typeof(AnimComp), new Dictionary<long, EntityComp>(64));
@@ -36,8 +36,8 @@ namespace Game {
 			compListMap.Add(typeof(RotateComp), new Dictionary<long, EntityComp>(64));
 			compListMap.Add(typeof(NavComp), new Dictionary<long, EntityComp>(64));
 			compListMap.Add(typeof(MoveComp), new Dictionary<long, EntityComp>(64));
+			compListMap.Add(typeof(SyncTransComp), new Dictionary<long, EntityComp>(64));
 			compListMap.Add(typeof(SyncStatusComp), new Dictionary<long, EntityComp>(64));
-			compListMap.Add(typeof(SyncPropertyComp), new Dictionary<long, EntityComp>(64));
 
 		}
 

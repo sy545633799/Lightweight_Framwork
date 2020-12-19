@@ -1,15 +1,9 @@
 // ========================================================
-// des：
-// author: 
+// des: 移动类型
+// author: shenyi
 // time：2020-12-11 14:40:21
 // version：1.0
 // ========================================================
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Game
 {

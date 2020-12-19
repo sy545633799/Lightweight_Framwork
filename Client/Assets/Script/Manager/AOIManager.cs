@@ -27,12 +27,12 @@ namespace Game
 			try
 			{
 				sync_Status.init(obj);
-				Dictionary<long, EntityComp> comps = EntityCompFactory.Instance.GetComponentsInUse<SyncStatusComp>();
+				Dictionary<long, EntityComp> comps = EntityCompFactory.Instance.GetComponentsInUse<SyncTransComp>();
 				foreach (var aoiData in sync_Status.status.Values)
 				{
 					EntityComp comp = null;
 					if (comps.TryGetValue(aoiData.aoiId, out comp))
-						(comp as SyncStatusComp).Sync(aoiData);
+						(comp as SyncTransComp).Sync(aoiData);
 				}
 			}
 			catch (Exception e)
