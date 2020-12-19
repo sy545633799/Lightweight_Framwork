@@ -8,8 +8,8 @@ NetMsgId = {
     ---同步状态
     sync_status = 10102, --服务端发送玩家状态给客户端
 
-    sync_create_role = 10103,
-    sync_delete_role = 10104,
+    sync_create_entity = 10103,
+    sync_delete_entity = 10104,
 
     ---登录相关
     req_login = 20101,

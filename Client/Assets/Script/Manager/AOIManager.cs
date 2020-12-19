@@ -25,7 +25,8 @@ namespace Game
 		{
 			try
 			{
-				sync_Status.init(obj);
+				//sync_Status.init(obj);
+				
 			}
 			catch (Exception e)
 			{

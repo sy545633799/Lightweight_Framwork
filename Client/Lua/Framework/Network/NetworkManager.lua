@@ -23,6 +23,8 @@ function NetworkManager:ctor()
     msgProto = sproto.parse(require("Framework/Network/Proto/msg"))
     tcpManager.OnConnectEventCallBack = function(state, count) self:OnConnectCallBack(state, count) end
     tcpManager.OnReceiveMsgCallBack = function(protoID, RPCID, bytes) self:OnReceiveMsgCallBack(protoID, RPCID, bytes) end
+    self.srvReqHandler = {}
+    self.sessionId2CBs = {}
 end
 
 ---@登录
@@ -32,8 +34,6 @@ function NetworkManager:Login(ip, port)
     self.isConnect = false
     self.ip = ip
     self.port = port
-    self.sessionId2CBs = {}
-    self.srvReqHandler = {}
     tcpManager.Connect(self.ip, self.port)
 end
 
@@ -85,6 +85,12 @@ function NetworkManager:RegSrvReqHandler(protoId, callback, handle)
     assert(type(callback) == "function")
     self.srvReqHandler[protoId] = { callback = callback, handle = handle}
 end
+
+function NetworkManager:RemoveHandler(protoId)
+    self.srvReqHandler[protoId] = nil
+end
+
+
 
 ---客户端向服务端同步消息
 function NetworkManager:SendMessage(protoId, args)

@@ -5,30 +5,44 @@
 ---------------------------------------------------
 ---@class MessageListener:Updatable
 MessageListener = BaseClass("MessageListener", Updatable)
+local networkManager = NetworkManager
 
 function MessageListener:ctor()
-    self.message_callaback = {}
+    self.message_callback = {}
 end
 ---------------------------------------------------网络消息部分-------------------------------------------------------------
-function MessageListener:AddMessageListener(funcname,authority)
-    MessageRPCManager:AddHandler(self, funcname,authority)
-    self.message_callaback[funcname] = true
+function MessageListener:AddMessageListener(protoID, callback, handler)
+    if self.message_callback[protoID] then
+        logError("重复添加id:" .. protoID)
+        return
+    end
+    networkManager:RegSrvReqHandler(protoID, callback, handler)
+    self.message_callback[protoID] = callback
 end
 
-function MessageListener:RemoveMessageListener(funcname)
-    MessageRPCManager:RemoveHandler(self, funcname)
-    self.message_callaback[funcname] = nil
+function MessageListener:RemoveMessageListener(protoID)
+    if self.message_callback[protoID] then
+        networkManager:RemoveHandler(protoID)
+        self.message_callback[protoID] = nil
+    end
 end
 
 function MessageListener:RemoveAllMessageListener()
-    if not self.message_callaback then return end
-    for funcname, _ in pairs(self.message_callaback) do
-        MessageRPCManager:RemoveHandler(self, funcname)
+    for protoID, _ in pairs(self.message_callback) do
+        networkManager:RemoveHandler(protoID)
     end
-    self.message_callaback = {}
+    self.message_callback = {}
+end
+
+function MessageListener:Send(protoID, args)
+    networkManager:SendMessage(protoID, args)
+end
+
+function MessageListener:SendRequest(protoID, args)
+    return networkManager:SendRequest(protoID, args)
 end
 --------------------------------------------------------------------------------------------------------------------------------
 function MessageListener:dtor()
     self:RemoveAllMessageListener()
-    self.message_callaback = nil
+    self.message_callback = nil
 end

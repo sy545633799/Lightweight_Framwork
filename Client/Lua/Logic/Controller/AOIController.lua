@@ -9,6 +9,8 @@ local Hero = require("Logic/Entity/Behaviour/Hero")
 function AOIController:ctor()
     ---@type table<string, Entity> @private
     self.entites = {}
+    self:AddMessageListener(NetMsgId.sync_create_entity, self.CreateEntity, self)
+    self:AddMessageListener(NetMsgId.sync_delete_entity, self.RemoveEntiy, self)
 end
 
 ---@param aoi_map table<number, AOIData>
@@ -28,11 +30,15 @@ function AOIController:EnterMap(aoi_map)
 
 end
 
-function AOIController:GetBornPosition()
-    if self.EnterBattleMap then
-        return self.bornPosition
-    end
-    return { x = 0, y = 0, z = 0}
+
+---@return Entity
+function AOIController:CreateEntity(args)
+
+end
+
+---@return Entity
+function AOIController:RemoveEntiy(args)
+
 end
 
 ---@return Entity
