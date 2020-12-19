@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Game
 {
-	public class aoi_status : SprotoTypeBase
+	public class aoi_trans : SprotoTypeBase
 	{
 		private static int max_field_count = 5;
 
@@ -69,9 +69,9 @@ namespace Game
 			get { return base.has_field.has_field(4); }
 		}
 
-		public aoi_status() : base(max_field_count) { }
+		public aoi_trans() : base(max_field_count) { }
 
-		public aoi_status(byte[] buffer) : base(max_field_count, buffer)
+		public aoi_trans(byte[] buffer) : base(max_field_count, buffer)
 		{
 			this.decode();
 		}
@@ -138,12 +138,12 @@ namespace Game
 	}
 	
 
-	public class sync_status : SprotoTypeBase
+	public class s2c_sync_trans : SprotoTypeBase
 	{
 		private static int max_field_count = 1;
 
-		private Dictionary<long, aoi_status> _status;
-		public Dictionary<long, aoi_status> status
+		private Dictionary<long, aoi_trans> _status;
+		public Dictionary<long, aoi_trans> status
 		{
 			get { return _status; }
 			set { base.has_field.set_field(0, true); _status = value; }
@@ -153,9 +153,9 @@ namespace Game
 			get { return base.has_field.has_field(0); }
 		}
 
-		public sync_status() : base(max_field_count) { }
+		public s2c_sync_trans() : base(max_field_count) { }
 
-		public sync_status(byte[] buffer) : base(max_field_count, buffer)
+		public s2c_sync_trans(byte[] buffer) : base(max_field_count, buffer)
 		{
 			this.decode();
 		}
@@ -179,7 +179,7 @@ namespace Game
 				switch (tag)
 				{
 					case 0:
-						this.status = base.deserialize.read_map<long, aoi_status>(v => v.aoiId);
+						this.status = base.deserialize.read_map<long, aoi_trans>(v => v.aoiId);
 						break;
 				}
 			}

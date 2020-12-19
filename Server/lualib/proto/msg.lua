@@ -1,6 +1,6 @@
 local msg = [[
 
-.sync_pos {
+.c2s_sync_trans {
     pos_x 0 :double
     pos_y 1 :double
     pos_z 2 :double
@@ -81,7 +81,7 @@ local msg = [[
 	roleInfo 1 : roleInfo
 }
 
-.status {
+.aoiTrans {
     aoiId 0 : integer
     pos_x 1 : double
     pos_y 2 : double
@@ -95,7 +95,7 @@ local msg = [[
     type 2 : integer
     name 3 : string
     modelId 4 : integer
-    status 5 : status
+    trans 5 : aoiTrans
 }
 
 .ack_enter_game {
@@ -103,16 +103,16 @@ local msg = [[
     aoi_map 1 : *aoiData(aoiId)
 }
 
-.sync_create_entities{
+.s2c_create_entities{
     data 0 : *aoiData(aoiId)
 }
 
-.sync_delete_entities{
+.s2c_delete_entities{
     id 0 : *integer
 }
 
-.sync_status {
-    list 0 : *status(aoiId)
+.s2c_sync_trans {
+    list 0 : *aoiTrans(aoiId)
 }
 
 ]]

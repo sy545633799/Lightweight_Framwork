@@ -2,16 +2,16 @@ local skynet = require "skynet"
 
 local user = User
 
----@class Sync_Pos
-local sync_pos =
+---@class Sync_Trans
+local Sync_Trans =
 {
-    pos_x = nil,
-    pos_y = nil,
-    pos_z = nil,
-    forward = nil
+    pos_x = "pos_x",
+    pos_y = "pos_y",
+    pos_z = "pos_z",
+    forward = "forward"
 }
 
----@param args AOIStatus
-function RPC:sync_pos(args)
-    user.scene_post.sync_pos(user.roleInfo.attrib.roleId, args)
+---@param args AOITrans
+function RPC:c2s_sync_trans(args)
+    user.scene_post.c2s_sync_trans(user.roleInfo.attrib.roleId, args)
 end

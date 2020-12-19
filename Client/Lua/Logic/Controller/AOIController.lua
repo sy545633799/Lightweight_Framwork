@@ -8,8 +8,8 @@ local Hero = require("Logic/Entity/Behaviour/Hero")
 function AOIController:ctor()
     ---@type table<string, Entity> @private
     self.entites_map = {}
-    self:AddMessageListener(NetMsgId.sync_create_entities, self.CreateEntities, self)
-    self:AddMessageListener(NetMsgId.sync_delete_entities, self.RemoveEntities, self)
+    self:AddMessageListener(NetMsgId.s2c_create_entities, self.CreateEntities, self)
+    self:AddMessageListener(NetMsgId.s2c_delete_entities, self.RemoveEntities, self)
 end
 
 ---@param args table<number, AOIData>

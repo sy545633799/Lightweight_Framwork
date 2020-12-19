@@ -30,7 +30,7 @@ namespace Game {
 		/// 用来计算同步间隔的帧数
 		/// </summary>
 		private int intervalFrame;
-		private sync_pos proto = new sync_pos();
+		private c2s_sync_trans proto = new c2s_sync_trans();
 
 		public override void OnAdd()
 		{
@@ -57,7 +57,7 @@ namespace Game {
 				proto.pos_z = behavior.transform.position.z;
 				proto.forward = behavior.transform.eulerAngles.y;
 				byte[] bys = proto.encode();
-				TcpManager.SendBytes(msgId.sync_pos, bys);
+				TcpManager.SendBytes(msgId.c2s_sync_trans, bys);
 				intervalFrame = 0;
 			}
 		}

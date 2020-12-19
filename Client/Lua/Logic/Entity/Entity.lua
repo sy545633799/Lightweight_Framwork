@@ -16,8 +16,8 @@ function Entity:ctor(aoiData)
             sceneId,
             aoiData.aoiId,
             aoiData.modelId,
-            { x = aoiData.status.pos_x, y = aoiData.status.pos_y, z = aoiData.status.pos_z },
-            aoiData.status.forward,
+            { x = aoiData.trans.pos_x, y = aoiData.trans.pos_y, z = aoiData.trans.pos_z },
+            aoiData.trans.forward,
             aoiData.type,
             function(components)
                 coroutine.start(function()

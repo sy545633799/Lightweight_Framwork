@@ -15,7 +15,7 @@ namespace Game
 {
 	public class SyncPropertyComp :EntityComp
 	{
-		public void Sync(sync_status status)
+		public void Sync(s2c_sync_trans status)
 		{
 			
 		}

@@ -15,7 +15,9 @@ using UnityEngine;
 namespace Game {
 	public class msgId
 	{
-		public const ushort sync_pos = 10101;
-		public const ushort sync_status = 10102;
+		public const ushort c2s_sync_trans = 101;
+
+		
+		public const ushort s2c_sync_trans = 10101;
 	}
 }

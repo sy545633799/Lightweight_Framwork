@@ -31,12 +31,12 @@ function entityMgr:create_monster()
 
 end
 
----@param args Sync_Pos
-function entityMgr:sync_pos(aoiId, args)
+---@param args Sync_Trans
+function entityMgr:c2s_sync_trans(aoiId, args)
     ---@type player
     local player = entity_map[aoiId]
     if not player then return end
-    player:sync_pos(args)
+    player:c2s_sync_trans(args)
 end
 
 ---@return table<number, entity>
@@ -49,7 +49,7 @@ function entityMgr:get_sync_info()
     local info = {}
     for id, entity in pairs(entity_map) do
         if entity.aoiData.dirty then
-            info[id] = entity.aoiData.status
+            info[id] = entity.aoiData.trans
             entity.aoiData.dirty = false
         end
     end

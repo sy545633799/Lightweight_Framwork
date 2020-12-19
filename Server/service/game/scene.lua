@@ -22,7 +22,7 @@ local function update()
     while true do
         local entity_map = entityMgr:get_sync_info()
         if table.size(entity_map) > 0 then
-            channel:publish(event_names.scene.sync_status, entity_map)
+            channel:publish(event_names.scene.s2c_sync_trans, entity_map)
         end
 
         local create_map = entityMgr:get_create_map()
@@ -94,11 +94,11 @@ function response.role_leave_scene(roleId)
     return true
 end
 
----@param args Sync_Pos
-function accept.sync_pos(roleId, args)
+---@param args Sync_Trans
+function accept.c2s_sync_trans(roleId, args)
     local roleInfo = role_map[roleId]
     if not roleInfo then skynet.error("玩家不在场景中") return false end
-    entityMgr:sync_pos(roleInfo.role.aoiData.aoiId, args)
+    entityMgr:c2s_sync_trans(roleInfo.role.aoiData.aoiId, args)
 end
 
 

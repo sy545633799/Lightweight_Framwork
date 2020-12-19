@@ -1,5 +1,5 @@
-------@class AOIStatus
-AOIStatus = {
+------@class AOITrans
+AOITrans = {
     aoiId = "aoiId",
     ---状态
     pos_x = "pos_x",
@@ -16,8 +16,8 @@ AOIData =
     modelId = "modelId",
     type = "type",
     name = "name",
-    ---@type AOIStatus
-    status = "status",
+    ---@type AOITrans
+    trans = "trans",
 
     ---服务端用，标记有没有修改
     dirty = false

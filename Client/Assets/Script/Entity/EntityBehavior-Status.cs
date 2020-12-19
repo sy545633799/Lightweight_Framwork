@@ -97,7 +97,7 @@ namespace Game
 		}
 
 
-		public virtual void SyncStatus(sync_status status)
+		public virtual void SyncStatus(s2c_sync_trans status)
 		{
 			
 		}

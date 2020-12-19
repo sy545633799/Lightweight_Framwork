@@ -1,15 +1,15 @@
---- 10000-->20000 (单向)客户端<->服务器
---- >20000    RPC消息(ack = req + 1)
+--- <10000          客户端->服务器
+--- 10000-->20000   服务端->客户端
+--- >20000          RPC消息(ack = req + 1)
 
 NetMsgId = {
-
     ---同步相关
-    sync_pos = 10101,  --客户端同步消息给服务器
-    ---同步状态
-    sync_status = 10102, --服务端发送玩家状态给客户端
+    c2s_sync_trans = 101,  --客户端同步消息给服务器
 
-    sync_create_entities = 10103,
-    sync_delete_entities = 10104,
+    ---同步状态
+    s2c_sync_trans = 10101, --服务端发送玩家状态给客户端
+    s2c_create_entities = 10102,
+    s2c_delete_entities = 10103,
 
     ---登录相关
     req_login = 20101,

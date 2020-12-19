@@ -12,9 +12,9 @@ namespace Game
 	public class SyncStatusComp : EntityComp
 	{
 		
-		public void Sync(aoi_status status)
+		public void Sync(aoi_trans status)
 		{
-			//Debug.LogError(status.forward);
+			Debug.LogError(status.forward);
 		}
 	}
 }

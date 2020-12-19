@@ -9,7 +9,7 @@
 using Sproto;
 
 namespace Game {
-	public class sync_pos : SprotoTypeBase
+	public class c2s_sync_trans : SprotoTypeBase
 	{
 		private static int max_field_count = 4;
 
@@ -57,9 +57,9 @@ namespace Game {
 			get { return base.has_field.has_field(3); }
 		}
 
-		public sync_pos() : base(max_field_count) { }
+		public c2s_sync_trans() : base(max_field_count) { }
 
-		public sync_pos(byte[] buffer) : base(max_field_count, buffer)
+		public c2s_sync_trans(byte[] buffer) : base(max_field_count, buffer)
 		{
 			this.decode();
 		}
