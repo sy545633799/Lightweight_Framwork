@@ -67,10 +67,6 @@ namespace Game
 		{
 			GameObject go = new GameObject("Entity");
 			EntityBehavior behavior = go.AddComponent<EntityBehavior>();
-			CharacterController controller = go.AddComponent<CharacterController>();
-			controller.center = new Vector3(0, controller.height * 0.5f, 0);
-			controller.radius = 0.5f;
-			behavior.Controller = controller;
 			return behavior;
 		}
 
@@ -119,7 +115,7 @@ namespace Game
 			entityBehaviors.Add(aoiId, entity);
 			entityBehaviorsQueue.AddFirst(entity);
 
-			
+
 			entity.onBodyCreate = onBodyCreated;
 
 			return entity;

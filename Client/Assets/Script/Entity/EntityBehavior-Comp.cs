@@ -73,9 +73,9 @@ namespace Game {
 					AddEntityComp<AnimComp>();
 					AddEntityComp<InputComp>();
 					AddEntityComp<RotateComp>();
-					AddEntityComp<NavComp>();
+					//AddEntityComp<NavComp>();
 					AddEntityComp<MoveComp>();
-					
+
 					break;
 				case 2: //player
 					AddEntityComp<RotateComp>();

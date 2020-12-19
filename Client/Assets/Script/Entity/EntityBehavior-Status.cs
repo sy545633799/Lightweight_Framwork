@@ -54,7 +54,20 @@ namespace Game
 			}
 		}
 
-		public CharacterController Controller { get; set; }
+		private CharacterController m_Controller;
+		public CharacterController Controller
+		{
+			get
+			{
+				if (!m_Controller)
+				{
+					m_Controller = gameObject.AddComponent<CharacterController>();
+					m_Controller.center = new Vector3(0, m_Controller.height * 0.5f, 0);
+					m_Controller.radius = 0.5f;
+				}
+				return m_Controller;
+			}
+		}
 		
 
 		private bool destroyed = false;

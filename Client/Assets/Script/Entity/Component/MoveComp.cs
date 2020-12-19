@@ -22,8 +22,18 @@ namespace Game {
 		private float TarVSpeed = 0f;
 		private Vector3 Target_Dir = Vector3.zero;
 
-		private int SyncFrame;
-		private int IntervalFrame;
+		/// <summary>
+		/// 组件自己的帧数
+		/// </summary>
+		private int compFrame = 0;
+		/// <summary>
+		/// 同步帧率（SyncFrame帧同步一次）
+		/// </summary>
+		private int syncFrame;
+		/// <summary>
+		/// 用来计算同步间隔的帧数
+		/// </summary>
+		private int intervalFrame;
 		private sync_pos proto = new sync_pos();
 
 		public override void OnAdd()
@@ -33,8 +43,9 @@ namespace Game {
 			m_AnimComp = behavior.GetEntityComp<AnimComp>() as AnimComp;
 			m_InputComp = behavior.GetEntityComp<InputComp>() as InputComp;
 			m_RotateComp = behavior.GetEntityComp<RotateComp>() as RotateComp;
+
 			//0.1s同步一次到服务端
-			SyncFrame = (int)(Application.targetFrameRate * 0.1f);
+			syncFrame = (int)(Application.targetFrameRate * 0.1f);
 		}
 
 		/// <summary>
@@ -43,7 +54,7 @@ namespace Game {
 		/// <param name="force">是否强制同步</param>
 		public void SyncPos(bool force = false)
 		{
-			if (IntervalFrame == SyncFrame || force)
+			if (intervalFrame == syncFrame || force)
 			{
 				proto.pos_x = behavior.transform.position.x;
 				proto.pos_y= behavior.transform.position.y;
@@ -51,24 +62,28 @@ namespace Game {
 				proto.forward = behavior.transform.eulerAngles.y;
 				byte[] bys = proto.encode();
 				TcpManager.SendBytes(msgId.client_asyn_pos, bys);
-				IntervalFrame = 0;
+				intervalFrame = 0;
 			}
 		}
 
+
+		
 		public override void OnFixedUpdate(float deltaTime)
 		{
+			//添加组件的第一帧不做计算, 否则Controller貌似会有问题
+			if (compFrame++ < 1) return;
 
 			if (m_InputComp.JoySticDir == Vector2.zero && !m_InputComp.IsJump
 				&& CurHSpeed == 0
 				&& CurVSpeed == TarVSpeed
-				&& behavior.Controller.isGrounded)
+				&& behavior.Controller.isGrounded) 
 			{
-				if (IntervalFrame > 0) SyncPos(true);
+				if (intervalFrame > 0) SyncPos(true);
 				return;
 			}
 				
 
-			IntervalFrame++;
+			intervalFrame++;
 
 			//这里先不做跳跃了，跳跃必须用blendtree做，因为跳跃时间不确定，只能用跳跃时的纵向速度去混合动画
 			//if (m_InputComp.IsJump && behavior.Controller.isGrounded)
@@ -116,6 +131,7 @@ namespace Game {
 
 		public override void OnRemove()
 		{
+			compFrame = 0;
 			m_AnimComp = null;
 			m_InputComp = null;
 			m_RotateComp = null;
