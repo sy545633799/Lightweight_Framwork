@@ -21,7 +21,7 @@ function MainScene:OnPrepare()
     local sceneId = RoleModel.RoleData.sceneId
     local sceneName = world_conig[sceneId].Resource
     coroutine.Do(MapManager.LoadMap, nil, sceneName)
-    AOIController:EnterMap(args.aoi_map)
+    AOIController:CreateEntities(args.aoi_map)
     UIManager:LoadView(UIConfig.MainUI)
 end
 

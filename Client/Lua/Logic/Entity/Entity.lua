@@ -2,30 +2,6 @@
 --- Created by shenyi.
 --- DateTime: 2020/8/13
 -----------------------------------------------------------
-------@class AOIStatus
-local status = {
-    ---状态
-    pos_x = nil,
-    pos_y = nil,
-    pos_z = nil,
-    forward = nil,
-}
-------@class AOIData
-local aoiData =
-{
-    aoiId = nil,
-    paramId = nil,--- 对于玩家来说是roleId, 对于配表单位来说是elementId
-    modelId = nil,
-    type = nil,
-    name = nil,
-    ---@type AOIStatus
-    status = nil,
-
-    ---服务端用，标记有没有修改
-    dirty = false
-}
-----------------------------------------------------------
-
 
 ---@class Entity:Updatable
 Entity = BaseClass("Entity", Updatable)
@@ -50,6 +26,7 @@ function Entity:ctor(aoiData)
                     self:OnBodyCreate(components)
                 end)
             end)
+
     ---@type UnityEngine.GameObject
     self.gameObject = self.behavior.gameObject
     ---@type UnityEngine.Transform
@@ -57,9 +34,7 @@ function Entity:ctor(aoiData)
 end
 
 ---@ 实体元素创建的时候回调
-function Entity:OnBodyCreate(components)
-
-end
+function Entity:OnBodyCreate(components) end
 
 function Entity:dtor()
     self.behavior:RemoveAllListeners()

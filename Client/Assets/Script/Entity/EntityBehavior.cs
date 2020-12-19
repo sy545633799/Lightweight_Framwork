@@ -82,12 +82,13 @@ namespace Game
 		/// <returns></returns>
 		public EntityBehavior Downcast()
         {
+			RemoveAllEntityComp();
 			if (body != null)
 			{
 				ResourceManager.RecyclePrefab(body);
 				body = null;
 			}
-			this.gameObject.name = RecycleName;
+			gameObject.name = RecycleName;
 			onBodyCreate = null;
 			isSyncable = false;
 			sceneid = 0;
@@ -97,7 +98,6 @@ namespace Game
 			destroyed = false;
 			bodyLoading = false;
 			logicSpeed = 1f;
-			RemoveAllEntityComp();
 			body = null;
 			head = null;
 			middle = null;

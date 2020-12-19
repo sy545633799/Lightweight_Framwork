@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using XLua;
 
 namespace Game
 {
@@ -33,13 +34,13 @@ namespace Game
 		/// <typeparam name="EntityBehavior"></typeparam>
 		/// <returns></returns>
 		private static Dictionary<int, EntityBehavior> entityBehaviors = new Dictionary<int, EntityBehavior>();
-
 		/// <summary>
 		/// 用于按照顺序遍历
 		/// </summary>
 		/// <typeparam name="EntityBehavior"></typeparam>
 		/// <returns></returns>
 		private static LinkedList<EntityBehavior> entityBehaviorsQueue = new LinkedList<EntityBehavior>();
+		
 
 		private static GameObject m_EntityContainer;
 		private static GameObject entityContainer

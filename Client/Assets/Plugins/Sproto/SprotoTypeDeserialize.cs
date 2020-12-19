@@ -349,6 +349,7 @@ namespace Sproto
 			reader.Init(this.reader.Buffer, this.reader.Offset, (int)hsz);
 			this.reader.Seek (this.reader.Position + (int)hsz);
 
+			///对象池优化
 			T obj = new T();
 			obj.init (reader);
 
@@ -373,8 +374,11 @@ namespace Sproto
 		public delegate TK gen_key_func<TK, TV>(TV v);
 		public Dictionary<TK, TV> read_map<TK, TV>(gen_key_func<TK, TV> func) where TV : SprotoTypeBase, new() {
 			UInt32 sz = this.read_array_size ();
-
+			
+			//对象池优化
 			Dictionary<TK, TV> map = new Dictionary<TK, TV> ();
+
+			
 			SprotoTypeReader reader = new SprotoTypeReader ();
 			for (UInt32 i = 0; sz > 0; i++) {
 				UInt32 read_size;

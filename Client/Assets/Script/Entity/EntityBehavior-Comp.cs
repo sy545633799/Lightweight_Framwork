@@ -12,13 +12,12 @@ using System.Linq;
 namespace Game {
 	public partial class EntityBehavior : EventObject, IMonoPoolObject<EntityBehavior>
 	{
-		public EntityComp AddEntityComp<T>()
+		public EntityComp AddEntityComp<T>(long aoiId)
 			where T : EntityComp
 		{
 			Type type = typeof(T);
 
-			EntityComp entitycomp = EntityCompFactory.Instance.Get<T>() as EntityComp;
-			entitycomp.SetBehavior(this);
+			EntityComp entitycomp = EntityCompFactory.Instance.Get<T>(aoiId) as EntityComp;
 			entitiesCompList.Add(type, entitycomp);
 			return entitycomp;
 		}
@@ -49,7 +48,9 @@ namespace Game {
 				Debug.Log("entity not contain comp named " + name);
 				return;
 			}
-			EntityCompFactory.Instance.Recycle(entitiesCompList[type]);
+			EntityComp comp = entitiesCompList[type];
+			comp.Remove();
+			EntityCompFactory.Instance.Recycle(aoiId, comp);
 			entitiesCompList.Remove(type);
 		}
 
@@ -59,9 +60,7 @@ namespace Game {
 			if (keyStr.Length < 1) return;
 			for (int i = keyStr.Length - 1; i >= 0; i--)
 				RemoveEntityComp(keyStr[i]);
-			var Enumerator = entitiesCompList.GetEnumerator();
-			while (Enumerator.MoveNext())
-				EntityCompFactory.Instance.Recycle(Enumerator.Current.Value);
+			
 			entitiesCompList.Clear();
 		}
 
@@ -70,27 +69,27 @@ namespace Game {
 			switch (entityType)
 			{
 				case 1://hero
-					AddEntityComp<AnimComp>();
-					AddEntityComp<InputComp>();
-					AddEntityComp<RotateComp>();
-					//AddEntityComp<NavComp>();
-					AddEntityComp<MoveComp>();
-
+					AddEntityComp<AnimComp>(aoiId);
+					AddEntityComp<InputComp>(aoiId);
+					AddEntityComp<RotateComp>(aoiId);
+					AddEntityComp<NavComp>(aoiId);
+					AddEntityComp<MoveComp>(aoiId);
+					AddEntityComp<SyncStatusComp>(aoiId);
 					break;
 				case 2: //player
-					AddEntityComp<RotateComp>();
-					AddEntityComp<AnimComp>();
+					AddEntityComp<RotateComp>(aoiId);
+					AddEntityComp<AnimComp>(aoiId);
 					break;
 				case 3: //monster
-					AddEntityComp<RotateComp>();
-					AddEntityComp<AnimComp>();
+					AddEntityComp<RotateComp>(aoiId);
+					AddEntityComp<AnimComp>(aoiId);
 					break;
 				case 4: //plant
 					break;
 			}
 			var Enumerator = entitiesCompList.GetEnumerator();
 			while (Enumerator.MoveNext())
-				Enumerator.Current.Value.OnAdd();
+				Enumerator.Current.Value.Add(this);
 		}
 
 

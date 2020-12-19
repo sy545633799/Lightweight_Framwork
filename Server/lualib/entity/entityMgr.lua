@@ -1,6 +1,7 @@
 ---@class entityMgr
 local entityMgr = class("entityMgr")
 require "entity.entity_types"
+require "entity.common.aoi_properties"
 local player = require "entity.behaviour.player"
 ----------------------------------------------------------------
 local aoiId = 0

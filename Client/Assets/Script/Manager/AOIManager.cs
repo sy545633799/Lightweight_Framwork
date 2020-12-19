@@ -9,6 +9,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using Sproto;
 using System;
+using System.Collections.Generic;
 
 namespace Game
 {
@@ -25,14 +26,19 @@ namespace Game
 		{
 			try
 			{
-				//sync_Status.init(obj);
-				
+				sync_Status.init(obj);
+				Dictionary<long, EntityComp> comps = EntityCompFactory.Instance.GetComponentsInUse<SyncStatusComp>();
+				foreach (var aoiData in sync_Status.status.Values)
+				{
+					EntityComp comp = null;
+					if (comps.TryGetValue(aoiData.aoiId, out comp))
+						(comp as SyncStatusComp).Sync(aoiData);
+				}
 			}
 			catch (Exception e)
 			{
 				Debug.LogError(e);
 			}
-			
 		}
 
 		public static void Dispose()

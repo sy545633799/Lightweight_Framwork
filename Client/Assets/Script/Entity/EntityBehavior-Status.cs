@@ -96,6 +96,14 @@ namespace Game
 			logicSpeed = speed;
 		}
 
+
+		public virtual void SyncStatus(sync_status status)
+		{
+			
+		}
+		
+		
+
 		//public bool IsRidingSword {
 		//	get {
 		//		if (animComp != null)

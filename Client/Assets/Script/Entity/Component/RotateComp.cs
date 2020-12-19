@@ -20,7 +20,7 @@ namespace Game {
 		public float rotateSpeed = 10;
 
 		public override void OnUpdate (float deltaTime) {
-
+			
 		}
 
 		void SyncRotation () {
@@ -36,6 +36,7 @@ namespace Game {
 			Quaternion q = Quaternion.Euler (Vector3.up * rotationY);
 			return q;
 		}
+		
 		public void SetLookAt (Vector3 dir, float t, bool smooth = false) {
 			if (smooth) {
 				Vector3 foward = dir;
@@ -50,11 +51,8 @@ namespace Game {
 				Quaternion q = Quaternion.Euler (Vector3.up * angle);
 				cacheTransform.rotation = q;
 			}
-			// 暂时不进行同步操作
-			// if (behavior.isSyncable) {
-			// 	SyncRotation ();
-			// }
 		}
+
 		public void SetForward (Vector3 foward) {
 			// if (behavior.IsOnSpurt) {
 			// 	return;
