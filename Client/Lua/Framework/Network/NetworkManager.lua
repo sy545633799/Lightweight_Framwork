@@ -139,7 +139,7 @@ function NetworkManager:OnReceiveMsgCallBack(protoID, rpcId, bytes)
         local protoName = Id2ProtoDic[protoID]
         if not protoName then logError("can't find protoId" .. protoID) return end
         args = msgProto:decode(protoName, bytes)
-        log("receive:" .. tostring(args))
+        --log("receive:" .. tostring(args))
     end
 
     if rpcId > 0 then
@@ -148,8 +148,10 @@ function NetworkManager:OnReceiveMsgCallBack(protoID, rpcId, bytes)
         self.sessionId2CBs[rpcId] = nil
     else
         local handler = self.srvReqHandler[protoID]
-        if handler then
-            coroutine.start(function () if handler then handler(handler.handler, args) else handler(args) end end)
+        if handler and handler.callback then
+            local handle = handler.handle
+            local callback = handler.callback
+            coroutine.start(function () if handle then callback(handle, args) else callback(args) end end)
         end
     end
 

@@ -32,16 +32,25 @@ end
 local function recvChannel(channel, source, eventId, data)
     --skynet.error("channel ID:",channel, "source:", skynet.address(source), "msg:",eventId)
     if eventId == event_names.scene.create_entities then
-        rpc:sendmessage(NetMsgId.sync_create_entities, { data = data })
-    elseif eventId == event_names.scene.delete_entities then
-        rpc:sendmessage(NetMsgId.sync_delete_entities, { id = data })
-    elseif eventId == event_names.scene.sync_status then
-        for aoiId, aoiStatus in pairs(data) do
-            if aoiId == user.aoiId then
-                user.roleInfo.status = aoiStatus
-                --TODO 如果只是位置朝向发生改变，就不同步给客户端了
-            end
+        if data[user.aoiId] then
+            data[user.aoiId] = nil
         end
+        if table.size(data) > 0 then
+            rpc:sendmessage(NetMsgId.sync_create_entities, { data = data })
+        end
+
+    elseif eventId == event_names.scene.delete_entities then
+        if data[user.aoiId] then
+            data[user.aoiId] = nil
+        end
+        if table.size(data) > 0 then
+            rpc:sendmessage(NetMsgId.sync_delete_entities, { id = data })
+        end
+    elseif eventId == event_names.scene.sync_status then
+        if data[user.aoiId] then
+            user.roleInfo.status = data[user.aoiId]
+        end
+        --TODO 如果只是位置朝向发生改变，就不同步给客户端了
         rpc:sendmessage(NetMsgId.sync_status, { list = data })
     end
 

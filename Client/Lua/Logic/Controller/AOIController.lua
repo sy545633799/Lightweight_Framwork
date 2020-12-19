@@ -30,7 +30,7 @@ end
 
 ---@return Entity
 function AOIController:CreateEntities(args)
-
+    logError(args)
 end
 
 ---@return Entity

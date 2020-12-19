@@ -8,6 +8,11 @@ local aoiId = 0
 local entity_map = {}
 ---@type table<number, AOIData>
 local aoi_map = {}
+---@type table<number, AOIData>
+local create_map = {}
+---@type table<number, number>
+local delete_map = {}
+
 ---@param attrib RoleAttrib
 ---@param status RoleStatus
 ---@return player
@@ -17,11 +22,12 @@ function entityMgr:create_player(attrib, status)
     local player = player.New(attrib, status, aoiId)
     entity_map[aoiId] = player
     aoi_map[aoiId] = player.aoiData
+    create_map[aoiId] = player.aoiData
     return player
 end
 
 function entityMgr:create_monster()
-    
+
 end
 
 ---@param args Sync_Pos
@@ -49,10 +55,21 @@ function entityMgr:get_sync_info()
     return info
 end
 
+---@return table<number, AOIData>
+function entityMgr:get_create_map()
+    return create_map
+end
+
+---@return table<number, number>
+function entityMgr:get_deltete_map()
+    return delete_map
+end
+
 function entityMgr:remove_entity(aoiId)
     if entity_map[aoiId] then
         entity_map[aoiId] = nil
         aoi_map[aoiId] = nil
+        table.insert(delete_map, aoiId)
     end
 end
 

@@ -24,7 +24,24 @@ local function update()
         if table.size(entity_map) > 0 then
             channel:publish(event_names.scene.sync_status, entity_map)
         end
-        skynet.sleep(100)
+
+        local create_map = entityMgr:get_create_map()
+        if table.size(create_map) > 0 then
+            channel:publish(event_names.scene.create_entities, create_map)
+            for k, _ in pairs(create_map) do
+                create_map[k] = nil
+            end
+        end
+
+        local delete_map = entityMgr:get_deltete_map()
+        if table.size(delete_map) > 0 then
+            channel:publish(event_names.scene.create_entities, delete_map)
+            for k, _ in pairs(delete_map) do
+                delete_map[k] = nil
+            end
+        end
+
+        skynet.sleep(10)
     end
 end
 
@@ -63,8 +80,6 @@ function response.role_enter_scene(agent, roleAttrib, status)
     }
     role_map[roleId] = roleInfo
 
-    --通知其他玩家
-    channel:publish(event_names.scene.create_entities, role.aoiData)
     local aoi_map = entityMgr:get_all_aoiData()
     return true, role.aoiData.aoiId, aoi_map
 end
@@ -75,8 +90,7 @@ function response.role_leave_scene(roleId)
     local aoiId = roleInfo.role.aoiData.aoiId
     entityMgr:remove_entity(aoiId)
     role_map[roleId] = nil
-    channel:publish(event_names.scene.delete_entities, aoiId)
-    --skynet.error(" exit game")
+
     return true
 end
 
