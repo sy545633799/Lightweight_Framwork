@@ -103,12 +103,12 @@ local msg = [[
     aoi_map 1 : *aoiData(aoiId)
 }
 
-.sync_create_entity{
-    data 0 : aoiData
+.sync_create_entities{
+    data 0 : *aoiData(aoiId)
 }
 
-.sync_delete_entity{
-    id 0 : integer
+.sync_delete_entities{
+    id 0 : *integer
 }
 
 .sync_status {

@@ -5,12 +5,11 @@ local EntityType = EntityType
 local Player = require("Logic/Entity/Behaviour/Player")
 local Hero = require("Logic/Entity/Behaviour/Hero")
 ------------------------------------------------------------------------------
----@type common_scene
 function AOIController:ctor()
     ---@type table<string, Entity> @private
     self.entites = {}
-    self:AddMessageListener(NetMsgId.sync_create_entity, self.CreateEntity, self)
-    self:AddMessageListener(NetMsgId.sync_delete_entity, self.RemoveEntiy, self)
+    self:AddMessageListener(NetMsgId.sync_create_entities, self.CreateEntities, self)
+    self:AddMessageListener(NetMsgId.sync_delete_entities, self.RemoveEntities, self)
 end
 
 ---@param aoi_map table<number, AOIData>
@@ -27,17 +26,15 @@ function AOIController:EnterMap(aoi_map)
         end
         self.entites[aoidId] = entity
     end
-
 end
 
-
 ---@return Entity
-function AOIController:CreateEntity(args)
+function AOIController:CreateEntities(args)
 
 end
 
 ---@return Entity
-function AOIController:RemoveEntiy(args)
+function AOIController:RemoveEntities(args)
 
 end
 

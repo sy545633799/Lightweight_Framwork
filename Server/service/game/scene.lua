@@ -64,7 +64,7 @@ function response.role_enter_scene(agent, roleAttrib, status)
     role_map[roleId] = roleInfo
 
     --通知其他玩家
-    channel:publish(event_names.scene.create_entity, role.aoiData)
+    channel:publish(event_names.scene.create_entities, role.aoiData)
     local aoi_map = entityMgr:get_all_aoiData()
     return true, role.aoiData.aoiId, aoi_map
 end
@@ -75,7 +75,7 @@ function response.role_leave_scene(roleId)
     local aoiId = roleInfo.role.aoiData.aoiId
     entityMgr:remove_entity(aoiId)
     role_map[roleId] = nil
-    channel:publish(event_names.scene.delete_entity, aoiId)
+    channel:publish(event_names.scene.delete_entities, aoiId)
     --skynet.error(" exit game")
     return true
 end

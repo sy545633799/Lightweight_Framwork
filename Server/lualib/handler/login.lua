@@ -31,10 +31,10 @@ end
 ---推送给客户端的消息
 local function recvChannel(channel, source, eventId, data)
     --skynet.error("channel ID:",channel, "source:", skynet.address(source), "msg:",eventId)
-    if eventId == event_names.scene.create_entity then
-        rpc:sendmessage(NetMsgId.sync_create_entity, { data = data })
-    elseif eventId == event_names.scene.delete_entity then
-        rpc:sendmessage(NetMsgId.sync_delete_entity, { id = data })
+    if eventId == event_names.scene.create_entities then
+        rpc:sendmessage(NetMsgId.sync_create_entities, { data = data })
+    elseif eventId == event_names.scene.delete_entities then
+        rpc:sendmessage(NetMsgId.sync_delete_entities, { id = data })
     elseif eventId == event_names.scene.sync_status then
         for aoiId, aoiStatus in pairs(data) do
             if aoiId == user.aoiId then
