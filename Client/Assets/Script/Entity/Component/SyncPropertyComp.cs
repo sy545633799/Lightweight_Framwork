@@ -17,7 +17,7 @@ namespace Game
 	{
 		public void Sync(s2c_sync_trans status)
 		{
-			
+		
 		}
 		
 	}

@@ -44,14 +44,16 @@ local function recvChannel(channel, source, eventId, data)
             data[user.aoiId] = nil
         end
         if table.size(data) > 0 then
-            rpc:sendmessage(NetMsgId.s2c_delete_entities, { id = data })
+            rpc:sendmessage(NetMsgId.s2c_delete_entities, { ids = data })
         end
     elseif eventId == event_names.scene.s2c_sync_trans then
         if data[user.aoiId] then
-            user.roleInfo.status = data[user.aoiId]
+            user.roleInfo.trans = data[user.aoiId]
+            user.roleInfo.trans.aoiId = nil
         end
-        --TODO 如果只是位置朝向发生改变，就不同步给客户端了
-        rpc:sendmessage(NetMsgId.s2c_sync_trans, { list = data })
+        if table.size(data) > 0 then
+            rpc:sendmessage(NetMsgId.s2c_sync_trans, { list = data })
+        end
     end
 
 

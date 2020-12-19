@@ -108,7 +108,7 @@ local msg = [[
 }
 
 .s2c_delete_entities{
-    id 0 : *integer
+    ids 0 : *integer
 }
 
 .s2c_sync_trans {

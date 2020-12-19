@@ -15,7 +15,7 @@ local create_map = {}
 local delete_map = {}
 
 ---@param attrib RoleAttrib
----@param status RoleStatus
+---@param status RoleTrans
 ---@return player
 function entityMgr:create_player(attrib, status)
     aoiId = aoiId + 1

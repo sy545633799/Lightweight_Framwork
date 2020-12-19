@@ -79,22 +79,19 @@ end
 
          getDefaultAttrib(attrib)
 
-         ---@class RoleStatus
-         local status =
+         ---@class RoleTrans
+         local trans =
          {
              pos_x          = -9.848041,
              pos_y          = -1.09,
              pos_z          = -2.997883,
              forward         = 0,
-             --cur_hp         = hpData.cur,
-             --max_hp         = hpData.max,
          }
 
-         
          ---@class RoleInfo
          local roleInfo = {
              account = account,
-             status = status,
+             trans = trans,
              attrib = attrib,
              itemPackage = {}
          }

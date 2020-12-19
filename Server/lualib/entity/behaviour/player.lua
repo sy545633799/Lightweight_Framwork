@@ -2,7 +2,7 @@ local entity = require "entity.entity"
 ---@class player:entity
 local player = class("player", entity)
 -----------------------------------------------------------
----@param status RoleStatus
+---@param status RoleTrans
 ---@param attrib RoleAttrib
 function player:ctor(attrib, status, aoiId)
     self.aoiData.aoiId = aoiId
