@@ -40,9 +40,6 @@ local function recvChannel(channel, source, eventId, data)
         end
 
     elseif eventId == event_names.scene.delete_entities then
-        if data[user.aoiId] then
-            data[user.aoiId] = nil
-        end
         if table.size(data) > 0 then
             rpc:sendmessage(NetMsgId.s2c_delete_entities, { ids = data })
         end

@@ -32,4 +32,5 @@ mklink /d %targetDir%\Assets  %sourceDir%\Assets
 mklink /d %targetDir%\Library  %sourceDir%\Library
 mklink /d %targetDir%\ProjectSettings  %sourceDir%\ProjectSettings
 mklink /d %targetDir%\Packages  %sourceDir%\Packages
+mklink /d %targetDir%\Lua  %sourceDir%\Lua
 pause

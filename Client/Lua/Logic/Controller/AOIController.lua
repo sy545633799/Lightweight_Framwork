@@ -8,8 +8,12 @@ local Hero = require("Logic/Entity/Behaviour/Hero")
 function AOIController:ctor()
     ---@type table<string, Entity> @private
     self.entites_map = {}
-    self:AddMessageListener(NetMsgId.s2c_create_entities, self.CreateEntities, self)
+    self:AddMessageListener(NetMsgId.s2c_create_entities, self.CreateEntitieEx, self)
     self:AddMessageListener(NetMsgId.s2c_delete_entities, self.RemoveEntities, self)
+end
+
+function AOIController:CreateEntitieEx(args)
+    self:CreateEntities(args.data)
 end
 
 ---@param args table<number, AOIData>
@@ -22,7 +26,7 @@ function AOIController:CreateEntities(args)
             entity = Hero.New(aoiData)
             MainCamera:SetTarget(entity.behavior.transform)
         else
-            logError("创建其他单位")
+            entity = Player.New(aoiData)
         end
         self.entites_map[aoidId] = entity
     end
@@ -30,10 +34,11 @@ end
 
 ---@param args table<number, Entity>
 function AOIController:RemoveEntities(args)
-    for aoidId, entity in pairs(args) do
-        if self.entites_map[aoidId] then
+    for _, aoiId in ipairs(args.ids) do
+        local entity = self.entites_map[aoiId]
+        if entity then
             entity:Delete()
-            self.entites_map[aoidId] = nil
+            self.entites_map[aoiId] = nil
         end
     end
 end

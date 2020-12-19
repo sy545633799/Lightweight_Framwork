@@ -38,5 +38,5 @@ function Entity:OnBodyCreate(components) end
 
 function Entity:dtor()
     self.behavior:RemoveAllListeners()
-    EntityBehaviorManager.DestroyEntity(self.aoiData.uid)
+    EntityBehaviorManager.DestroyEntity(self.aoiData.aoiId)
 end

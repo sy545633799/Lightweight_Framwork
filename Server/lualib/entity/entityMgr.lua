@@ -67,8 +67,8 @@ end
 ---@public 获取一次就置空
 ---@return table<number, number>
 function entityMgr:get_delete_map()
-    local t = create_map
-    create_map = {}
+    local t = delete_map
+    delete_map = {}
     return t
 end
 

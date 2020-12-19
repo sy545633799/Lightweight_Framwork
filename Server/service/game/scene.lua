@@ -32,7 +32,7 @@ local function update()
 
         local delete_map = entityMgr:get_delete_map()
         if table.size(delete_map) > 0 then
-            channel:publish(event_names.scene.create_entities, delete_map)
+            channel:publish(event_names.scene.delete_entities, delete_map)
         end
 
         skynet.sleep(10)
