@@ -15,4 +15,5 @@ do
 	esac
 done
 
+
 $ROOT/skynet/skynet $ROOT/etc/gameconfig
