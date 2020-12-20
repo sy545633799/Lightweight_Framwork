@@ -75,6 +75,8 @@ namespace Game {
 					AddEntityComp<NavComp>(aoiId);
 					AddEntityComp<MoveComp>(aoiId);
 					AddEntityComp<SyncStatusComp>(aoiId);
+
+					AddEntityComp<SyncTransComp>(aoiId);
 					break;
 				case 2: //player
 					AddEntityComp<AnimComp>(aoiId);

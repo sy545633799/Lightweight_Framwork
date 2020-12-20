@@ -11,50 +11,13 @@ using Sproto;
 namespace Game {
 	public class c2s_sync_trans : SprotoTypeBase
 	{
-		private static int max_field_count = 4;
+		private static int max_field_count = 1;
 
-		private double _pos_x;
-		public double pos_x
+		private sync_trans _trans;
+		public sync_trans trans
 		{
-			get { return _pos_x; }
-			set { base.has_field.set_field(0, true); _pos_x = value; }
-		}
-		public bool HasPos_x
-		{
-			get { return base.has_field.has_field(0); }
-		}
-
-		private double _pos_y;
-		public double pos_y
-		{
-			get { return _pos_y; }
-			set { base.has_field.set_field(1, true); _pos_y = value; }
-		}
-		public bool HasPos_y
-		{
-			get { return base.has_field.has_field(1); }
-		}
-
-		private double _pos_z;
-		public double pos_z
-		{
-			get { return _pos_z; }
-			set { base.has_field.set_field(2, true); _pos_z = value; }
-		}
-		public bool HasPos_z
-		{
-			get { return base.has_field.has_field(2); }
-		}
-
-		private double _forward;
-		public double forward
-		{
-			get { return _forward; }
-			set { base.has_field.set_field(3, true); _forward = value; }
-		}
-		public bool HasForward_z
-		{
-			get { return base.has_field.has_field(3); }
+			get { return _trans; }
+			set { base.has_field.set_field(0, true); _trans = value; }
 		}
 
 		public c2s_sync_trans() : base(max_field_count) { }
@@ -70,22 +33,7 @@ namespace Game {
 
 			if (base.has_field.has_field(0))
 			{
-				base.serialize.write_double(this.pos_x, 0);
-			}
-
-			if (base.has_field.has_field(1))
-			{
-				base.serialize.write_double(this.pos_y, 1);
-			}
-
-			if (base.has_field.has_field(2))
-			{
-				base.serialize.write_double(this.pos_z, 2);
-			}
-
-			if (base.has_field.has_field(3))
-			{
-				base.serialize.write_double(this.forward, 3);
+				base.serialize.write_obj(this.trans, 0);
 			}
 
 			return base.serialize.close();
@@ -99,16 +47,7 @@ namespace Game {
 				switch (tag)
 				{
 					case 0:
-						this.pos_x = base.deserialize.read_double();
-						break;
-					case 1:
-						this.pos_y = base.deserialize.read_double();
-						break;
-					case 2:
-						this.pos_z = base.deserialize.read_double();
-						break;
-					case 3:
-						this.forward = base.deserialize.read_double();
+						this.trans = base.deserialize.read_obj<sync_trans>();
 						break;
 					default:
 						base.deserialize.read_unknow_data();

@@ -1,12 +1,5 @@
 local msg = [[
 
-.c2s_sync_trans {
-    pos_x 0 :double
-    pos_y 1 :double
-    pos_z 2 :double
-    forward 3 :double
-}
-
 .mainAttrib {
 	roleId 0 : string
 	name 1 : string
@@ -81,27 +74,45 @@ local msg = [[
 	roleInfo 1 : roleInfo
 }
 
+.sync_attrib {
+    paramId 0 : string
+    type 1 : integer
+    name 2 : string
+    modelId 3 : integer
+}
+
+.sync_trans {
+    pos_x 0 :double
+    pos_y 1 :double
+    pos_z 2 :double
+    forward 3 :double
+}
+
+.aoiAttrib {
+    aoiId 0 : integer
+    attrib 1 : sync_attrib
+}
+
 .aoiTrans {
     aoiId 0 : integer
-    pos_x 1 : double
-    pos_y 2 : double
-    pos_z 3 : double
-    forward 4 : double
+    trans 1 : sync_trans
 }
 
 .aoiData {
     aoiId 0 : integer
-    paramId 1 : string
-    type 2 : integer
-    name 3 : string
-    modelId 4 : integer
-    trans 5 : aoiTrans
+    attrib 1 : sync_attrib
+    trans 5 : sync_trans
 }
 
 .ack_enter_game {
     ok 0 : boolean
     aoi_map 1 : *aoiData(aoiId)
 }
+
+.c2s_sync_trans {
+    trans 0 : sync_trans
+}
+
 
 .s2c_create_entities{
     data 0 : *aoiData(aoiId)

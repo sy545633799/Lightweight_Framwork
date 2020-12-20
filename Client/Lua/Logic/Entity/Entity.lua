@@ -15,10 +15,10 @@ function Entity:ctor(aoiData)
     self.behavior = EntityBehaviorManager.CreateEntity(
             sceneId,
             aoiData.aoiId,
-            aoiData.modelId,
+            aoiData.attrib.modelId,
             { x = aoiData.trans.pos_x, y = aoiData.trans.pos_y, z = aoiData.trans.pos_z },
             aoiData.trans.forward,
-            aoiData.type,
+            aoiData.attrib.type,
             function(components)
                 coroutine.start(function()
                     self.animComp = components[0]

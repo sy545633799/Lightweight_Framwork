@@ -14,7 +14,7 @@ namespace Game
 		
 		public void Sync(aoi_trans status)
 		{
-			Debug.LogError(status.forward);
+			Debug.LogError(status.trans.forward);
 		}
 	}
 }

@@ -21,8 +21,8 @@ function AOIController:CreateEntities(args)
     local roleId  = RoleModel.RoleData.roleId
     for aoidId, aoiData in pairs(args) do
         local entity
-        if aoiData.paramId == roleId then
-            aoiData.type = EntityType.hero
+        if aoiData.attrib.paramId == roleId then
+            aoiData.attrib.type = EntityType.hero
             entity = Hero.New(aoiData)
             MainCamera:SetTarget(entity.behavior.transform)
         else

@@ -16,11 +16,6 @@ namespace Game
 	{
 		protected EntityBehavior behavior;
 
-		public void SetBehavior(EntityBehavior behavior)
-		{
-			this.behavior = behavior;
-		}
-
 		public virtual void OnUpdate(float deltaTime) { }
 		public virtual void OnFixedUpdate(float fixedDeltaTime) { }
 		public virtual void OnLateUpdate(float deltaTime) { }
