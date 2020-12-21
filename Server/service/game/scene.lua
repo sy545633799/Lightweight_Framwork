@@ -62,11 +62,11 @@ function response.get_scene_param()
 end
 
 ---@param roleAttrib RoleAttrib
-function response.role_enter_scene(agent, roleAttrib, status)
+function response.role_enter_scene(agent, roleAttrib, trans)
     local roleId = roleAttrib.roleId
     
     if role_map[roleId] then skynet.error("玩家已经在场景中") return false end
-    local role = entityMgr:create_player(roleAttrib, status)
+    local role = entityMgr:create_player(roleAttrib, trans)
     ---@class SceneRoleInfo
     local roleInfo =
     {

@@ -44,10 +44,10 @@ local function recvChannel(channel, source, eventId, data)
             rpc:sendmessage(NetMsgId.s2c_delete_entities, { ids = data })
         end
     elseif eventId == event_names.scene.s2c_sync_trans then
-        if data[user.aoiId] then
-            user.roleInfo.trans = data[user.aoiId]
-            user.roleInfo.trans.aoiId = nil
-        end
+        --if data[user.aoiId] then
+        --    user.roleInfo.trans = data[user.aoiId]
+        --    user.roleInfo.trans.aoiId = nil
+        --end
         if table.size(data) > 0 then
             rpc:sendmessage(NetMsgId.s2c_sync_trans, { list = data })
         end

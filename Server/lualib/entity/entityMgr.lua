@@ -17,10 +17,10 @@ local delete_map = {}
 ---@param attrib RoleAttrib
 ---@param status RoleTrans
 ---@return player
-function entityMgr:create_player(attrib, status)
+function entityMgr:create_player(attrib, trans)
     aoiId = aoiId + 1
     ---@type player
-    local player = player.New(attrib, status, aoiId)
+    local player = player.New(attrib, trans, aoiId)
     entity_map[aoiId] = player
     aoi_map[aoiId] = player.aoiData
     create_map[aoiId] = player.aoiData
@@ -48,9 +48,9 @@ end
 function entityMgr:get_sync_info()
     local info = {}
     for id, entity in pairs(entity_map) do
-        if entity.aoiData.dirty then
-            info[id] = entity.aoiData.trans
-            entity.aoiData.dirty = false
+        if entity.aoiData.trans.dirty then
+            info[id] = entity.aoiData
+            entity.aoiData.trans.dirty = false
         end
     end
     return info
