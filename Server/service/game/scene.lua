@@ -4,7 +4,7 @@ local mc = require "skynet.multicast"
 
 local event_names = event_names
 ---@type entityMgr
-local entityMgr
+local entityMgr = require "entity.entityMgr"
 
 local config
 local channel
@@ -20,6 +20,8 @@ local role_map = {}
 
 local function update()
     while true do
+        
+
         local entity_map = entityMgr:get_sync_info()
         if table.size(entity_map) > 0 then
             channel:publish(event_names.scene.s2c_aoi_trans, entity_map)
@@ -40,20 +42,22 @@ local function update()
 end
 
 function init( ... )
-    config = require(skynet.getenv("config"))
-    entityMgr = require "entity.entityMgr".New()
-
-    channel = mc.new()
-
     local start_arge = {...}
-    sceneInfo.sceneId = start_arge[1]
-    sceneInfo.sceneName = start_arge[2]
+    local sceneId = start_arge[1]
+    local sceneName = start_arge[2]
+    config = require(skynet.getenv("config"))
+    sceneConfig = require("config/" .. sceneName)
+    ---创建场景组播频道
+    channel = mc.new()
+    ---创建场景信息表
+    sceneInfo.sceneId = sceneId
+    sceneInfo.sceneName = sceneName
     sceneInfo.serviceName = SERVICE_NAME
     sceneInfo.handle = skynet.self()
     sceneInfo.channel = channel.channel
-
-    sceneConfig = require("config/" .. sceneInfo.sceneName)
-
+    ---创建场景元素
+    entityMgr:create_elements(sceneConfig)
+    ---开启场景主循环
     skynet.fork(update)
 end
 

@@ -1,12 +1,13 @@
+---@class Demo_2 
 local Demo_2 = {
 	[10101] = {
-		Type = 4,
-		Name = "测试怪物",
-		ModelID = 50008,
-		PosX = 658.13,
-		PosY = 9.23,
-		PosZ = 379.31,
-		ForwardY = 105.38,
+		Type = 3,
+		ModelID = 10001,
+		RanRadius = 10,
+		PosX = -20.0,
+		PosY = 0.0,
+		PosZ = -20.0,
+		ForwardY = 0.0,
 	},
 }
  return Demo_2

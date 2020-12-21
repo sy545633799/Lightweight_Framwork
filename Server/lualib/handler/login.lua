@@ -35,6 +35,7 @@ local function recvChannel(channel, source, eventId, data)
         if data[user.aoiId] then
             data[user.aoiId] = nil
         end
+
         if table.size(data) > 0 then
             rpc:sendmessage(NetMsgId.s2c_create_entities, { data = data })
         end
@@ -52,7 +53,6 @@ local function recvChannel(channel, source, eventId, data)
             rpc:sendmessage(NetMsgId.s2c_aoi_trans, { list = data })
         end
     end
-
 
 end
 

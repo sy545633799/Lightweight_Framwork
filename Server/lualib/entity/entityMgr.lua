@@ -1,9 +1,12 @@
 ---@class entityMgr
-local entityMgr = class("entityMgr")
+local entityMgr = {}
 require "entity.entity_types"
 require "entity.common.aoi_properties"
 local player = require "entity.behaviour.player"
+local monster = require "entity.behaviour.monster"
 ----------------------------------------------------------------
+local entity_types = entity_types
+
 local aoiId = 0
 ---@type table<number, entity>
 local entity_map = {}
@@ -14,21 +17,33 @@ local create_map = {}
 ---@type table<number, number>
 local delete_map = {}
 
+---@param entity entity
+local function onCreateEntity(entity)
+    entity_map[aoiId] = entity
+    aoi_map[aoiId] = entity.aoiData
+    create_map[aoiId] = entity.aoiData
+end
+
 ---@param attrib RoleAttrib
 ---@param status RoleTrans
 ---@return player
 function entityMgr:create_player(attrib, trans)
     aoiId = aoiId + 1
     ---@type player
-    local player = player.New(attrib, trans, aoiId)
-    entity_map[aoiId] = player
-    aoi_map[aoiId] = player.aoiData
-    create_map[aoiId] = player.aoiData
-    return player
+    local instance = player.New(aoiId, attrib, trans)
+    onCreateEntity(instance)
+    return instance
 end
 
-function entityMgr:create_monster()
-
+---@param scene_config table<number, SceneElement>
+function entityMgr:create_elements(scene_config)
+    for k, v in pairs(scene_config) do
+        if v.Type == entity_types.monster then
+            aoiId = aoiId + 1
+            local instance = monster.New(aoiId, k, v)
+            onCreateEntity(instance)
+        end
+    end
 end
 
 ---@param args Sync_Trans

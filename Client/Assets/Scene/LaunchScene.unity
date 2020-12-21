@@ -380,6 +380,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09caa884941a017469508f6deefc11aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Target: {fileID: 0}
   pivotOffset: {x: 0, y: 1.2, z: 0}
   fixDistance: 0
   minDistance: 2
@@ -399,7 +400,7 @@ MonoBehaviour:
   minY: 0.412
   layerMask:
     serializedVersion: 2
-    m_Bits: 257
+    m_Bits: 256
   IsBattleModel: 0
 --- !u!114 &435719940
 MonoBehaviour:
@@ -589,6 +590,8 @@ MonoBehaviour:
     MiniMode: 0
     LogDebug: 0
     UwaMode: 0
+    PCFrameRate: 60
+    MobileFrameRate: 30
 --- !u!114 &1960002718
 MonoBehaviour:
   m_ObjectHideFlags: 0

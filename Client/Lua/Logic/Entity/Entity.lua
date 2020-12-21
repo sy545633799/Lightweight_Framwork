@@ -11,6 +11,7 @@ function Entity:ctor(aoiData)
     local sceneId = RoleModel.RoleData.sceneId
     ---@type AOIData
     self.aoiData = aoiData
+
     ---@type Game.EntityBehavior
     self.behavior = EntityBehaviorManager.CreateEntity(
             sceneId,

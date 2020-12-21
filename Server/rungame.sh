@@ -2,8 +2,6 @@
 export ROOT=$(cd `dirname $0`; pwd)
 export DAEMON=false
 
-./killall.sh
-
 while getopts "Dk" arg
 do
 	case $arg in
