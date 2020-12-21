@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,7 +18,7 @@ namespace Game {
 	public class MainCamera : MonoSingleton<MainCamera>
 	{
 		private Camera m_Camera;
-		private Transform m_Target;
+		public Transform m_Target;
 		private bool isLock = false;
 	
 		//新增相机参数
