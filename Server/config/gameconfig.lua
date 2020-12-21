@@ -13,18 +13,15 @@ local config = {
     platform_id = 1,
     server_id = 1,
 
-    loginconfig = {
-        host = "0.0.0.0",
-        port = 8003,
-        multilogin = false,	-- disallow multilogin
-        name = "login_master",
-    },
+    ---帧数，每秒
+    fps = 10,
 
     ---gate服务配置
     gateconfig = {
         port = 8890,
         maxclient = 512,
         servername = "DevelopServer",
+
     },
 
     db = {

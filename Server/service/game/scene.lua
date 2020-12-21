@@ -6,6 +6,7 @@ local event_names = event_names
 ---@type entityMgr
 local entityMgr = require "entity.entityMgr"
 
+---@type gameconfig
 local config
 local channel
 local sceneConfig
@@ -18,9 +19,15 @@ local sceneInfo = {}
 ---@type table <string, SceneRoleInfo>
 local role_map = {}
 
+
 local function update()
+    local deltaTime = 1 / config.fps
+    local tick = 100 * deltaTime
     while true do
-        
+        local alive_map = entityMgr:get_alive_map()
+        for _, entity in pairs(alive_map) do
+            entity:update(deltaTime)
+        end
 
         local entity_map = entityMgr:get_sync_info()
         if table.size(entity_map) > 0 then
@@ -37,7 +44,7 @@ local function update()
             channel:publish(event_names.scene.delete_entities, delete_map)
         end
 
-        skynet.sleep(10)
+        skynet.sleep(tick)
     end
 end
 

@@ -62,6 +62,11 @@ function entityMgr:get_all_aoiData()
 end
 
 ---@return table<number, entity>
+function entityMgr:get_alive_map()
+    return alive_map
+end
+
+---@return table<number, entity>
 function entityMgr:get_sync_info()
     local info = {}
     for id, entity in pairs(alive_map) do
