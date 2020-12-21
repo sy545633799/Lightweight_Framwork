@@ -10,7 +10,7 @@ NetMsgId = {
 
 
     ---同步状态
-    s2c_sync_trans = 10101, --服务端发送玩家状态给客户端
+    s2c_aoi_trans = 10101, --服务端发送玩家状态给客户端
     s2c_create_entities = 10102,
     s2c_delete_entities = 10103,
 

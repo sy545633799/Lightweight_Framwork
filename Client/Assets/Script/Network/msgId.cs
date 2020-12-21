@@ -18,6 +18,6 @@ namespace Game {
 		public const ushort c2s_sync_trans = 101;
 
 		
-		public const ushort s2c_sync_trans = 10101;
+		public const ushort s2c_aoi_trans = 10101;
 	}
 }

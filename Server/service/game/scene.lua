@@ -22,7 +22,7 @@ local function update()
     while true do
         local entity_map = entityMgr:get_sync_info()
         if table.size(entity_map) > 0 then
-            channel:publish(event_names.scene.s2c_sync_trans, entity_map)
+            channel:publish(event_names.scene.s2c_aoi_trans, entity_map)
         end
 
         local create_map = entityMgr:get_create_map()

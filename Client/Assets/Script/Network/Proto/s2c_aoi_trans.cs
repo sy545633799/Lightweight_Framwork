@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace Game
 {
 	
-	public class s2c_sync_trans : SprotoTypeBase
+	public class s2c_aoi_trans : SprotoTypeBase
 	{
 		private static int max_field_count = 1;
 
@@ -26,9 +26,9 @@ namespace Game
 			get { return base.has_field.has_field(0); }
 		}
 
-		public s2c_sync_trans() : base(max_field_count) { }
+		public s2c_aoi_trans() : base(max_field_count) { }
 
-		public s2c_sync_trans(byte[] buffer) : base(max_field_count, buffer)
+		public s2c_aoi_trans(byte[] buffer) : base(max_field_count, buffer)
 		{
 			this.decode();
 		}

@@ -122,7 +122,7 @@ local msg = [[
     ids 0 : *integer
 }
 
-.s2c_sync_trans {
+.s2c_aoi_trans {
     list 0 : *aoiTrans(aoiId)
 }
 

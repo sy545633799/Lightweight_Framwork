@@ -15,11 +15,11 @@ namespace Game
 {
 	public class AOIManager
 	{
-		private static s2c_sync_trans sync_Status = new s2c_sync_trans();
+		private static s2c_aoi_trans sync_Status = new s2c_aoi_trans();
 
 		public async static Task Init()
 		{
-			TcpManager.AddListener(msgId.s2c_sync_trans, Sync_Status);
+			TcpManager.AddListener(msgId.s2c_aoi_trans, Sync_Status);
 		}
 
 		private static void Sync_Status(byte[] obj)
@@ -43,7 +43,7 @@ namespace Game
 
 		public static void Dispose()
 		{
-			TcpManager.RemoveListener(msgId.s2c_sync_trans);
+			TcpManager.RemoveListener(msgId.s2c_aoi_trans);
 		}
 	}
 }
