@@ -73,7 +73,7 @@
 			#pragma multi_compile_fog
 			#pragma multi_compile_instancing
 
-			#include "./Library/Character.hlsl"
+			#include "./Core/Character.hlsl"
 
 			ENDHLSL
 		}
@@ -121,7 +121,7 @@
 
 			#pragma shader_feature _USE_RIM
 			#define _USE_RIM 
-			#include "./Library/Character.hlsl"
+			#include "./Core/Character.hlsl"
 
 			ENDHLSL
 		}
@@ -170,7 +170,7 @@
 
 			#pragma shader_feature _USE_MASK
 			#define _USE_MASK 
-			#include "./Library/Character.hlsl"
+			#include "./Core/Character.hlsl"
 
 			ENDHLSL
 		}

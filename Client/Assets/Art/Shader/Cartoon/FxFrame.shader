@@ -31,7 +31,7 @@
 			#pragma vertex VERT
 			#pragma fragment FRAG	
 
-			#include "./Library/FxFrame.hlsl"
+			#include "./Core/FxFrame.hlsl"
 			
 			ENDHLSL
 		}

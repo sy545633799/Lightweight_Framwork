@@ -72,7 +72,7 @@
 	//		#define _USE_SPECULAR
 	//		#define _ADDITIONAL_LIGHTS_VERTEX
 
-	//		#include "./Library/Scene.hlsl"
+	//		#include "./Core/Scene.hlsl"
 	//		
 	//		ENDHLSL
 	//	}
@@ -121,7 +121,7 @@
 
 	//		#pragma shader_feature _USE_SPECULAR
 	//		#define _USE_SPECULAR
-	//		#include "./Library/Scene.hlsl"
+	//		#include "./Core/Scene.hlsl"
 
 	//		ENDHLSL
 	//	}
@@ -171,7 +171,7 @@
 			#define _ADDITIONAL_LIGHTS_VERTEX
 			#pragma shader_feature _USE_PBR
 			#define _USE_PBR 
-			#include "./Library/Scene.hlsl"
+			#include "./Core/Scene.hlsl"
 
 			ENDHLSL
 		}

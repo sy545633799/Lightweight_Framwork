@@ -66,7 +66,7 @@
 
 			#pragma shader_feature _USE_TERRAIN
 			#define _USE_TERRAIN
-			#include "./Library/Terrain.hlsl"
+			#include "./Core/Terrain.hlsl"
 
 			ENDHLSL
 		}
@@ -115,7 +115,7 @@
 
 			#pragma shader_feature _USE_TERRAIN
 			#define _USE_TERRAIN
-			#include "./Library/Terrain.hlsl"
+			#include "./Core/Terrain.hlsl"
 
 			ENDHLSL
 		}
@@ -158,7 +158,7 @@
 
 			#pragma shader_feature _USE_TERRAIN
 			#define _USE_TERRAIN
-			#include "./Library/Terrain.hlsl"
+			#include "./Core/Terrain.hlsl"
 			ENDHLSL
 		}
 		UsePass "Common/Shadow/Default/ShadowCaster"
