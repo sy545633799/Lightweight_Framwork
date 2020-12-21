@@ -1,11 +1,12 @@
 
 ---@class SceneElement
 local scene_element = {
-    Type = 3,
-    ModelID = 10001,
-    RanRadius = 10,
-    PosX = -20.0,
-    PosY = 0.0,
-    PosZ = -20.0,
-    ForwardY = 0.0,
+    Type = 0,
+    ModelID = 0,
+    RanRadius = 0,
+    PosX = 0,
+    PosY = 0,
+    PosZ = 0,
+    ForwardY = 0,
+    Count = 0,
 }

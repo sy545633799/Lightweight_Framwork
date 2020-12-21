@@ -27,5 +27,4 @@ end
 
 
 
-
 return monster

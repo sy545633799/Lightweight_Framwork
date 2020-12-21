@@ -8,6 +8,7 @@ local Demo_2 = {
 		PosY = 0.0,
 		PosZ = -20.0,
 		ForwardY = 0.0,
+		Count = 10,
 	},
 }
  return Demo_2

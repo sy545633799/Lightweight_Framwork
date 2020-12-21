@@ -8,9 +8,9 @@ local monster = require "entity.behaviour.monster"
 local entity_types = entity_types
 
 local aoiId = 0
----@type table<number, entity>
-local entity_map = {}
----@type table<number, AOIData>
+---@type table<number, entity> 当前激活(未死亡或者移除)的entity
+local alive_map = {}
+---@type table<number, AOIData> 但钱
 local aoi_map = {}
 ---@type table<number, AOIData>
 local create_map = {}
@@ -19,7 +19,7 @@ local delete_map = {}
 
 ---@param entity entity
 local function onCreateEntity(entity)
-    entity_map[aoiId] = entity
+    alive_map[aoiId] = entity
     aoi_map[aoiId] = entity.aoiData
     create_map[aoiId] = entity.aoiData
 end
@@ -39,9 +39,11 @@ end
 function entityMgr:create_elements(scene_config)
     for k, v in pairs(scene_config) do
         if v.Type == entity_types.monster then
-            aoiId = aoiId + 1
-            local instance = monster.New(aoiId, k, v)
-            onCreateEntity(instance)
+            for _ = 1, v.Count do
+                aoiId = aoiId + 1
+                local instance = monster.New(aoiId, k, v)
+                onCreateEntity(instance)
+            end
         end
     end
 end
@@ -49,7 +51,7 @@ end
 ---@param args Sync_Trans
 function entityMgr:c2s_sync_trans(aoiId, args)
     ---@type player
-    local player = entity_map[aoiId]
+    local player = alive_map[aoiId]
     if not player then return end
     player:c2s_sync_trans(args)
 end
@@ -62,7 +64,7 @@ end
 ---@return table<number, entity>
 function entityMgr:get_sync_info()
     local info = {}
-    for id, entity in pairs(entity_map) do
+    for id, entity in pairs(alive_map) do
         if entity.aoiData.trans.dirty then
             info[id] = entity.aoiData
             entity.aoiData.trans.dirty = false
@@ -87,14 +89,24 @@ function entityMgr:get_delete_map()
     return t
 end
 
+---@public 加入entity(比如重新激活的entity)
+---@param entity entity
+function entityMgr:add_entity(entity)
+    if alive_map[entity.aoiData.aoiId] then
+        alive_map[aoiId] = entity
+        aoi_map[aoiId] = entity.aoiData
+        table.insert(create_map, entity)
+    end
+end
+
+---@public 移除entity
 function entityMgr:remove_entity(aoiId)
-    if entity_map[aoiId] then
-        entity_map[aoiId] = nil
+    if alive_map[aoiId] then
+        alive_map[aoiId] = nil
         aoi_map[aoiId] = nil
         table.insert(delete_map, aoiId)
     end
 end
-
 
 
 
