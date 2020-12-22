@@ -53,8 +53,8 @@ function response.role_enter_game(agent, roleInfo, sceneId)
         agent = agent
     }
 
-    online_roles[roleInfo.attrib.roleId] = sceneRole
-    local ok, aoiId, aoi_map = scene_Info.service_req.role_enter_scene(agent, roleInfo.attrib, roleInfo.trans)
+    online_roles[roleInfo.roleId] = sceneRole
+    local ok, aoiId, aoi_map = scene_Info.service_req.role_enter_scene(agent, roleInfo)
     return ok, aoiId, aoi_map, scene_Info.scene_param
 end
 

@@ -130,3 +130,14 @@ MonoBehaviour:
     SceneName: 
     AtlasNames:
     - Battle
+  - ID: 1608620256
+    Name: 
+    Path: Assets/Art/UI/SelectRole/SelectRoleUI.prefab
+    SceneName: 
+    AtlasNames: []
+  - ID: 1608621515
+    Name: 
+    Path: Assets/Art/UI/Confirm/InputConfirmUI.prefab
+    SceneName: 
+    AtlasNames:
+    - Qualty

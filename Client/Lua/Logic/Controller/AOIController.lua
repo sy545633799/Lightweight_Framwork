@@ -18,7 +18,7 @@ end
 
 ---@param args table<number, AOIData>
 function AOIController:CreateEntities(args)
-    local roleId  = RoleModel.RoleData.roleId
+    local roleId  = RoleModel.roleId
     for aoidId, aoiData in pairs(args) do
         local entity
         if aoiData.attrib.paramId == roleId then
@@ -57,7 +57,7 @@ function AOIController:DestroyEntityByAoiId(uid)
 end
 
 --自动寻路到场景中elementID的元素
-function AOIController:SimplePosToTarget(elementID,callBack)
+function AOIController:SimplePosToTarget(elementID, callBack)
 
 end
 

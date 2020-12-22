@@ -1,38 +1,23 @@
 local msg = [[
 
 .mainAttrib {
-	roleId 0 : string
-	name 1 : string
+	name 0 : string
+	job 1 : integer
 	level 2 : integer
 	exp 3 : integer
 	vip 4 : integer
-	totalFight 5 : integer
-	progress 6 : integer
-	sceneId 7 : integer
-	headIconId 8 : integer
-	headFrameId 9 : integer
-
-	crystal 10 : integer
-	gold 11 : integer
-	silver 12 : integer
-	energy 13 : integer
-	achive 14 : integer
-	guide 15 : integer
-	guildEnable 16 : integer
-	vipExp 17 : integer
-	vipGift 18 : integer
-	mouthCard 19 : integer
-	modelId 20 : integer
-	guildId 21 : integer
-	daySign 22 : integer
-}
-
-.hero {
-	id 0 : string
-	configId 1 : integer
-	level 2 : integer
-	star 3 : integer
-	totalFight 4 : integer
+	crystal 5 : integer
+	gold 6 : integer
+	silver 7 : integer
+	daySign 8 : integer
+	headIconId 9 : integer
+	headFrameId 10 : integer
+    sceneId 11 : integer
+	achive 12 : integer
+	vipExp 13 : integer
+	vipGift 14 : integer
+	mouthCard 15 : integer
+	modelId 16 : integer
 }
 
 .equipExtraAttrib {
@@ -50,26 +35,38 @@ local msg = [[
 }
 
 .roleInfo {
-    account 0 : string
+    roleId 0 : string
     attrib 1 : mainAttrib
-	heroPackage 2 : *hero(id)
-	itemPackage 3 : *item(id)
+	itemPackage 2 : *item(id)
+}
+
+.roleAttrib {
+    roleId 0 : string
+    attrib 1 : mainAttrib
+}
+
+.req_role_list {
+    account 0 : string
+}
+
+.ack_role_list {
+    list 0 : *roleAttrib
 }
 
 .req_login {
-	uid 0 : string
+	roleId 0 : string
 }
 
 .ack_login {
 	roleInfo 0 : roleInfo
 }
 
-.req_register {
-	nickname 0 : string
-	channel 1 : integer
+.req_create_role {
+    job 0 : integer
+	nickname 1 : string
 }
 
-.ack_register {
+.ack_create_role {
 	error 0 : integer
 	roleInfo 1 : roleInfo
 }
@@ -88,6 +85,22 @@ local msg = [[
     forward 3 :double
 }
 
+.sync_status {
+    str 0 : double
+    mag 1 : double
+    dex 2 : double
+    max_hp 3 : double
+    hp 4 : double
+    max_mp 5 : double
+    mp 6 : double
+    atn 7 : double
+    int 8 : double
+    def 9 : double
+    res 10 : double
+    spd 11 : double
+    crt 12 : double
+}
+
 .aoiAttrib {
     aoiId 0 : integer
     attrib 1 : sync_attrib
@@ -96,6 +109,11 @@ local msg = [[
 .aoiTrans {
     aoiId 0 : integer
     trans 1 : sync_trans
+}
+
+.aoiStatus {
+    aoiId 0 : integer
+    status 1 : sync_status
 }
 
 .aoiData {
@@ -113,7 +131,6 @@ local msg = [[
     trans 0 : sync_trans
 }
 
-
 .s2c_create_entities{
     data 0 : *aoiData(aoiId)
 }
@@ -122,7 +139,7 @@ local msg = [[
     ids 0 : *integer
 }
 
-.s2c_sync_trans {
+.s2c_aoi_trans {
     list 0 : *aoiTrans(aoiId)
 }
 

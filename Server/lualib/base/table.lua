@@ -357,3 +357,5 @@ do
         end
     end
 end
+
+empty_table = {}

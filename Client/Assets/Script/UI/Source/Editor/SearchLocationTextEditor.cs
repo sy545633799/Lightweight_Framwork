@@ -65,7 +65,13 @@ namespace Game.Editor
 
 				foreach (var location in UILocationAsset.GetAll())
 				{
-					textInfoList.Add(location.Key, location.Value.Text);
+					if (textInfoList.ContainsKey(location.Key))
+					{
+						//Debug.LogError(location.Key)
+					}
+
+					else
+						textInfoList.Add(location.Key, location.Value.Text);
 				}
 			}
 			else

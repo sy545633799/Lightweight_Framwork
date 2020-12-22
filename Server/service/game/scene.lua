@@ -72,12 +72,12 @@ function response.get_scene_param()
     return sceneInfo
 end
 
----@param roleAttrib RoleAttrib
-function response.role_enter_scene(agent, roleAttrib, trans)
-    local roleId = roleAttrib.roleId
+---@param roleInfo RoleInfo
+function response.role_enter_scene(agent, roleInfo)
+    local roleId = roleInfo.roleId
     
     if role_map[roleId] then skynet.error("玩家已经在场景中") return false end
-    local role = entityMgr:create_player(roleAttrib, trans)
+    local role = entityMgr:create_player(roleInfo)
     ---@class SceneRoleInfo
     local roleInfo =
     {
@@ -92,7 +92,7 @@ end
 
 function response.role_leave_scene(roleId)
     local roleInfo = role_map[roleId]
-    if not roleInfo then skynet.error("玩家不在场景中") return false end
+    if not roleInfo then skynet.error("玩家不在场景中" .. roleId) return false end
     local aoiId = roleInfo.role.aoiData.aoiId
     entityMgr:remove_entity(aoiId)
     role_map[roleId] = nil
@@ -103,7 +103,7 @@ end
 ---@param args Sync_Trans
 function accept.c2s_sync_trans(roleId, args)
     local roleInfo = role_map[roleId]
-    if not roleInfo then skynet.error("玩家不在场景中") return false end
+    if not roleInfo then skynet.error("玩家不在场景中" .. roleId) return false end
     entityMgr:c2s_sync_trans(roleInfo.role.aoiData.aoiId, args)
 end
 

@@ -265,6 +265,13 @@ MonoBehaviour:
     Japanese: 
     Korean: 
     Vietnamese: 
+  - ID: 1001037
+    SimplifiedChinese: "\u7ECF\u9A8C"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
   - ID: 1002001
     SimplifiedChinese: "\u8D26\u53F7"
     TraditionalChinese: "\u8CEC\u865F"
@@ -617,6 +624,83 @@ MonoBehaviour:
     Vietnamese: 
   - ID: 1006010
     SimplifiedChinese: "\u6392\u5217"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1007001
+    SimplifiedChinese: "\u91D1\u5E01\u5B9D\u7BB1"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1007002
+    SimplifiedChinese: "\u94BB\u77F3\u5B9D\u7BB1"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1007003
+    SimplifiedChinese: "\u7ECF\u9A8C\u76D2\u5B50"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1008001
+    SimplifiedChinese: "\u6218\u58EB"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1008002
+    SimplifiedChinese: "\u6CD5\u5E08"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1008003
+    SimplifiedChinese: "\u5F13\u7BAD\u624B"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 2001001
+    SimplifiedChinese: "\u5317\u6781\u5149"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 2001002
+    SimplifiedChinese: "\u5149\u5B50"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 2001003
+    SimplifiedChinese: "\u5929\u7F8E"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 2001004
+    SimplifiedChinese: "\u9B54\u65B9"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 0
+    SimplifiedChinese: 
     TraditionalChinese: 
     English: 
     Japanese: 

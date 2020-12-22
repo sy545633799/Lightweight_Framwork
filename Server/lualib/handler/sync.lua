@@ -13,5 +13,5 @@ local Sync_Trans =
 
 ---@param args AOITrans
 function RPC:c2s_sync_trans(args)
-    user.scene_post.c2s_sync_trans(user.roleInfo.attrib.roleId, args)
+    user.scene_post.c2s_sync_trans(user.roleInfo.roleId, args)
 end

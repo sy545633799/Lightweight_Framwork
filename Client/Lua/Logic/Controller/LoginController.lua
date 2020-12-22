@@ -5,17 +5,32 @@ function LoginController:ctor()
 
 end
 
----@public 握手成功
+---@public 握手成功, 请求玩家列表
 function LoginController:HandSucess(account)
-    local ret = NetworkManager:SendRequest(NetMsgId.req_login, { uid = account })
-    local roleInfo = ret.roleInfo
-    if not roleInfo or not next(roleInfo) then
-        UIManager:LoadView(UIConfig.RegisterUI)
-    else
+    local ret = NetworkManager:SendRequest(NetMsgId.req_role_list, { account = account })
+    RoleModel:SetRoleAttribList(ret.list)
+    UIManager:LoadView(UIConfig.SelectRoleUI)
+end
 
-        Model:Login(roleInfo)
+function LoginController:Req_Login(roleId)
+    local ret = NetworkManager:SendRequest(NetMsgId.req_login, { roleId = roleId })
+    if ret and next(ret) then
+        Model:Login(ret.roleInfo)
         Controller:Login()
         SceneManager:SwitchScene(SceneConfig.MainScene)
+    else
+        logError("登录失败")
+    end
+end
+
+function LoginController:Req_Create_Role(job, nickname)
+    local ret = NetworkManager:SendRequest(NetMsgId.req_create_role, { job = job, nickname = nickname })
+    if ret and next(ret) then
+        Model:Login(ret.roleInfo)
+        Controller:Login()
+        SceneManager:SwitchScene(SceneConfig.MainScene)
+    else
+        logError("创角失败")
     end
 end
 

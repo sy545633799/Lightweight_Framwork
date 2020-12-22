@@ -1,3 +1,15 @@
+-----插入
+--mongod.req.insert("role", { account = 1, money = 123, age = 28 , test = {
+--	["1001"] = { id = "1001", star = 1, level = 1},
+--	["1002"] = { id = "1002", star = 1, level = 1}
+--}})
+-----增加
+--mongod.post.update("role", { account = 1 }, { ["$set"] = { ["test.1003"] = { id = "1003", star = 1, level = 1} } })
+-----删除
+--mongod.post.update("role", { account = 1 }, { ["$unset"] = { ["test.1003"] = 1 } })
+-----更改
+--mongod.post.update("role", { account = 1 }, { ["$set"] = { ["test.1001.star"] = 3 } })
+
 local skynet = require "skynet"
 local mongo = require "skynet.db.mongo"
 -- local json = require "cjson"
@@ -79,9 +91,9 @@ function response.update( tableName, selector, tbl, upsert, multi )
 
 	if upsert == nil then upsert = true end
 	local ret = db[db_name][tableName]:update(selector, tbl, upsert, multi)
-	if ret == nil then
-		skynet.error("mongod update, errno:", json.encode(ret), json.encode(tbl))
-	end
+	--if ret == nil then
+	--	skynet.error("mongod update, errno:", tostring(ret))
+	--end
 
 	return ret
 end
@@ -177,12 +189,12 @@ end
 
 -- 创建索引
 function accept.ensureIndex( tableName, tbl, options )
-	local ret = db[db_name][tableName]:ensureIndex(tbl, options)
-	if ret == nil then
-		skynet.error("mongod ensureIndex, errno:", json.encode(ret), json.encode(tbl))
-	end
+local ret = db[db_name][tableName]:ensureIndex(tbl, options)
+if ret == nil then
+skynet.error("mongod ensureIndex, errno:", json.encode(ret), json.encode(tbl))
+end
 
-	return ret
+return ret
 end
 
 

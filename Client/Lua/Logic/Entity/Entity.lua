@@ -8,7 +8,7 @@ Entity = BaseClass("Entity", Updatable)
 -----------------------------------------------------------
 ---@param aoiData AOIData
 function Entity:ctor(aoiData)
-    local sceneId = RoleModel.RoleData.sceneId
+    local sceneId = RoleModel.RoleAttrib.sceneId
     ---@type AOIData
     self.aoiData = aoiData
 

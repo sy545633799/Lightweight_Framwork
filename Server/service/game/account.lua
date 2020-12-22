@@ -1,8 +1,10 @@
 local skynet = require "skynet"
 local snax = require "skynet.snax"
 local setting = require "config.Setting"
+local job_config = require "config.Job"
 
-local config
+local game_config
+local all_job_configs = {}
 local snax_mongod, snax_uid
 
 ---@class Account_Req
@@ -11,100 +13,112 @@ local response = response
 local accept = accept
 
 function init( ... )
-    config = require(skynet.getenv("config"))
+    game_config = require(skynet.getenv("config"))
     snax_uid = snax.uniqueservice("common/uid")
     snax_mongod = snax.uniqueservice("common/mongod")
+
+    for k, v in pairs(job_config) do
+        all_job_configs[k] = require("config." .. v.Name)
+    end
 end
 
+---@public 后期这样添加属性?
 local function getDefaultAttrib(attrib)
     if not attrib.sceneId then
         attrib.sceneId = setting.DefaultScene
     end
 end
 
-function response.get_roleInfo(account)
-    local roleInfo = snax_mongod.req.findOne("role", { account = account })
-    if roleInfo then
-        getDefaultAttrib(roleInfo.attrib)
-    end
+---@return table<number, RoleInfo>
+function response.get_role_list(account)
+    local list = snax_mongod.req.findOne("role", { account = account })
 
-    --TODO 保存到数据库
-    return roleInfo
+    return list
 end
 
---TODO 这个函数是否要锁一下
- function response.create_role(account, name)
-     ---TODO 验证名字合法性
-     -----插入
-     --mongod.req.insert("role", { account = 1, money = 123, age = 28 , test = {
-     --	["1001"] = { id = "1001", star = 1, level = 1},
-     --	["1002"] = { id = "1002", star = 1, level = 1}
-     --}})
-     -----增加
-     --mongod.post.update("role", { account = 1 }, { ["$set"] = { ["test.1003"] = { id = "1003", star = 1, level = 1} } })
-     -----删除
-     --mongod.post.update("role", { account = 1 }, { ["$unset"] = { ["test.1003"] = 1 } })
-     -----更改
-     --mongod.post.update("role", { account = 1 }, { ["$set"] = { ["test.1001.star"] = 3 } })
-     ---再确认一次
-     local role_attrib = snax_mongod.req.findOne("role", { account = account })
-     if not role_attrib then
-         local roleId = tostring(snax_uid.req.gen("role"))
-         ---@class RoleAttrib
-         local attrib = {
-             roleId         = roleId,
-             name           = name,
-             level          = 1,
-             exp            = 0,
-             vip            = 0,
-             totalFight     = 0,
-             progress       = 0,
-             headIconId     = 1,
-             headFrameId    = 1,
-             crystal        = 0,
-             gold           = 0,
-             silver         = 0,
-             energy         = 0,
-             achive         = 0,
-             guide          = 0,
-             vipExp         = 0,
-             vipGift        = 0,
-             mouthCard      = 0,
-             guildId        = 0,
-             daySign        = 0,
-             sceneId        = setting.DefaultScene,
-             ---这里先写死
-             modelId        = 10003,
-         }
+---@return RoleInfo
+function response.create_role(account, job, name)
+    ---TODO 验证名字合法性
+    ---再确认一次
+    local config = all_job_configs[job]
+    if  not config then
+        return false
+    end
 
-         getDefaultAttrib(attrib)
+    local roleId = tostring(snax_uid.req.gen("role"))
+    ---@class RoleAttrib
+    local attrib = {
+        name           = name,
+        job            = job,
+        level          = 1,
+        exp            = 0,
+        vip            = 0,
+        crystal        = 0,
+        gold           = 0,
+        silver         = 0,
+        daySign        = 0,
+        headIconId     = 0,
+        headFrameId    = 0,
+        sceneId        = setting.DefaultScene,
+        achive         = 0,
+        vipExp         = 0,
+        vipGift        = 0,
+        mouthCard      = 0,
+        ---这里先写死
+        modelId        = job_config[job].ModelId,
+    }
+    getDefaultAttrib(attrib)
+    ---@class RoleTrans
+    local trans =
+    {
+        pos_x          = -9.848041,
+        pos_y          = -1.09,
+        pos_z          = -2.997883,
+        forward         = 0,
+    }
 
-         ---@class RoleTrans
-         local trans =
-         {
-             pos_x          = -9.848041,
-             pos_y          = -1.09,
-             pos_z          = -2.997883,
-             forward         = 0,
-         }
+    local config_lv1 = config[1]
+    ---@class RoleStatus
+    local status =
+    {
+        str = config_lv1.STR,
+        mag = config_lv1.MAG,
+        dex = config_lv1.DEX,
+        max_hp = config_lv1.HP,
+        hp = config_lv1.HP,
+        max_mp = config_lv1.MP,
+        mp = config_lv1.MP,
+        atn = config_lv1.STR,
+        int = config_lv1.INT,
+        def = config_lv1.DEF,
+        res = config_lv1.RES,
+        spd = config_lv1.SPD,
+        crt = config_lv1.CRT,
+    }
 
-         ---@class RoleInfo
-         local roleInfo = {
-             account = account,
-             trans = trans,
-             attrib = attrib,
-             itemPackage = {}
-         }
-         snax_mongod.req.insert("role", roleInfo)
-         return true, roleInfo
+    ---@class RoleInfo
+    local roleInfo = {
+        roleId = roleId,
+        status = status,
+        trans = trans,
+        attrib = attrib,
+        itemPackage = {}
+    }
+    local role_list = snax_mongod.req.findOne("role", { account = account })
+
+    if not role_list then
+        role_list = { account = account, [roleId] = roleInfo }
+        snax_mongod.req.insert("role", role_list)
     else
-         return false
-    end
-end
 
+        snax_mongod.req.update("role", { account = account }, { ["$set"] = { [roleId] = roleInfo } })
+    end
+
+    return true, roleInfo
+end
 
 function accept.save_role(account, roleInfo)
-    snax_mongod.req.replace("role", { account = account }, roleInfo)
+    snax_mongod.req.update("role", { account = account }, { ["$set"] = { [roleInfo.roleId] = roleInfo } })
 end
 
 function exit( ... )

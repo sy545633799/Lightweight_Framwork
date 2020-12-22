@@ -44,7 +44,7 @@ end
 
 function CMD:disconnect(source)
     if user.roleInfo then
-        user.world_post.role_leave_game(user.roleInfo.attrib.roleId)
+        user.world_post.role_leave_game(user.roleInfo.roleId)
         user.account_post.save_role(user.account, user.roleInfo)
     end
 
@@ -57,6 +57,7 @@ function CMD:disconnect(source)
         end
     end
     user.roleInfo = nil
+    user.role_list = nil
 end
 
 function CMD:doDisconnect(ret)

@@ -2,15 +2,14 @@ local entity = require "entity.entity"
 ---@class player:entity
 local player = class("player", entity)
 -----------------------------------------------------------
----@param status RoleTrans
----@param attrib RoleAttrib
-function player:ctor(aoiId, attrib, trans)
+---@param roleInfo RoleInfo
+function player:ctor(aoiId, roleInfo)
     ---@type AOIAttrib
-    self.aoiData.attrib = attrib
-    self.aoiData.attrib.paramId = attrib.roleId
+    self.aoiData.attrib = roleInfo.attrib
+    self.aoiData.attrib.paramId = roleInfo.roleId
     self.aoiData.attrib.type = entity_types.player
     ---@type AOITrans
-    self.aoiData.trans = trans
+    self.aoiData.trans = roleInfo.trans
     self.aoiData.trans.dirty = false
     ---状态
 

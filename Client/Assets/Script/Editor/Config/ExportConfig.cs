@@ -106,7 +106,6 @@ namespace Game.Editor {
 				Array _array = Array.CreateInstance(type, objs.Count);
 				for (int i = 0; i < objs.Count; i++)
 					_array.SetValue(objs[i], i);
-				Debug.LogError(_array.Length);
 				string assetsClsName = $"Game.{sheet.Key}Asset";//命名空间.类型名,程序集
 				Type assetType = typeof(Game.UIText).Assembly.GetType(assetsClsName);
 				object _config = Activator.CreateInstance(assetType);

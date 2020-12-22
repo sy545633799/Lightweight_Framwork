@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69e651471be0a1d4e90a3f4bc0ae085e, type: 3}
+  m_Name: UIEquip
+  m_EditorClassIdentifier: 
+  Configs:
+  - ID: 1001001
+    SimplifiedChinese: "\u4E4C\u6728\u5251"
+    TraditionalChinese: "\u4E4C\u6728\u5251"
+    English: "\u4E4C\u6728\u5251"
+    Japanese: "\u4E4C\u6728\u5251"
+    Korean: "\u4E4C\u6728\u5251"
+    Vietnamese: "\u4E4C\u6728\u5251"

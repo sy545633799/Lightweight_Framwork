@@ -14,7 +14,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Configs:
   - ID: 1001001
-    SimplifiedChinese: "\u6D4B\u8BD5\u7A0B\u5E8F\u6587\u672C{0}"
+    SimplifiedChinese: "\u4F7F\u7528\u83B7\u5F97\u91D1\u5E01"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001002
+    SimplifiedChinese: "\u4F7F\u7528\u83B7\u5F97\u94BB\u77F3"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001003
+    SimplifiedChinese: "\u4F7F\u7528\u83B7\u5F97\u7ECF\u9A8C"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001004
+    SimplifiedChinese: "\u4F7F\u7528\u83B7\u5F9710000\u91D1\u5E01"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001005
+    SimplifiedChinese: "\u4F7F\u7528\u83B7\u5F9710000\u94BB\u77F3"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 1001006
+    SimplifiedChinese: "\u4F7F\u7528\u83B7\u5F9710000\u7ECF\u9A8C"
+    TraditionalChinese: 
+    English: 
+    Japanese: 
+    Korean: 
+    Vietnamese: 
+  - ID: 2001001
+    SimplifiedChinese: "\u4E00\u628A\u666E\u901A\u6728\u5251"
     TraditionalChinese: 
     English: 
     Japanese: 

@@ -24,13 +24,12 @@ local function onCreateEntity(entity)
     create_map[aoiId] = entity.aoiData
 end
 
----@param attrib RoleAttrib
----@param status RoleTrans
+---@param roleInfo RoleInfo
 ---@return player
-function entityMgr:create_player(attrib, trans)
+function entityMgr:create_player(roleInfo)
     aoiId = aoiId + 1
     ---@type player
-    local instance = player.New(aoiId, attrib, trans)
+    local instance = player.New(aoiId, roleInfo)
     onCreateEntity(instance)
     return instance
 end

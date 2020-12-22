@@ -264,41 +264,48 @@ namespace Game
 
 		public static void SendBytes(ushort protoID, byte[] message, ushort rpcId = 0)
 		{
-			MemoryStream ms = null;
-			int messageLength = message == null ? 2 : message.Length + 2;
-			using (ms = new MemoryStream())
+			try
 			{
-				ms.Position = 0;
-				BinaryWriter writer = new BinaryWriter(ms);
-				if (rpcId > 0)
+				MemoryStream ms = null;
+				int messageLength = message == null ? 2 : message.Length + 2;
+				using (ms = new MemoryStream())
 				{
-					ushort msglen = BytesUtility.SwapUInt16((ushort)(messageLength + 2));
-					writer.Write(msglen);
-					ushort protoid = BytesUtility.SwapUInt16(protoID);
-					writer.Write(protoid);
-					ushort rpcid = BytesUtility.SwapUInt16(rpcId);
-					writer.Write(rpcid);
+					ms.Position = 0;
+					BinaryWriter writer = new BinaryWriter(ms);
+					if (rpcId > 0)
+					{
+						ushort msglen = BytesUtility.SwapUInt16((ushort)(messageLength + 2));
+						writer.Write(msglen);
+						ushort protoid = BytesUtility.SwapUInt16(protoID);
+						writer.Write(protoid);
+						ushort rpcid = BytesUtility.SwapUInt16(rpcId);
+						writer.Write(rpcid);
+					}
+					else
+					{
+						ushort msglen = BytesUtility.SwapUInt16((ushort)messageLength);
+						writer.Write(msglen);
+						ushort protoid = BytesUtility.SwapUInt16(protoID);
+						writer.Write(protoid);
+					}
+
+					if (message != null)
+						writer.Write(message);
+					writer.Flush();
+					if (client != null && client.Connected)
+					{
+						byte[] payload = ms.ToArray();
+						outStream.BeginWrite(payload, 0, payload.Length, new AsyncCallback(OnWrite), null);
+					}
+					else
+					{
+						// Debug.LogError("client.connected----->>false");
+					}
 				}
-				else
-				{
-					ushort msglen = BytesUtility.SwapUInt16((ushort)messageLength);
-					writer.Write(msglen);
-					ushort protoid = BytesUtility.SwapUInt16(protoID);
-					writer.Write(protoid);
-				}
-				
-				if (message != null)
-					writer.Write(message);
-				writer.Flush();
-				if (client != null && client.Connected)
-				{
-					byte[] payload = ms.ToArray();
-					outStream.BeginWrite(payload, 0, payload.Length, new AsyncCallback(OnWrite), null);
-				}
-				else
-				{
-					// Debug.LogError("client.connected----->>false");
-				}
+			}
+			catch (Exception e)
+			{
+				Debug.LogError(e.Message);
 			}
 		}
 

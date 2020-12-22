@@ -5,17 +5,54 @@ local event_names = event_names
 local user = User
 local rpc = RPC
 
+
+---@public 客户端点击登录调用, 返回玩家信息，如果没有，则返回空
+function RPC:req_role_list(arg)
+    user.account = arg.account
+    local roleList = user.account_req.get_role_list(arg.account)
+    if not roleList then
+        return empty_table
+    end
+
+    ---@type table<number, RoleInfo>
+    user.role_list = {}
+    for _, v in pairs(roleList) do
+        if type(v) == "table" then
+            table.insert(user.role_list, v)
+        end
+    end
+
+    return { list = user.role_list }
+end
+
+
 ---@public 客户端点击登录调用, 返回玩家信息，如果没有，则返回空
 function RPC:req_login(arg)
-    user.account = arg.uid
+    user.roleId = arg.roleId
+
+    if not user.role_list then
+        return empty_table
+    end
+
+    local roleInfo
+    for _, v in pairs(user.role_list) do
+        if v.roleId == arg.roleId then
+            roleInfo = v
+        end
+    end
+
+    if not roleInfo then
+        return empty_table
+    end
+
     ---@type RoleInfo
-    user.roleInfo = user.account_req.get_roleInfo(arg.uid)
+    user.roleInfo = roleInfo
     return { roleInfo = user.roleInfo }
 end
 
 ---@public 如果客户端得到的玩家信息为空，则调用这个方法注册，并返回玩家信息
-function RPC:req_register(args)
-    local ok, roleInfo = user.account_req.create_role(user.account, args.nickname)
+function RPC:req_create_role(args)
+    local ok, roleInfo = user.account_req.create_role(user.account, args.job, args.nickname)
     user.roleInfo = roleInfo
     local result = {}
     if ok then
@@ -26,6 +63,12 @@ function RPC:req_register(args)
     end
 
     return result
+end
+
+---@public 切换角色
+function RPC:req_switch_role(arg)
+    local roleId = arg.roleId
+
 end
 
 ---推送给客户端的消息
@@ -75,14 +118,15 @@ function RPC:req_enter_game(args)
 end
 
 function RPC:req_leave_game(args)
+    print(user.roleInfo.roleId)
     user.channels["scene"]:unsubscribe()
     user.channels["scene"] = nil
-    local ok = user.world_req.role_leave_game(user.roleInfo.attrib.roleId)
+    local ok = user.world_req.role_leave_game(user.roleInfo.roleId)
     return { ok = ok }
 end
 
 function RPC:req_switch_scene(args)
-    local ok = user.world_req.role_switch_scene(user.roleInfo.attrib.roleId, args.sceneId)
+    local ok = user.world_req.role_switch_scene(user.roleInfo.roleId, args.sceneId)
     user.roleInfo.attrib.sceneId = args.sceneId
     return { ok = ok }
 end
