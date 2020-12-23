@@ -1,23 +1,39 @@
 local msg = [[
 
+.integer_property
+{
+    id 0 : integer
+    val 1 : integer
+}
+
+.double_property
+{
+    id 0 : integer
+    val 1 : double
+}
+
 .role_attrib {
-	name 0 : string
-	job 1 : integer
-	level 2 : integer
-	exp 3 : integer
-	vip 4 : integer
-	crystal 5 : integer
-	gold 6 : integer
-	silver 7 : integer
-	daySign 8 : integer
-	headIconId 9 : integer
-	headFrameId 10 : integer
-    sceneId 11 : integer
-	achive 12 : integer
-	vipExp 13 : integer
-	vipGift 14 : integer
-	mouthCard 15 : integer
-	modelId 16 : integer
+	job 0 : integer
+	level 1 : integer
+	exp 2 : integer
+	vip 3 : integer
+	crystal 4 : integer
+	gold 5 : integer
+	silver 6 : integer
+	daySign 7 : integer
+	headIconId 8 : integer
+	headFrameId 9 : integer
+    sceneId 10 : integer
+	achive 11 : integer
+	vipExp 12 : integer
+	vipGift 13 : integer
+	mouthCard 14 : integer
+	modelId 15 : integer
+}
+
+.s2c_role_attrib
+{
+    list 0 : *integer_property(id)
 }
 
 .role_status {
@@ -36,6 +52,11 @@ local msg = [[
     crt 12 : double
 }
 
+.s2c_role_satus
+{
+    list 0 : *double_property(id)
+}
+
 .equipExtraAttrib {
 	key 0 : integer
 	value 1 : integer
@@ -52,9 +73,10 @@ local msg = [[
 
 .roleInfo {
     roleId 0 : string
-    attrib 1 : role_attrib
-    status 2 : role_status
-	itemPackage 3 : *item(id)
+    roleName 1 : string
+    attrib 2 : role_attrib
+    status 3 : role_status
+	itemPackage 4 : *item(id)
 }
 
 .roleAttrib {
