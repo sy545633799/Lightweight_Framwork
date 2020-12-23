@@ -4,6 +4,7 @@ local AOIController = BaseClass("AOIController", Controller)
 local EntityType = EntityType
 local Player = require("Logic/Entity/Behaviour/Player")
 local Hero = require("Logic/Entity/Behaviour/Hero")
+local Monster = require("Logic/Entity/Behaviour/Monster")
 ------------------------------------------------------------------------------
 function AOIController:ctor()
     ---@type table<string, Entity> @private
@@ -21,13 +22,16 @@ function AOIController:CreateEntities(args)
     local roleId  = RoleModel.roleId
     for aoidId, aoiData in pairs(args) do
         local entity
-        if aoiData.attrib.paramId == roleId then
+        if aoiData.attrib.roleId == roleId then
             aoiData.attrib.type = EntityType.hero
             entity = Hero.New(aoiData)
             MainCamera:SetTarget(entity.behavior.transform)
-        else
+        elseif aoiData.attrib.type == EntityType.player then
             entity = Player.New(aoiData)
+        elseif aoiData.attrib.type == EntityType.monster then
+            entity = Monster.New(aoiData)
         end
+
         self.entites_map[aoidId] = entity
     end
 end

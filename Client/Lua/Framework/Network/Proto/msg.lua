@@ -112,10 +112,11 @@ local msg = [[
 
 
 .sync_attrib {
-    paramId 0 : string
-    type 1 : integer
-    name 2 : string
-    modelId 3 : integer
+    roleId 0 : string
+    configId 1 : integer
+    type 2 : integer
+    name 3 : string
+    modelId 4 : integer
 }
 
 .aoiAttrib {
@@ -161,7 +162,7 @@ local msg = [[
 .aoiData {
     aoiId 0 : integer
     attrib 1 : sync_attrib
-    trans 5 : sync_trans
+    trans 2 : sync_trans
 }
 
 .ack_enter_game {

@@ -54,7 +54,6 @@ function response.create_role(account, job, name)
     local roleId = tostring(snax_uid.req.gen("role"))
     ---@class RoleAttrib
     local attrib = {
-        name           = name,
         job            = job,
         level          = 1,
         exp            = 0,
@@ -105,6 +104,7 @@ function response.create_role(account, job, name)
     ---@class RoleInfo
     local roleInfo = {
         roleId = roleId,
+        roleName = name,
         status = status,
         trans = trans,
         attrib = attrib,

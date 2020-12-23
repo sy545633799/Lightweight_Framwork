@@ -8,7 +8,7 @@ function monster:ctor(aoiId, elementId, monsterConfig)
     ---@type AOIAttrib
     local attrib = {}
     attrib.type = entity_types.monster
-    attrib.paramId = tostring(elementId)
+    attrib.configId = elementId
     attrib.modelId = monsterConfig.ModelID
     self.aoiData.attrib = attrib
     self.aoiData.trans = {}

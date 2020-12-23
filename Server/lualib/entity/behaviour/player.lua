@@ -6,13 +6,13 @@ local player = class("player", entity)
 function player:ctor(aoiId, roleInfo)
     ---@type AOIAttrib
     self.aoiData.attrib = roleInfo.attrib
-    self.aoiData.attrib.paramId = roleInfo.roleId
+    self.aoiData.attrib.roleId = roleInfo.roleId
+    self.aoiData.attrib.name = roleInfo.name
     self.aoiData.attrib.type = entity_types.player
     ---@type AOITrans
     self.aoiData.trans = roleInfo.trans
     self.aoiData.trans.dirty = false
     ---状态
-
 end
 
 ---@param args Sync_Trans
