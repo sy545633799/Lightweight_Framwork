@@ -17,6 +17,12 @@ local mongo = require "skynet.db.mongo"
 local DEBUG
 local bson_encode
 
+---@class Mongod_Req
+local response = response
+---@class Mongod_Post
+local accept = accept
+
+
 local db, db_name
 function init( ... )
 	DEBUG = skynet.getenv("DEBUG")
@@ -52,7 +58,7 @@ function response.insert( tableName, tbl )
 	if DEBUG then
 		local ok = pcall(bson_encode, tbl)
 		if not ok then
-			skynet.error("mongod insert:", json.encode(tbl))
+			skynet.error("mongod insert:", tostring(tbl))
 		end
 	end
 
@@ -68,31 +74,31 @@ end
 -- 异步更新
 -- upsert:如果查找不到记录是否生成新的记录
 -- multi:是否更新多条，默认一条
-function accept.update( tableName, selector, tbl, upsert, multi )
+function accept.update( tableName, keyName, tbl, upsert, multi )
 	if DEBUG then
 		local ok = pcall(bson_encode, tbl)
 		if not ok then
-			skynet.error("mongod update:", json.encode(selector), json.encode(tbl))
+			skynet.error("mongod update:", keyName, tostring(tbl))
 		end
 	end
 
 	if upsert == nil then upsert = true end
-	db[db_name][tableName]:update(selector, tbl, upsert, multi)
+	db[db_name][tableName]:update({ uid = keyName }, { ["$set"] = tbl }, upsert, multi)
 end
 
 -- 同步更新
-function response.update( tableName, selector, tbl, upsert, multi )
+function response.update( tableName, keyName, tbl, upsert, multi )
 	if DEBUG then
 		local ok = pcall(bson_encode, tbl)
 		if not ok then
-			skynet.error("mongod update:", json.encode(selector), json.encode(tbl))
+			skynet.error("mongod update:", keyName, tostring(tbl))
 		end
 	end
 
 	if upsert == nil then upsert = true end
-	local ret = db[db_name][tableName]:update(selector, tbl, upsert, multi)
+	local ret = db[db_name][tableName]:update({ uid = keyName }, { ["$set"] = tbl }, upsert, multi)
 	--if ret == nil then
-	--	skynet.error("mongod update, errno:", tostring(ret))
+	--	skynet.error("mongod update:", keyName, tostring(tbl))
 	--end
 
 	return ret
@@ -101,10 +107,10 @@ end
 -- sort:{key:-1} -1表示倒序，默认增序
 -- skip: n 表示跳过n个
 -- limit: n 表示只显示n个
-function response.find( tableName, tbl, sort, skip, limit, selector )
-	local ret = db[db_name][tableName]:find(tbl, selector)
+function response.find( tableName, keyName, sort, skip, limit, selector )
+	local ret = db[db_name][tableName]:find( { uid = keyName }, selector)
 	if ret == nil then
-		skynet.error("mongod update, errno:", json.encode(ret), json.encode(tbl))
+		skynet.error("mongod update:", keyName)
 	end
 
 	if sort then
@@ -128,8 +134,8 @@ function response.find( tableName, tbl, sort, skip, limit, selector )
 	return result
 end
 
-function response.findOne( tableName, tbl, selector )
-	local info = db[db_name][tableName]:findOne(tbl, selector)
+function response.findOne( tableName, keyName, selector )
+	local info = db[db_name][tableName]:findOne({ uid = keyName }, selector)
 	if info then
 		info._id = nil
 	end
@@ -149,10 +155,10 @@ function response.findMulti( tableNameList, tbl )
 	return result
 end
 
-function response.findAndModify( tableName, tbl )
-	local ret = db[db_name][tableName]:findAndModify(tbl)
+function response.findAndModify( tableName, keyName )
+	local ret = db[db_name][tableName]:findAndModify({ uid = keyName })
 	if ret == nil then
-		skynet.error("mongod findAndModify, errno:", json.encode(ret), json.encode(tbl))
+		skynet.error("mongod findAndModify, errno:", keyName)
 	end
 
 	return ret
@@ -162,17 +168,9 @@ end
 function response.delete( tableName, tbl, single )
 	local ret = db[db_name][tableName]:delete(tbl, single)
 	if ret == nil then
-		skynet.error("mongod delete, errno:", json.encode(ret), json.encode(tbl))
+		skynet.error("mongod delete, errno:", tostring(tbl))
 	end
 
-	return ret
-end
-
-function response.replace( tableName, tbl, tb2)
-	local ret = db[db_name][tableName]:delete(tbl, 1)
-	if not ret then
-		ret = db[db_name][tableName]:safe_insert(tb2)
-	end
 	return ret
 end
 
@@ -181,7 +179,7 @@ end
 function accept.drop( tableName )
 	local ret = db[db_name][tableName]:drop()
 	if ret == nil then
-		skynet.error("mongod drop, errno:", json.encode(ret), json.encode(tbl))
+		skynet.error("mongod drop, errno:", tableName)
 	end
 
 	return ret
@@ -191,7 +189,7 @@ end
 function accept.ensureIndex( tableName, tbl, options )
 local ret = db[db_name][tableName]:ensureIndex(tbl, options)
 if ret == nil then
-skynet.error("mongod ensureIndex, errno:", json.encode(ret), json.encode(tbl))
+skynet.error("mongod ensureIndex, errno:", tableName)
 end
 
 return ret

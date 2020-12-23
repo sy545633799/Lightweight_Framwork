@@ -5,7 +5,11 @@ local job_config = require "config.Job"
 
 local game_config
 local all_job_configs = {}
-local snax_mongod, snax_uid
+---@type Mongod_Req
+local mongod_req
+---@type Mongod_Post
+local mongod_post
+local snax_uid
 
 ---@class Account_Req
 local response = response
@@ -15,7 +19,9 @@ local accept = accept
 function init( ... )
     game_config = require(skynet.getenv("config"))
     snax_uid = snax.uniqueservice("common/uid")
-    snax_mongod = snax.uniqueservice("common/mongod")
+    local snax_mongod = snax.uniqueservice("common/mongod")
+    mongod_req = snax_mongod.req
+    mongod_post = snax_mongod.post
 
     for k, v in pairs(job_config) do
         all_job_configs[k] = require("config." .. v.Name)
@@ -31,7 +37,7 @@ end
 
 ---@return table<number, RoleInfo>
 function response.get_role_list(account)
-    local list = snax_mongod.req.findOne("role", { account = account })
+    local list = mongod_req.findOne("role", account)
 
     return list
 end
@@ -104,21 +110,21 @@ function response.create_role(account, job, name)
         attrib = attrib,
         itemPackage = {}
     }
-    local role_list = snax_mongod.req.findOne("role", { account = account })
+    local role_list = mongod_req.findOne("role", account)
 
     if not role_list then
         role_list = { account = account, [roleId] = roleInfo }
-        snax_mongod.req.insert("role", role_list)
+        mongod_req.insert("role", role_list)
     else
 
-        snax_mongod.req.update("role", { account = account }, { ["$set"] = { [roleId] = roleInfo } })
+        mongod_req.update("role", account, { [roleId] = roleInfo })
     end
 
     return true, roleInfo
 end
 
 function accept.save_role(account, roleInfo)
-    snax_mongod.req.update("role", { account = account }, { ["$set"] = { [roleInfo.roleId] = roleInfo } })
+    mongod_req.update("role", account, { [roleInfo.roleId] = roleInfo })
 end
 
 function exit( ... )
