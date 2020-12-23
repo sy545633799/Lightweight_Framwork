@@ -18,6 +18,14 @@
 		<type fullname="Game.UIDropDown" preserve="all"/>
 		<type fullname="Game.UIImage" preserve="all"/>
 		<type fullname="Game.UIJoyStick" preserve="all"/>
+		<type fullname="Game.NameComp" preserve="all"/>
+		<type fullname="Game.HUDComp" preserve="all"/>
+		<type fullname="Game.AnimComp" preserve="all"/>
+		<type fullname="Game.MoveComp" preserve="all"/>
+		<type fullname="Game.RotateComp" preserve="all"/>
+		<type fullname="Game.NavComp" preserve="all"/>
+		<type fullname="Game.SyncStatusComp" preserve="all"/>
+		<type fullname="Game.SyncTransComp" preserve="all"/>
 		<type fullname="Game.MainCamera" preserve="all"/>
 		<type fullname="Game.InputManager" preserve="all"/>
 		<type fullname="Game.LoadManager" preserve="all"/>

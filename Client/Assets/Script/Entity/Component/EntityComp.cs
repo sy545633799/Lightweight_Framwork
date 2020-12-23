@@ -14,13 +14,22 @@ namespace Game
 
 	public class EntityComp : RecycleObject<EntityComp>
 	{
+		protected virtual int compIndex => CompIndex.None;
 		protected EntityBehavior behavior;
 
 		public virtual void OnUpdate(float deltaTime) { }
 		public virtual void OnFixedUpdate(float fixedDeltaTime) { }
 		public virtual void OnLateUpdate(float deltaTime) { }
 
-		public void Add(EntityBehavior entity) { behavior = entity; OnAdd(); }
+		
+
+		public void Add(EntityBehavior entity)
+		{
+			behavior = entity;
+			if (compIndex > CompIndex.None)
+				behavior.CompTable.Set(compIndex, this);
+			OnAdd();
+		}
 		public virtual void OnAdd() { }
 		public void Remove() { behavior = null; OnRemove(); }
 		public virtual void OnRemove() { }

@@ -33,7 +33,7 @@ namespace Game.Editor {
 			
 			if (EditorApplication.isCompiling)
 				return false;
-
+			string fileName = Path.GetFileName(excelPath);
 			Dictionary<string, List<Dictionary<string, ExcelObjectElement>>> excelData = ExcelReader.ReadExcel(excelPath);
 
 			foreach (var item in excelData)
@@ -51,13 +51,13 @@ namespace Game.Editor {
 				m_streamWriter.WriteLine($"\tpublic class {sheetName}Asset : ConfigBaseAsset<{sheetName}> {{}}");
 
 				m_streamWriter.WriteLine("\t[System.Serializable]");
-				if (sheetName.Contains("Location"))
+				if (fileName.Contains("本地化"))
 					m_streamWriter.WriteLine($"\tpublic class {sheetName} : LocationConfig");
 				else
 					m_streamWriter.WriteLine($"\tpublic class {sheetName} : ConfigBase");
 				m_streamWriter.WriteLine("\t{");
 				Dictionary<string, ExcelObjectElement> row = list[0];
-				if (!sheetName.Contains("Location"))
+				if (!fileName.Contains("本地化"))
 				{
 					foreach (var cell in row)
 					{

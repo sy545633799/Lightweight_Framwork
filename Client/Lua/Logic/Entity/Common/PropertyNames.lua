@@ -2,7 +2,7 @@
 ---@class AOIAttrib
 AOIAttrib = {
     roleId = 1,
-    configId = 2,
+    elementId = 2,
     modelId = 3,
     type = 4,
     name = 5,

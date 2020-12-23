@@ -22,6 +22,8 @@ namespace Game {
 			poolMap.Add(typeof(MoveComp), new RecyclePool<EntityComp>(() => new MoveComp()));
 			poolMap.Add(typeof(SyncTransComp), new RecyclePool<EntityComp>(() => new SyncTransComp()));
 			poolMap.Add(typeof(SyncStatusComp), new RecyclePool<EntityComp>(() => new SyncStatusComp()));
+			poolMap.Add(typeof(NameComp), new RecyclePool<EntityComp>(() => new NameComp()));
+			poolMap.Add(typeof(HUDComp), new RecyclePool<EntityComp>(() => new HUDComp()));
 
 
 			compListMap.Add(typeof(AnimComp), new Dictionary<long, EntityComp>(64));
@@ -31,7 +33,8 @@ namespace Game {
 			compListMap.Add(typeof(MoveComp), new Dictionary<long, EntityComp>(64));
 			compListMap.Add(typeof(SyncTransComp), new Dictionary<long, EntityComp>(64));
 			compListMap.Add(typeof(SyncStatusComp), new Dictionary<long, EntityComp>(64));
-
+			compListMap.Add(typeof(NameComp), new Dictionary<long, EntityComp>(64));
+			compListMap.Add(typeof(HUDComp), new Dictionary<long, EntityComp>(64));
 		}
 
 		public T Get<T>(long aoiId)

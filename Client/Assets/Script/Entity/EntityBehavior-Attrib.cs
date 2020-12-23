@@ -13,11 +13,6 @@ namespace Game {
 	public partial class EntityBehavior : EventObject, IMonoPoolObject<EntityBehavior>
 	{
 		private GameObject body;
-		private GameObject root;
-		private GameObject head;
-		private GameObject middle;
-		private GameObject hp_name;
-
 		public GameObject Body
 		{
 			get
@@ -76,28 +71,6 @@ namespace Game {
 				//		}
 				//	}
 				//}
-			}
-		}
-		public GameObject Root
-		{
-			get
-			{
-				return root;
-			}
-		}
-		public GameObject Middle
-		{
-			get
-			{
-				return middle;
-			}
-		}
-
-		public GameObject HP_name
-		{
-			get
-			{
-				return hp_name;
 			}
 		}
 

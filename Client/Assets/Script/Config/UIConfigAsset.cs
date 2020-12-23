@@ -15,7 +15,7 @@ namespace Game {
 	public class UIConfigAsset : ConfigBaseAsset<UIConfig> { }
 
 	[System.Serializable]
-	public class UIConfig: ConfigBase
+	public class UIConfig: LocationConfig
 	{
 		[Tooltip("UI名字")]
 		public string Name;

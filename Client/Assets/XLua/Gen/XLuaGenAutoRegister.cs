@@ -266,6 +266,30 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(Game.UIJoyStick), GameUIJoyStickWrap.__Register);
         
         
+            translator.DelayWrapLoader(typeof(Game.NameComp), GameNameCompWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Game.HUDComp), GameHUDCompWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Game.AnimComp), GameAnimCompWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Game.MoveComp), GameMoveCompWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Game.RotateComp), GameRotateCompWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Game.NavComp), GameNavCompWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Game.SyncStatusComp), GameSyncStatusCompWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(Game.SyncTransComp), GameSyncTransCompWrap.__Register);
+        
+        
             translator.DelayWrapLoader(typeof(Game.MainCamera), GameMainCameraWrap.__Register);
         
         
@@ -307,6 +331,10 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(Game.EventExtension), GameEventExtensionWrap.__Register);
         
+        }
+        
+        static void wrapInit2(LuaEnv luaenv, ObjectTranslator translator)
+        {
         
             translator.DelayWrapLoader(typeof(Game.UIExtensions), GameUIExtensionsWrap.__Register);
         
@@ -323,6 +351,8 @@ namespace XLua.CSObjectWrap
             wrapInit0(luaenv, translator);
             
             wrapInit1(luaenv, translator);
+            
+            wrapInit2(luaenv, translator);
             
             
             translator.AddInterfaceBridgeCreator(typeof(System.Collections.IEnumerator), SystemCollectionsIEnumeratorBridge.__Create);

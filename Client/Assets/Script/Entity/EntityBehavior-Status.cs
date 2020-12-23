@@ -10,20 +10,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.Events;
+using XLua;
 
 namespace Game
 {
 	public partial class EntityBehavior : EventObject, IMonoPoolObject<EntityBehavior>
 	{
-		public int aoiId = 0;
-		public int sceneid = 0;
-		public int entityType = 0;
-		public bool isSyncable = false;
-		public bool isHero = false;
+		public int AoiId = 0;
+		public int SceneId = 0;
+		public int EntityType = 0;
 		public bool bodyLoading = false;
-		public int res_id = 0;
-
+		public int ResId = 0;
 		public int unitCamp = 0;
+
+		
 		
 		
 

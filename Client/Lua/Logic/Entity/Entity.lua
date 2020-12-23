@@ -2,10 +2,13 @@
 --- Created by shenyi.
 --- DateTime: 2020/8/13
 -----------------------------------------------------------
-
+require("Logic/Entity/Common/EntityType")
+require("Logic/Entity/Common/PropertyNames")
+require("Logic/Entity/Common/CompIndex")
 ---@class Entity:Updatable
 Entity = BaseClass("Entity", Updatable)
 -----------------------------------------------------------
+local compIndex = CompIndex
 ---@param aoiData AOIData
 function Entity:ctor(aoiData)
     local sceneId = RoleModel.RoleAttrib.sceneId
@@ -22,12 +25,16 @@ function Entity:ctor(aoiData)
             aoiData.attrib.type,
             function(components)
                 coroutine.start(function()
-                    self.animComp = components[0]
-                    self.rotateComp = components[1]
+                    ---@type Game.NameComp
+                    self.nameComp = components[compIndex.Name]
+                    ---@type Game.AnimComp
+                    self.animComp = components[compIndex.Anim]
+                    ---@type Game.RotateComp
+                    self.rotateComp = components[compIndex.Rotate]
+
                     self:OnBodyCreate(components)
                 end)
             end)
-
     ---@type UnityEngine.GameObject
     self.gameObject = self.behavior.gameObject
     ---@type UnityEngine.Transform

@@ -5,9 +5,10 @@ local player = class("player", entity)
 ---@param roleInfo RoleInfo
 function player:ctor(aoiId, roleInfo)
     ---@type AOIAttrib
-    self.aoiData.attrib = roleInfo.attrib
+    self.aoiData.attrib = {}
     self.aoiData.attrib.roleId = roleInfo.roleId
-    self.aoiData.attrib.name = roleInfo.name
+    self.aoiData.attrib.name = roleInfo.roleName
+    self.aoiData.attrib.modelId = roleInfo.attrib.modelId
     self.aoiData.attrib.type = entity_types.player
     ---@type AOITrans
     self.aoiData.trans = roleInfo.trans

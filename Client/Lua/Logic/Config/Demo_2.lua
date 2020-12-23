@@ -1,9 +1,8 @@
----@class Demo_2 
 local Demo_2 = {
 	[10101] = {
 		Type = 3,
 		Name = "测试小怪",
-		ModelID = 10001,
+		ConfigId = 10101,
 		RanRadius = 10,
 		PosX = -20.0,
 		PosY = 0.0,

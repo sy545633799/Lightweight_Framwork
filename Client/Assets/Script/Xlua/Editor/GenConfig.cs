@@ -99,6 +99,15 @@ using Game;
         typeof(UIImage),
         typeof(UIJoyStick),
 
+		typeof(NameComp),
+		typeof(HUDComp),
+		typeof(AnimComp),
+		typeof(MoveComp),
+		typeof(RotateComp),
+		typeof(NavComp),
+		typeof(SyncStatusComp),
+		typeof(SyncTransComp),
+
 		//manager
 		typeof(MainCamera),
 		typeof(InputManager),

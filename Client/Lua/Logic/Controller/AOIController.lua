@@ -6,6 +6,8 @@ local Player = require("Logic/Entity/Behaviour/Player")
 local Hero = require("Logic/Entity/Behaviour/Hero")
 local Monster = require("Logic/Entity/Behaviour/Monster")
 ------------------------------------------------------------------------------
+local world_conig = require "Logic/Config/World"
+------------------------------------------------------------------------------
 function AOIController:ctor()
     ---@type table<string, Entity> @private
     self.entites_map = {}
@@ -19,6 +21,10 @@ end
 
 ---@param args table<number, AOIData>
 function AOIController:CreateEntities(args)
+    local sceneId = RoleModel.RoleAttrib.sceneId
+    local sceneName = world_conig[sceneId].Resource
+    local scene_config = require("Logic/Config/" .. sceneName)
+
     local roleId  = RoleModel.roleId
     for aoidId, aoiData in pairs(args) do
         local entity
@@ -28,8 +34,11 @@ function AOIController:CreateEntities(args)
             MainCamera:SetTarget(entity.behavior.transform)
         elseif aoiData.attrib.type == EntityType.player then
             entity = Player.New(aoiData)
-        elseif aoiData.attrib.type == EntityType.monster then
-            entity = Monster.New(aoiData)
+        else
+            local element = scene_config[aoiData.attrib.elementId]
+            if aoiData.attrib.type == EntityType.monster then
+                entity = Monster.New(aoiData, element)
+            end
         end
 
         self.entites_map[aoidId] = entity

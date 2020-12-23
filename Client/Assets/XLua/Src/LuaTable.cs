@@ -389,5 +389,5 @@ namespace XLua
         {
             return "table :" + luaReference;
         }
-    }
+	}
 }

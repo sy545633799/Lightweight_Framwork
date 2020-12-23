@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9878cd3f588bf9b47bc535954843296a, type: 3}
+  m_Name: UINames
+  m_EditorClassIdentifier: 
+  Configs:
+  - ID: 1001001
+    SimplifiedChinese: "\u5C71\u4E18\u5DE8\u4EBA"
+    TraditionalChinese: "\u5C71\u4E18\u5DE8\u4EBA"
+    English: "\u5C71\u4E18\u5DE8\u4EBA"
+    Japanese: "\u5C71\u4E18\u5DE8\u4EBA"
+    Korean: "\u5C71\u4E18\u5DE8\u4EBA"
+    Vietnamese: "\u5C71\u4E18\u5DE8\u4EBA"
+  - ID: 1001002
+    SimplifiedChinese: "\u5C0F\u6076\u9B54"
+    TraditionalChinese: "\u5C0F\u6076\u9B54"
+    English: "\u5C0F\u6076\u9B54"
+    Japanese: "\u5C0F\u6076\u9B54"
+    Korean: "\u5C0F\u6076\u9B54"
+    Vietnamese: "\u5C0F\u6076\u9B54"
+  - ID: 1001003
+    SimplifiedChinese: "\u9AB7\u9AC5\u5175"
+    TraditionalChinese: "\u9AB7\u9AC5\u5175"
+    English: "\u9AB7\u9AC5\u5175"
+    Japanese: "\u9AB7\u9AC5\u5175"
+    Korean: "\u9AB7\u9AC5\u5175"
+    Vietnamese: "\u9AB7\u9AC5\u5175"
+  - ID: 1001004
+    SimplifiedChinese: "\u6B7B\u795E"
+    TraditionalChinese: "\u6B7B\u795E"
+    English: "\u6B7B\u795E"
+    Japanese: "\u6B7B\u795E"
+    Korean: "\u6B7B\u795E"
+    Vietnamese: "\u6B7B\u795E"

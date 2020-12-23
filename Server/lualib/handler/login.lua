@@ -118,7 +118,6 @@ function RPC:req_enter_game(args)
 end
 
 function RPC:req_leave_game(args)
-    print(user.roleInfo.roleId)
     user.channels["scene"]:unsubscribe()
     user.channels["scene"] = nil
     local ok = user.world_req.role_leave_game(user.roleInfo.roleId)

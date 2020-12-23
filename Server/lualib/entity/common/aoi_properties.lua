@@ -2,7 +2,7 @@
 ---@class AOIAttrib
 AOIAttrib = {
     roleId = 1,
-    configId = 2,
+    elementId = 2,
     modelId = 3,
     type = 4,
     name = 5,
@@ -19,7 +19,7 @@ AOIStatus = {
     dirty = false
 }
 
-------@class AOITrans
+---@class AOITrans
 AOITrans = {
     ---状态
     pos_x = 1,
@@ -30,7 +30,7 @@ AOITrans = {
     dirty = false
 }
 
-------@class AOIData
+---@class AOIData
 AOIData =
 {
     aoiId = "aoiId",

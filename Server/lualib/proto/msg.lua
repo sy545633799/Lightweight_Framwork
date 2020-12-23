@@ -113,7 +113,7 @@ local msg = [[
 
 .sync_attrib {
     roleId 0 : string
-    configId 1 : integer
+    elementId 1 : integer
     type 2 : integer
     name 3 : string
     modelId 4 : integer
@@ -147,7 +147,9 @@ local msg = [[
 .sync_status {
     max_hp 0 : double
     hp 1 : double
-    is_crit 2 : boolean
+    max_mp 2 : double
+    mp 3 : double
+    is_crit 4 : boolean
 }
 
 .aoiStatus {

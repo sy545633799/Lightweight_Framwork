@@ -8,6 +8,7 @@ end
 
 function Player:OnBodyCreate(componets)
     base.OnBodyCreate(self, componets)
+    self.nameComp:SetName(self.aoiData.attrib.name)
 end
 
 function Player:MoveByNavimesh(pos, stopDis, onArrived, onMoving)

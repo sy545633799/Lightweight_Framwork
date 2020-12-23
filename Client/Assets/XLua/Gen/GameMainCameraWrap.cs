@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(Game.MainCamera);
-			Utils.BeginObjectRegister(type, L, translator, 0, 10, 19, 19);
+			Utils.BeginObjectRegister(type, L, translator, 0, 10, 20, 20);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetTarget", _m_SetTarget);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetTarget", _m_GetTarget);
@@ -35,7 +35,8 @@ namespace XLua.CSObjectWrap
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnDestroy", _m_OnDestroy);
 			
 			
-			Utils.RegisterFunc(L, Utils.GETTER_IDX, "pivotOffset", _g_get_pivotOffset);
+			Utils.RegisterFunc(L, Utils.GETTER_IDX, "m_Target", _g_get_m_Target);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "pivotOffset", _g_get_pivotOffset);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "fixDistance", _g_get_fixDistance);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "minDistance", _g_get_minDistance);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "maxDistance", _g_get_maxDistance);
@@ -55,7 +56,8 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "layerMask", _g_get_layerMask);
             Utils.RegisterFunc(L, Utils.GETTER_IDX, "IsBattleModel", _g_get_IsBattleModel);
             
-			Utils.RegisterFunc(L, Utils.SETTER_IDX, "pivotOffset", _s_set_pivotOffset);
+			Utils.RegisterFunc(L, Utils.SETTER_IDX, "m_Target", _s_set_m_Target);
+            Utils.RegisterFunc(L, Utils.SETTER_IDX, "pivotOffset", _s_set_pivotOffset);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "fixDistance", _s_set_fixDistance);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "minDistance", _s_set_minDistance);
             Utils.RegisterFunc(L, Utils.SETTER_IDX, "maxDistance", _s_set_maxDistance);
@@ -404,6 +406,20 @@ namespace XLua.CSObjectWrap
         
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_m_Target(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                Game.MainCamera gen_to_be_invoked = (Game.MainCamera)translator.FastGetCSObj(L, 1);
+                translator.Push(L, gen_to_be_invoked.m_Target);
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 1;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _g_get_pivotOffset(RealStatePtr L)
         {
 		    try {
@@ -670,6 +686,21 @@ namespace XLua.CSObjectWrap
         }
         
         
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_m_Target(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                Game.MainCamera gen_to_be_invoked = (Game.MainCamera)translator.FastGetCSObj(L, 1);
+                gen_to_be_invoked.m_Target = (UnityEngine.Transform)translator.GetObject(L, 2, typeof(UnityEngine.Transform));
+            
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            return 0;
+        }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _s_set_pivotOffset(RealStatePtr L)

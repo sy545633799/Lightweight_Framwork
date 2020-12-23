@@ -31,15 +31,16 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 20, 10, 9);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 21, 10, 9);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "Init", _m_Init_xlua_st_);
-            Utils.RegisterFunc(L, Utils.CLS_IDX, "AddEvent", _m_AddEvent_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "Update", _m_Update_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "FixedUpdate", _m_FixedUpdate_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "ReConnect", _m_ReConnect_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "Connect", _m_Connect_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "OnConnect", _m_OnConnect_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "SendBytes", _m_SendBytes_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "AddListener", _m_AddListener_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "RemoveListener", _m_RemoveListener_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "OnRead", _m_OnRead_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "OnDisconnected", _m_OnDisconnected_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "OnWrite", _m_OnWrite_xlua_st_);
@@ -127,35 +128,6 @@ namespace XLua.CSObjectWrap
                     
                     
                     return 1;
-                }
-                
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            
-        }
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_AddEvent_xlua_st_(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-            
-                
-                {
-                    System.Action<ushort, ushort, byte[]> __event = translator.GetDelegate<System.Action<ushort, ushort, byte[]>>(L, 1);
-                    ushort _protoID = (ushort)LuaAPI.xlua_tointeger(L, 2);
-                    ushort _RPCID = (ushort)LuaAPI.xlua_tointeger(L, 3);
-                    byte[] _data = LuaAPI.lua_tobytes(L, 4);
-                    
-                    //Game.TcpManager.AddEvent( __event, _protoID, _RPCID, _data );
-                    
-                    
-                    
-                    return 0;
                 }
                 
             } catch(System.Exception gen_e) {
@@ -342,6 +314,57 @@ namespace XLua.CSObjectWrap
             }
             
             return LuaAPI.luaL_error(L, "invalid arguments to Game.TcpManager.SendBytes!");
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_AddListener_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+            
+                
+                {
+                    ushort _msgId = (ushort)LuaAPI.xlua_tointeger(L, 1);
+                    System.Action<byte[]> _callback = translator.GetDelegate<System.Action<byte[]>>(L, 2);
+                    
+                    Game.TcpManager.AddListener( _msgId, _callback );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_RemoveListener_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+            
+            
+                
+                {
+                    ushort _msgId = (ushort)LuaAPI.xlua_tointeger(L, 1);
+                    
+                    Game.TcpManager.RemoveListener( _msgId );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
             
         }
         

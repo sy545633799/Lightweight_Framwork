@@ -6,8 +6,6 @@ local registerGlobalModule = RegisterGlobalModule
 registerModule "Logic/Global/PropertyNames"
 registerModule("Logic/Common/LogicUtil")
 registerModule("Logic/Common/ConfigUtil")
-registerModule("Logic/Entity/EntityType")
-registerModule("Logic/Entity/PropertyNames")
 registerModule("Logic/Entity/Entity")
 
 ---Model

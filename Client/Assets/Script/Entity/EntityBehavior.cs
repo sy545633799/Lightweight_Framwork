@@ -10,15 +10,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.Events;
+using XLua;
 
 namespace Game
 {
 	public partial class EntityBehavior : EventObject, IMonoPoolObject<EntityBehavior> 
     {
 		
-		private const string RecycleName = "objRecyle";
+		private static string RecycleName = "objRecyle";
 		private static Vector3 OnRecylePos = new Vector3(-888f, -888f, -888f);
-		private Dictionary<Type, EntityComp> entitiesCompList = new Dictionary<Type, EntityComp> ();
+		private static RecyclePool<LuaBase> m_CompTablePool = new RecyclePool<LuaBase>(() => XLuaManager.GetLuaEnv().NewTable());
+		private static RecyclePool<LuaBase> m_StatusTablePool = new RecyclePool<LuaBase>(() => XLuaManager.GetLuaEnv().NewTable());
 
 		[Header("加速")]
 		public float Acceleration = 5.0f;
@@ -31,7 +33,22 @@ namespace Game
 		public float JumpSpeed = 0.1f;
 		public float MaxFallSpeed = 0.1f;
 
-		public Action<EntityComp[]> onBodyCreate { get; set; }
+		
+		public LuaTable StatusTable { get; private set; }
+		public LuaTable CompTable { get; private set; }
+		public Action<LuaTable> OnBodyCreate { get; set; }
+		private Dictionary<Type, EntityComp> entitiesCompList = new Dictionary<Type, EntityComp>();
+
+		public void Init(int sceneId, int aoiId, int resId, int entityType, Action<LuaTable> onBodycreated)
+		{
+			AoiId = aoiId;
+			SceneId = sceneId;
+			ResId = resId;
+			EntityType = entityType;
+			OnBodyCreate = onBodycreated;
+			StatusTable = m_StatusTablePool.Alloc() as LuaTable;
+			CompTable = m_CompTablePool.Alloc() as LuaTable;
+		}
 
 		public void Update () {
 			float fUpdateTime = Time.deltaTime;
@@ -82,6 +99,12 @@ namespace Game
 		/// <returns></returns>
 		public EntityBehavior Downcast()
         {
+			StatusTable.Recycle();
+			StatusTable = null;
+			for (int index = 1; index <= CompIndex.Count; index++)
+				CompTable.Set(index, 0);
+			CompTable.Recycle();
+			CompTable = null;
 			RemoveAllEntityComp();
 			if (body != null)
 			{
@@ -89,18 +112,15 @@ namespace Game
 				body = null;
 			}
 			gameObject.name = RecycleName;
-			onBodyCreate = null;
-			isSyncable = false;
-			sceneid = 0;
-			entityType = 0;
-			aoiId = 0;
+			OnBodyCreate = null;
+			SceneId = 0;
+			EntityType = 0;
+			AoiId = 0;
 			destroyed = false;
 			bodyLoading = false;
 			logicSpeed = 1f;
 			body = null;
-			head = null;
-			middle = null;
-			root = null;
+
 			transform.position = OnRecylePos;
 			transform.localScale = Vector3.one;
 			return this;

@@ -44,6 +44,7 @@ namespace Game
 			//config
 			initFunctions.Add(UILocationAsset.Refresh);
 			initFunctions.Add(UICodeTextAsset.Refresh);
+			initFunctions.Add(UINamesAsset.Refresh);
 			initFunctions.Add(AtlasConfigAsset.Refresh);
 			initFunctions.Add(UIConfigAsset.Refresh);
 			//manager

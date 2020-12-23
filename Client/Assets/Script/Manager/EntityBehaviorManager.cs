@@ -88,7 +88,7 @@ namespace Game
 		/// <param name="entityType">实体类型</param>
 		/// <param name="onBodyCreated">实体的组件</param>
 		/// <returns></returns>
-		public static EntityBehavior CreateEntity(int sceneid, int aoiId, int res_id, Vector3 bornPos, float orientation, int entityType, Action<EntityComp[]> onBodyCreated = null)
+		public static EntityBehavior CreateEntity(int sceneid, int aoiId, int resId, Vector3 bornPos, float orientation, int entityType, Action<LuaTable> onBodyCreated = null)
 		{
 			if (entityBehaviors.ContainsKey(aoiId))
 			{
@@ -100,8 +100,6 @@ namespace Game
 			if (entity == null)
 				Debug.LogError("entity is nil");
 
-			entity.res_id = res_id;
-
 			// 设置父物体
 			GameObject parent = entity.gameObject;
 			if (!parent.activeSelf)
@@ -111,17 +109,10 @@ namespace Game
 			parent.transform.position = bornPos;
 			parent.transform.rotation = Quaternion.Euler(0, orientation, 0);
 
-			entity.aoiId = aoiId;
-			entity.onBodyCreate = null;
-			entity.sceneid = sceneid;
-			entity.entityType = entityType;
+			entity.Init(sceneid, aoiId, resId, entityType, onBodyCreated);
 			// 把实体放到容器中
-
 			entityBehaviors.Add(aoiId, entity);
 			entityBehaviorsQueue.AddFirst(entity);
-
-
-			entity.onBodyCreate = onBodyCreated;
 
 			return entity;
 		}
@@ -131,19 +122,19 @@ namespace Game
 		private static async void CreateBody(EntityBehavior entity)
 		{
 			entity.bodyLoading = true;
-			int uid = entity.aoiId;
+			int uid = entity.AoiId;
 			ModelConfig config;
-			if (!Id2ModelCondig.TryGetValue(entity.res_id, out config))
+			if (!Id2ModelCondig.TryGetValue(entity.ResId, out config))
 				return;
 			var obj = await ResourceManager.LoadPrefabFromePool(config.Resource);
 			if (!obj) return;
-			if (entity == null || uid != entity.aoiId || entity.bodyLoading == false)
+			if (entity == null || uid != entity.AoiId || entity.bodyLoading == false)
 			{
 				ResourceManager.RecyclePrefab(obj);
 				return;
 			}
 
-			EntityBehavior p = GetEntity(entity.aoiId);
+			EntityBehavior p = GetEntity(entity.AoiId);
 			if (p != null && p != entity)
 			{
 				Debug.LogError("这个错误可以无视 保留查看而已 entity create error");
@@ -187,13 +178,10 @@ namespace Game
 				}
 				else
 				{
-					if (entity.onBodyCreate != null)
+					if (entity.OnBodyCreate != null)
 					{
-						entity.onBodyCreate(new EntityComp[] {
-							entity.GetEntityComp<AnimComp>(),
-							entity.GetEntityComp<RotateComp>(),
-						});
-						entity.onBodyCreate = null;
+						entity.OnBodyCreate(entity.CompTable);
+						entity.OnBodyCreate = null;
 					}
 					else
 					{
@@ -212,7 +200,7 @@ namespace Game
 			while (Enumerator != null)
 			{
 				EntityBehavior entity = Enumerator.Value;
-				if (entity.Body != null && entity.onBodyCreate == null)
+				if (entity.Body != null && entity.OnBodyCreate == null)
 					entity.FixedUpdate();
 
 				Enumerator = Enumerator.Next;

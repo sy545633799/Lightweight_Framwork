@@ -17,8 +17,12 @@ namespace Game {
 		{
 			Type type = typeof(T);
 
-			EntityComp entitycomp = EntityCompFactory.Instance.Get<T>(aoiId) as EntityComp;
-			entitiesCompList.Add(type, entitycomp);
+			EntityComp entitycomp = null;
+			if (!entitiesCompList.TryGetValue(type, out entitycomp))
+			{
+				entitycomp = EntityCompFactory.Instance.Get<T>(aoiId) as EntityComp;
+				entitiesCompList.Add(type, entitycomp);
+			}
 			return entitycomp;
 		}
 
@@ -50,7 +54,7 @@ namespace Game {
 			}
 			EntityComp comp = entitiesCompList[type];
 			comp.Remove();
-			EntityCompFactory.Instance.Recycle(aoiId, comp);
+			EntityCompFactory.Instance.Recycle(AoiId, comp);
 			entitiesCompList.Remove(type);
 		}
 
@@ -66,29 +70,32 @@ namespace Game {
 
 		public void InitComp(bool isBodyCreated)
 		{
-			switch (entityType)
+
+			AddEntityComp<NameComp>(AoiId);
+			switch (EntityType)
 			{
 				case 1://hero
-					AddEntityComp<AnimComp>(aoiId);
-					AddEntityComp<InputComp>(aoiId);
-					AddEntityComp<RotateComp>(aoiId);
-					AddEntityComp<NavComp>(aoiId);
-					AddEntityComp<MoveComp>(aoiId);
-					AddEntityComp<SyncStatusComp>(aoiId);
-
-					AddEntityComp<SyncTransComp>(aoiId);
+					AddEntityComp<HUDComp>(AoiId);
+					AddEntityComp<AnimComp>(AoiId);
+					AddEntityComp<InputComp>(AoiId);
+					AddEntityComp<RotateComp>(AoiId);
+					AddEntityComp<NavComp>(AoiId);
+					AddEntityComp<MoveComp>(AoiId);
+					AddEntityComp<SyncStatusComp>(AoiId);
+					AddEntityComp<SyncTransComp>(AoiId);
 					break;
 				case 2: //player
-					AddEntityComp<AnimComp>(aoiId);
-					AddEntityComp<RotateComp>(aoiId);
-					AddEntityComp<SyncTransComp>(aoiId);
-					AddEntityComp<SyncStatusComp>(aoiId);
+					AddEntityComp<HUDComp>(AoiId);
+					AddEntityComp<AnimComp>(AoiId);
+					AddEntityComp<RotateComp>(AoiId);
+					AddEntityComp<SyncTransComp>(AoiId);
+					AddEntityComp<SyncStatusComp>(AoiId);
 					break;
 				case 3: //monster
-					AddEntityComp<AnimComp>(aoiId);
-					AddEntityComp<RotateComp>(aoiId);
-					AddEntityComp<SyncTransComp>(aoiId);
-					AddEntityComp<SyncStatusComp>(aoiId);
+					AddEntityComp<AnimComp>(AoiId);
+					AddEntityComp<RotateComp>(AoiId);
+					AddEntityComp<SyncTransComp>(AoiId);
+					AddEntityComp<SyncStatusComp>(AoiId);
 					break;
 				case 4: //plant
 					break;

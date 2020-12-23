@@ -1,8 +1,7 @@
----@class Demo_1 
 local Demo_1 = {
 	[10101] = {
 		Type = 3,
-		ModelID = 10001,
+		ConfigId = 10101,
 		RanRadius = 10,
 		PosX = -20.0,
 		PosY = -1.15,
