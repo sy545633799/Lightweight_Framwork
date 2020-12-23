@@ -1,6 +1,6 @@
 local msg = [[
 
-.mainAttrib {
+.role_attrib {
 	name 0 : string
 	job 1 : integer
 	level 2 : integer
@@ -20,6 +20,22 @@ local msg = [[
 	modelId 16 : integer
 }
 
+.role_status {
+    str 0 : double
+    mag 1 : double
+    dex 2 : double
+    max_hp 3 : double
+    hp 4 : double
+    max_mp 5 : double
+    mp 6 : double
+    atn 7 : double
+    int 8 : double
+    def 9 : double
+    res 10 : double
+    spd 11 : double
+    crt 12 : double
+}
+
 .equipExtraAttrib {
 	key 0 : integer
 	value 1 : integer
@@ -36,13 +52,14 @@ local msg = [[
 
 .roleInfo {
     roleId 0 : string
-    attrib 1 : mainAttrib
-	itemPackage 2 : *item(id)
+    attrib 1 : role_attrib
+    status 2 : role_status
+	itemPackage 3 : *item(id)
 }
 
 .roleAttrib {
     roleId 0 : string
-    attrib 1 : mainAttrib
+    attrib 1 : role_attrib
 }
 
 .req_role_list {
@@ -71,11 +88,17 @@ local msg = [[
 	roleInfo 1 : roleInfo
 }
 
+
 .sync_attrib {
     paramId 0 : string
     type 1 : integer
     name 2 : string
     modelId 3 : integer
+}
+
+.aoiAttrib {
+    aoiId 0 : integer
+    attrib 1 : sync_attrib
 }
 
 .sync_trans {
@@ -85,25 +108,8 @@ local msg = [[
     forward 3 :double
 }
 
-.sync_status {
-    str 0 : double
-    mag 1 : double
-    dex 2 : double
-    max_hp 3 : double
-    hp 4 : double
-    max_mp 5 : double
-    mp 6 : double
-    atn 7 : double
-    int 8 : double
-    def 9 : double
-    res 10 : double
-    spd 11 : double
-    crt 12 : double
-}
-
-.aoiAttrib {
-    aoiId 0 : integer
-    attrib 1 : sync_attrib
+.c2s_sync_trans {
+    trans 0 : sync_trans
 }
 
 .aoiTrans {
@@ -111,9 +117,23 @@ local msg = [[
     trans 1 : sync_trans
 }
 
+.s2c_aoi_trans {
+    list 0 : *aoiTrans(aoiId)
+}
+
+.sync_status {
+    max_hp 0 : double
+    hp 1 : double
+    is_crit 2 : boolean
+}
+
 .aoiStatus {
     aoiId 0 : integer
     status 1 : sync_status
+}
+
+.s2c_aoi_status {
+    list 0 : *aoiStatus(aoiId)
 }
 
 .aoiData {
@@ -127,10 +147,6 @@ local msg = [[
     aoi_map 1 : *aoiData(aoiId)
 }
 
-.c2s_sync_trans {
-    trans 0 : sync_trans
-}
-
 .s2c_create_entities{
     data 0 : *aoiData(aoiId)
 }
@@ -139,9 +155,7 @@ local msg = [[
     ids 0 : *integer
 }
 
-.s2c_aoi_trans {
-    list 0 : *aoiTrans(aoiId)
-}
+
 
 ]]
 

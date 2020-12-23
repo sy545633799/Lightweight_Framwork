@@ -1,6 +1,6 @@
 local msg = [[
 
-.mainAttrib {
+.role_attrib {
 	name 0 : string
 	job 1 : integer
 	level 2 : integer
@@ -20,6 +20,22 @@ local msg = [[
 	modelId 16 : integer
 }
 
+.role_status {
+    str 0 : double
+    mag 1 : double
+    dex 2 : double
+    max_hp 3 : double
+    hp 4 : double
+    max_mp 5 : double
+    mp 6 : double
+    atn 7 : double
+    int 8 : double
+    def 9 : double
+    res 10 : double
+    spd 11 : double
+    crt 12 : double
+}
+
 .equipExtraAttrib {
 	key 0 : integer
 	value 1 : integer
@@ -36,13 +52,14 @@ local msg = [[
 
 .roleInfo {
     roleId 0 : string
-    attrib 1 : mainAttrib
-	itemPackage 2 : *item(id)
+    attrib 1 : role_attrib
+    status 2 : role_status
+	itemPackage 3 : *item(id)
 }
 
 .roleAttrib {
     roleId 0 : string
-    attrib 1 : mainAttrib
+    attrib 1 : role_attrib
 }
 
 .req_role_list {
@@ -71,6 +88,8 @@ local msg = [[
 	roleInfo 1 : roleInfo
 }
 
+
+
 .sync_attrib {
     paramId 0 : string
     type 1 : integer
@@ -85,22 +104,6 @@ local msg = [[
     forward 3 :double
 }
 
-.sync_status {
-    str 0 : double
-    mag 1 : double
-    dex 2 : double
-    max_hp 3 : double
-    hp 4 : double
-    max_mp 5 : double
-    mp 6 : double
-    atn 7 : double
-    int 8 : double
-    def 9 : double
-    res 10 : double
-    spd 11 : double
-    crt 12 : double
-}
-
 .aoiAttrib {
     aoiId 0 : integer
     attrib 1 : sync_attrib
@@ -109,11 +112,6 @@ local msg = [[
 .aoiTrans {
     aoiId 0 : integer
     trans 1 : sync_trans
-}
-
-.aoiStatus {
-    aoiId 0 : integer
-    status 1 : sync_status
 }
 
 .aoiData {

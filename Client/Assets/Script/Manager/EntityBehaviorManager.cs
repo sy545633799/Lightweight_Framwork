@@ -40,7 +40,11 @@ namespace Game
 		/// <typeparam name="EntityBehavior"></typeparam>
 		/// <returns></returns>
 		private static LinkedList<EntityBehavior> entityBehaviorsQueue = new LinkedList<EntityBehavior>();
-		
+
+		///// <summary>
+		///// 
+		///// </summary>
+		//public static RecyclePool<LuaBase>   { get; private set; }
 
 		private static GameObject m_EntityContainer;
 		private static GameObject entityContainer
