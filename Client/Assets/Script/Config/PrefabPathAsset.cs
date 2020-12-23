@@ -11,9 +11,9 @@ using UnityEngine;
 
 namespace Game {
 
-	public class PrefabPathAsset : ConfigBaseAsset<PrefabPathCondig> { }
+	public class PrefabPathAsset : ConfigBaseAsset<PrefabPathConfig> { }
 	[System.Serializable]
-	public class PrefabPathCondig : ConfigBase
+	public class PrefabPathConfig : ConfigBase
 	{
 		public string Path;
 	}

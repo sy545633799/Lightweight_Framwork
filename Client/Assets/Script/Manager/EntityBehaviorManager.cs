@@ -17,10 +17,6 @@ namespace Game
 	public class EntityBehaviorManager
 	{
 		/// <summary>
-		/// 模型信息
-		/// </summary>
-		private static Dictionary<int, ModelConfig> Id2ModelCondig = new Dictionary<int, ModelConfig>();
-		/// <summary>
 		/// 实体对象池
 		/// </summary>
 		/// <typeparam name="EntityBehavior"></typeparam>
@@ -57,15 +53,9 @@ namespace Game
 			}
 		}
 
-		public async static Task Init()
+		public static void Init()
 		{
-			ModelConfigAsset modelConfig = await ResourceManager.LoadAsset("Assets/Art/Assets/Config/ModelConfig.asset") as ModelConfigAsset;
-			ModelConfig[] configs = modelConfig.Configs;
-			for (int i = 0; i < configs.Length; i++)
-			{
-				int id = configs[i].ID;
-				Id2ModelCondig.Add(id, configs[i]);
-			}
+			
 		}
 
 		private static EntityBehavior AllocEntity()
@@ -123,8 +113,8 @@ namespace Game
 		{
 			entity.bodyLoading = true;
 			int uid = entity.AoiId;
-			ModelConfig config;
-			if (!Id2ModelCondig.TryGetValue(entity.ResId, out config))
+			ModelConfig config = ModelConfigAsset.Get(entity.ResId);
+			if (config == null)
 				return;
 			var obj = await ResourceManager.LoadPrefabFromePool(config.Resource);
 			if (!obj) return;

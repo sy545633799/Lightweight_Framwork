@@ -17,7 +17,7 @@ namespace Game
 	{
 		private static s2c_aoi_trans sync_Status = new s2c_aoi_trans();
 
-		public async static Task Init()
+		public static void Init()
 		{
 			TcpManager.AddListener(msgId.s2c_aoi_trans, Sync_Status);
 		}

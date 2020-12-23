@@ -18,16 +18,16 @@ namespace Game.Editor {
 		public static void Build()
 		{
 			PrefabPathAsset configAsset;
-			List<PrefabPathCondig> configs;
+			List<PrefabPathConfig> configs;
 			if (File.Exists(PrefabListPath))
 			{
 				configAsset = AssetDatabase.LoadAssetAtPath<PrefabPathAsset>(PrefabListPath);
-				configs = new List<PrefabPathCondig>(configAsset.Configs);
+				configs = new List<PrefabPathConfig>(configAsset.Configs);
 			}
 			else
 			{
 				configAsset = new PrefabPathAsset();
-				configs = new List<PrefabPathCondig>();
+				configs = new List<PrefabPathConfig>();
 			}
 
 			DirectoryInfo root = new DirectoryInfo(Application.dataPath + "/Art/SceneRes");
@@ -48,7 +48,7 @@ namespace Game.Editor {
 				path = path.Replace(Application.dataPath, "Assets");
 				if (configs.Find(p => p.Path == path) == null)
 				{
-					PrefabPathCondig config = new PrefabPathCondig();
+					PrefabPathConfig config = new PrefabPathConfig();
 					config.ID = index++;
 					config.Path = path;
 					configs.Add(config);

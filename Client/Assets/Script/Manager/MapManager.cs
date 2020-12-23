@@ -51,20 +51,16 @@ namespace Game {
 		private static CommandBuffer cmdBuffer;
 		private static Dictionary<int, string> Id2Path = new Dictionary<int, string>();
 
-		public async static Task Init()
+		public static void Init()
 		{
 			cmdBuffer = new CommandBuffer();
 			m_Cam = Camera.main;
 			m_Cam.AddCommandBuffer(CameraEvent.BeforeForwardAlpha, cmdBuffer);
-
-			PrefabPathAsset audioConfig = await ResourceManager.LoadAsset("Assets/Art/Assets/Config/PrefabPathConfig.asset") as PrefabPathAsset;
-			PrefabPathCondig[] configs = audioConfig.Configs;
-			for (int i = 0; i < configs.Length; i++)
+			Dictionary<int, PrefabPathConfig> map = PrefabPathAsset.GetAll();
+			foreach (var item in map)
 			{
-				int id = configs[i].ID;
-				Id2Path.Add(id, configs[i].Path);
+				Id2Path.Add(item.Key, item.Value.Path);
 			}
-
 		}
 
 

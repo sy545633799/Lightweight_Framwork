@@ -38,28 +38,31 @@ namespace Game
 			//初始化zstring
 			using (zstring.Block()) { }
 
+			LaunchUI.Init();
 			List<Func<Task>> initFunctions = new List<Func<Task>>();
-			//launch
-			initFunctions.Add(LaunchUI.Init);
 			//config
 			initFunctions.Add(UILocationAsset.Refresh);
 			initFunctions.Add(UICodeTextAsset.Refresh);
 			initFunctions.Add(UINamesAsset.Refresh);
 			initFunctions.Add(AtlasConfigAsset.Refresh);
 			initFunctions.Add(UIConfigAsset.Refresh);
-			//manager
-			initFunctions.Add(SoundManager.Init);
-			initFunctions.Add(TcpManager.Init);
-			initFunctions.Add(MapManager.Init);
-			initFunctions.Add(EntityBehaviorManager.Init);
-			initFunctions.Add(AOIManager.Init);
+			initFunctions.Add(AudioConfigAsset.Refresh);
+			initFunctions.Add(PrefabPathAsset.Refresh);
+			initFunctions.Add(ModelConfigAsset.Refresh);
+			//setting
+			initFunctions.Add(HUDConfigAsset.Refresh);
 			for (int i = 0; i < initFunctions.Count; i++)
 			{
 				await initFunctions[i].Invoke();
 				LaunchUI.ShowProcess((float)(i + 1) / (float)initFunctions.Count * 0.5f);
 			}
 
-			await XLuaManager.Init();
+			SoundManager.Init();
+			TcpManager.Init();
+			MapManager.Init();
+			EntityBehaviorManager.Init();
+			AOIManager.Init();
+			XLuaManager.Init();
 			XLuaManager.Inject<GameSettings>("GameSettings", GameSettings);
 			XLuaManager.StartGame();
 			LuaLoadedTime = DateTime.UtcNow.Ticks;

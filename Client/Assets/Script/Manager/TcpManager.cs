@@ -90,7 +90,7 @@ namespace Game
 
 		public static long TimeStamp;
 
-		public static async Task Init()
+		public static void Init()
 		{
 			memStream = new MemoryStream();
 			reader = new BinaryReader(memStream);

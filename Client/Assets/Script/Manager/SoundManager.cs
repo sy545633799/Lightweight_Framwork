@@ -58,19 +58,12 @@ namespace Game
 		private static AudioSource m_BackMusicSource;
 		private static AudioSource m_SoundSource;
 		public static GameObject m_MainCameraTrans;
-		public async static Task Init()
+		public static void Init()
 		{
 			m_MainCameraTrans = GameObject.Find("MainCamera");
 			m_BackMusicSource = m_MainCameraTrans.AddComponent<AudioSource>();
 			m_SoundSource = m_MainCameraTrans.AddComponent<AudioSource>();
-
-			AudioConfigAsset audioConfig = await ResourceManager.LoadAsset("Assets/Art/Assets/Config/AudioConfig.asset") as AudioConfigAsset;
-			AudioConfig[] configs = audioConfig.Configs;
-			for (int i = 0; i < configs.Length; i++)
-			{
-				int id = configs[i].ID;
-				SoundConfigMap.Add(id, configs[i]);
-			}
+			SoundConfigMap = AudioConfigAsset.GetAll();
 		}
 
 		public static async void PlaySound(int SoundID, GameObject go = null)

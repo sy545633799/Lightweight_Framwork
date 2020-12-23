@@ -104,12 +104,12 @@ namespace Game.Editor {
 			}
 		}
 
-		private static List<PrefabPathCondig> m_PrefabList;
+		private static List<PrefabPathConfig> m_PrefabList;
 		private static int SearchPrefabIndex(string path)
 		{
 			if (m_PrefabList == null)
-				m_PrefabList = new List<PrefabPathCondig>(AssetDatabase.LoadAssetAtPath<PrefabPathAsset>(PrefabListPath).Configs);
-			PrefabPathCondig condig = m_PrefabList.Find(p => p.Path == path);
+				m_PrefabList = new List<PrefabPathConfig>(AssetDatabase.LoadAssetAtPath<PrefabPathAsset>(PrefabListPath).Configs);
+			PrefabPathConfig condig = m_PrefabList.Find(p => p.Path == path);
 			if (condig != null)
 				return condig.ID;
 			else

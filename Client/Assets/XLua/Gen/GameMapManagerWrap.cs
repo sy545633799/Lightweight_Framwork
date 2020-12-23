@@ -88,19 +88,16 @@ namespace XLua.CSObjectWrap
         {
 		    try {
             
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
             
             
                 
                 {
                     
-                        System.Threading.Tasks.Task gen_ret = Game.MapManager.Init(  );
-                        translator.Push(L, gen_ret);
+                    Game.MapManager.Init(  );
                     
                     
                     
-                    return 1;
+                    return 0;
                 }
                 
             } catch(System.Exception gen_e) {

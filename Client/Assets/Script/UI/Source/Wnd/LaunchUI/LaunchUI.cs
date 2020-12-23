@@ -15,7 +15,7 @@ namespace Game {
 	{
 		private static GameObject mLauchUI;
 		private static Slider mProcess;
-		public static async Task Init()
+		public static void Init()
 		{
 			mLauchUI = GameObject.Find("UIRoot/LaunchUI");
 			mProcess = mLauchUI.transform.Find("Root/Process").GetComponent<Slider>();

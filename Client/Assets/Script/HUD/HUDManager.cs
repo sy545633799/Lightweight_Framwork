@@ -1,6 +1,6 @@
 // ========================================================
 // des：
-// author: 
+// author: shenyi
 // time：2020-12-21 17:54:44
 // version：1.0
 // ========================================================
@@ -61,20 +61,17 @@ namespace Game {
 		public HUDManager Instance { get; private set; }
 		public SpriteAtlas Atlas { get; private set; }
 		public CommandBuffer Command { get; private set; }
-		
-		[Header("跳字的随机偏移半径")]
-		public float m_offsetRandomRangeR;
-		[Header("相机坐标空间下的Render深度(值越大飘字越小)"), Range(1f, 10f)]
-		public float m_viewportRenderDepth;
-		//[Header("飘字动画相关设置")]
-		//public Dictionary<string, HUDNumberAnimation> m_HUDNumberAnimationAttributes;
-		//[Header("飘字网格相关设置")]
-		//public Dictionary<HUDNumberType, HUDNumberAttributes> m_HUDNumberAttributes;
+		private HUDConfigAsset Config;
+
+		[Header("配置加载路径")]
+		public string SettingPath ;
 
 		private void Awake()
 		{
 			Instance = this;
 			Command = new CommandBuffer();
+			if (string.IsNullOrEmpty(SettingPath))
+				Debug.LogError("请设置HUDConfig加载路径");
 			
 		}
 

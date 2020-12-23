@@ -36,7 +36,7 @@ namespace Game
 		private static Stopwatch sw = new Stopwatch();
 #endif
 
-		public static async Task Init()
+		public static void Init()
         {
 			LuaEnv.AddIniter(Init);
 			InitLuaEnv();
