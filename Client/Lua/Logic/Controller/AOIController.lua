@@ -27,21 +27,25 @@ function AOIController:CreateEntities(args)
 
     local roleId  = RoleModel.roleId
     for aoidId, aoiData in pairs(args) do
-        local entity
-        if aoiData.attrib.roleId == roleId then
-            aoiData.attrib.type = EntityType.hero
-            entity = Hero.New(aoiData)
-            MainCamera:SetTarget(entity.behavior.transform)
-        elseif aoiData.attrib.type == EntityType.player then
-            entity = Player.New(aoiData)
+        if self.entites_map[aoidId] then
+            logError("已经创建:" .. aoiData.aoiId)
         else
-            local element = scene_config[aoiData.attrib.elementId]
-            if aoiData.attrib.type == EntityType.monster then
-                entity = Monster.New(aoiData, element)
+            local entity
+            if aoiData.attrib.roleId == roleId then
+                aoiData.attrib.type = EntityType.hero
+                entity = Hero.New(aoiData)
+                MainCamera:SetTarget(entity.behavior.transform)
+            elseif aoiData.attrib.type == EntityType.player then
+                entity = Player.New(aoiData)
+            else
+                local element = scene_config[aoiData.attrib.elementId]
+                if aoiData.attrib.type == EntityType.monster then
+                    entity = Monster.New(aoiData, element)
+                end
             end
+            self.entites_map[aoidId] = entity
         end
 
-        self.entites_map[aoidId] = entity
     end
 end
 

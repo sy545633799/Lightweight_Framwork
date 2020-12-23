@@ -14,7 +14,9 @@ AOIAttrib = {
 AOIStatus = {
     max_hp = 1,
     hp = 2,
-    is_crit = 3,
+    max_mp = 3,
+    mp = 4,
+    is_crit = 5,
     ---服务端用，标记有没有修改
     dirty = false
 }
@@ -38,4 +40,7 @@ AOIData =
     attrib = "attrib",
     ---@type AOITrans
     trans = "trans",
+    ---@type AOIStatus
+    status = "trans",
+    dirty = false
 }

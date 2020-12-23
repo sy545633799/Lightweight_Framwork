@@ -31,6 +31,7 @@ local function update()
 
         local entity_map = entityMgr:get_sync_info()
         if table.size(entity_map) > 0 then
+            --TODO: 序列化完之后再发？
             channel:publish(event_names.scene.s2c_aoi_trans, entity_map)
         end
 

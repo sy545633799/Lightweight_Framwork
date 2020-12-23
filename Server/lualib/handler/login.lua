@@ -88,10 +88,10 @@ local function recvChannel(channel, source, eventId, data)
             rpc:sendmessage(NetMsgId.s2c_delete_entities, { ids = data })
         end
     elseif eventId == event_names.scene.s2c_aoi_trans then
-        --if data[user.aoiId] then
-        --    user.roleInfo.trans = data[user.aoiId]
-        --    user.roleInfo.trans.aoiId = nil
-        --end
+        if data[user.aoiId] then
+            user.roleInfo.trans = data[user.aoiId].trans
+            data[user.aoiId] = nil
+        end
         if table.size(data) > 0 then
             rpc:sendmessage(NetMsgId.s2c_aoi_trans, { list = data })
         end
@@ -118,6 +118,7 @@ function RPC:req_enter_game(args)
 end
 
 function RPC:req_leave_game(args)
+
     user.channels["scene"]:unsubscribe()
     user.channels["scene"] = nil
     local ok = user.world_req.role_leave_game(user.roleInfo.roleId)
