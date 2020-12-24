@@ -19,5 +19,6 @@ namespace Game
 		pos_y = 2,
 		pos_z = 3,
 		forward = 4,
+		count = 5
 	}
 }

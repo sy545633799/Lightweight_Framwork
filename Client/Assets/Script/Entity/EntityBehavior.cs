@@ -112,12 +112,19 @@ namespace Game
 		/// <returns></returns>
 		public EntityBehavior Downcast()
         {
+			for (int index = 1; index < (int)AOTTransIndex.count; index++)
+				TransTable.Set(index, 0);
+			TransTable.Recycle();
+			TransTable = null;
+			for (int index = 1; index < (int)AOIStatusIndex.count; index++)
+				StatusTable.Set(index, 0);
 			StatusTable.Recycle();
 			StatusTable = null;
-			for (int index = 1; index <= (int)CompIndex.Count; index++)
+			for (int index = 1; index < (int)CompIndex.Count; index++)
 				CompTable.Set(index, 0);
 			CompTable.Recycle();
 			CompTable = null;
+
 			RemoveAllEntityComp();
 			if (body != null)
 			{

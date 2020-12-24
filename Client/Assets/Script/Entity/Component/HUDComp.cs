@@ -16,7 +16,9 @@ namespace Game
 		{
 			LuaTable table = behavior.StatusTable;
 
-			Debug.LogError($"{table.Get<int, int>(1)}:{table.Get<int, int>(2)}:{table.Get<int, int>(3)}:{table.Get<int, int>(4)}");
+			//Debug.LogError($"{table.Get<int, int>(1)}:{table.Get<int, int>(2)}:{table.Get<int, int>(3)}:{table.Get<int, int>(4)}");
+
+			
 		}
 
 

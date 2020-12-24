@@ -19,5 +19,6 @@ namespace Game
 		hp = 2,
 		max_mp = 3,
 		mp = 4,
+		count = 5
 	}
 }

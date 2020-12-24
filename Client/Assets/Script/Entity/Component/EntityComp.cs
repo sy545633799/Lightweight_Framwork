@@ -21,8 +21,6 @@ namespace Game
 		public virtual void OnFixedUpdate(float fixedDeltaTime) { }
 		public virtual void OnLateUpdate(float deltaTime) { }
 
-		
-
 		public void Add(EntityBehavior entity)
 		{
 			behavior = entity;
