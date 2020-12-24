@@ -68,6 +68,8 @@ namespace Game {
 			entitiesCompList.Clear();
 		}
 
+		
+
 		public void InitComp(bool isBodyCreated)
 		{
 
@@ -92,6 +94,7 @@ namespace Game {
 					AddEntityComp<SyncStatusComp>(AoiId);
 					break;
 				case 3: //monster
+					AddEntityComp<HUDComp>(AoiId);
 					AddEntityComp<AnimComp>(AoiId);
 					AddEntityComp<RotateComp>(AoiId);
 					AddEntityComp<SyncTransComp>(AoiId);

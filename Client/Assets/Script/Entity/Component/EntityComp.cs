@@ -14,7 +14,7 @@ namespace Game
 
 	public class EntityComp : RecycleObject<EntityComp>
 	{
-		protected virtual int compIndex => CompIndex.None;
+		protected virtual CompIndex compIndex => CompIndex.None;
 		protected EntityBehavior behavior;
 
 		public virtual void OnUpdate(float deltaTime) { }
@@ -27,7 +27,7 @@ namespace Game
 		{
 			behavior = entity;
 			if (compIndex > CompIndex.None)
-				behavior.CompTable.Set(compIndex, this);
+				behavior.CompTable.Set((int)compIndex, this);
 			OnAdd();
 		}
 		public virtual void OnAdd() { }

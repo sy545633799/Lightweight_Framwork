@@ -165,6 +165,7 @@ local msg = [[
     aoiId 0 : integer
     attrib 1 : sync_attrib
     trans 2 : sync_trans
+    status 3 : sync_status
 }
 
 .ack_enter_game {

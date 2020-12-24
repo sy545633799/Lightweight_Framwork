@@ -16,12 +16,11 @@ AOIStatus = {
     hp = 2,
     max_mp = 3,
     mp = 4,
-    is_crit = 5,
     ---服务端用，标记有没有修改
     dirty = false
 }
 
----@class AOITrans
+------@class AOITrans
 AOITrans = {
     ---状态
     pos_x = 1,
@@ -32,15 +31,14 @@ AOITrans = {
     dirty = false
 }
 
----@class AOIData
+------@class AOIData
 AOIData =
 {
-    aoiId = "aoiId",
+    aoiId = 1,
     ---@type AOIAttrib
-    attrib = "attrib",
+    attrib = 2,
     ---@type AOITrans
-    trans = "trans",
+    trans = 3,
     ---@type AOIStatus
-    status = "trans",
-    dirty = false
+    status = 4,
 }

@@ -14,6 +14,7 @@ function player:ctor(aoiId, roleInfo)
     self.aoiData.trans = roleInfo.trans
     self.aoiData.trans.dirty = false
     ---状态
+    self.aoiData.status = roleInfo.status
 end
 
 ---@param args Sync_Trans

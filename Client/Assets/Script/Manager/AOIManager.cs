@@ -33,6 +33,10 @@ namespace Game
 					EntityComp comp = null;
 					if (comps.TryGetValue(aoiTtrans.aoiId, out comp))
 						(comp as SyncTransComp).Sync(aoiTtrans);
+
+					EntityBehavior behavior = EntityBehaviorManager.GetEntity(aoiTtrans.aoiId);
+					if (behavior != null)
+						behavior.SetEntityTrans(aoiTtrans);
 				}
 			}
 			catch (Exception e)

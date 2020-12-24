@@ -157,7 +157,7 @@ namespace Game
 
 			if (m_showVertical)
 			{
-				#region �Զ������
+				#region 
 				float x = m_rectTransform.sizeDelta.x / 2;
 				float y = m_rectTransform.sizeDelta.y / 2;
 

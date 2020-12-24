@@ -10,7 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc3d38545e7a86d4cbc055ee98cf6e6c, type: 3}
-  m_Name: HUDConfig
+  m_Name: HUDConfigAsset
   m_EditorClassIdentifier: 
-  m_offsetRandomRangeR: 0
-  m_viewportRenderDepth: 1
+  Atlas: {fileID: 0}
+  OffsetRandomRangeR: 1
+  ViewportRenderDepth: 0
+  HUDNumberAnimationAttributesList: []
+  HUDNumberAttributesList: []

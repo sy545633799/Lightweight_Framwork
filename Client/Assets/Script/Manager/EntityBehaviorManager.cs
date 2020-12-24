@@ -29,18 +29,13 @@ namespace Game
 		/// <typeparam name="string"></typeparam>
 		/// <typeparam name="EntityBehavior"></typeparam>
 		/// <returns></returns>
-		private static Dictionary<int, EntityBehavior> entityBehaviors = new Dictionary<int, EntityBehavior>();
+		private static Dictionary<long, EntityBehavior> entityBehaviors = new Dictionary<long, EntityBehavior>();
 		/// <summary>
 		/// 用于按照顺序遍历
 		/// </summary>
 		/// <typeparam name="EntityBehavior"></typeparam>
 		/// <returns></returns>
 		private static LinkedList<EntityBehavior> entityBehaviorsQueue = new LinkedList<EntityBehavior>();
-
-		///// <summary>
-		///// 
-		///// </summary>
-		//public static RecyclePool<LuaBase>   { get; private set; }
 
 		private static GameObject m_EntityContainer;
 		private static GameObject entityContainer
@@ -51,11 +46,6 @@ namespace Game
 				m_EntityContainer.transform.localScale = Vector3.one;
 				return m_EntityContainer;
 			}
-		}
-
-		public static void Init()
-		{
-			
 		}
 
 		private static EntityBehavior AllocEntity()
@@ -223,7 +213,7 @@ namespace Game
 		/// 通过uid删除指定的实体
 		/// </summary>
 		/// <param name="aoiId"></param>
-		public static void DestroyEntity(int aoiId)
+		public static void DestroyEntity(long aoiId)
 		{
 			if (entityBehaviors.ContainsKey(aoiId))
 			{
@@ -243,13 +233,13 @@ namespace Game
 		/// <param name="uid"></param>
 		public static void DestroyAllEntity()
 		{
-			List<int> ids = new List<int>();
+			List<long> ids = new List<long>();
 			foreach (var item in entityBehaviors)
 				ids.Add(item.Key);
 			ids.ForEach(p => DestroyEntity(p));
 		}
 
-		public static EntityBehavior GetEntity(int uid)
+		public static EntityBehavior GetEntity(long uid)
 		{
 			EntityBehavior entity = null;
 			entityBehaviors.TryGetValue(uid, out entity);

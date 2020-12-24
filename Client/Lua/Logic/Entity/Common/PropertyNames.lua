@@ -14,7 +14,8 @@ AOIAttrib = {
 AOIStatus = {
     max_hp = 1,
     hp = 2,
-    is_crit = 3,
+    max_mp = 3,
+    mp = 4,
     ---服务端用，标记有没有修改
     dirty = false
 }
@@ -33,9 +34,11 @@ AOITrans = {
 ------@class AOIData
 AOIData =
 {
-    aoiId = "aoiId",
+    aoiId = 1,
     ---@type AOIAttrib
-    attrib = "attrib",
+    attrib = 2,
     ---@type AOITrans
-    trans = "trans",
+    trans = 3,
+    ---@type AOIStatus
+    status = 4
 }

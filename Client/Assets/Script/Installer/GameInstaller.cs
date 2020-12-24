@@ -60,7 +60,6 @@ namespace Game
 			SoundManager.Init();
 			TcpManager.Init();
 			MapManager.Init();
-			EntityBehaviorManager.Init();
 			AOIManager.Init();
 			XLuaManager.Init();
 			XLuaManager.Inject<GameSettings>("GameSettings", GameSettings);

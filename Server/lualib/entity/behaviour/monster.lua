@@ -14,8 +14,23 @@ function monster:ctor(aoiId, elementId, element)
     attrib.elementId = elementId
     attrib.modelId = self.monsterConfig.ModelId
     self.aoiData.attrib = attrib
+    ---trans
     self.aoiData.trans = {}
     self:random_pos()
+    ---status
+    self.aoiData.status =
+    {
+        max_hp = self.monsterConfig.HP,
+        hp = self.monsterConfig.HP,
+        max_mp = self.monsterConfig.MP,
+        mp = self.monsterConfig.MP,
+        atn = self.monsterConfig.STR,
+        int = self.monsterConfig.INT,
+        def = self.monsterConfig.DEF,
+        res = self.monsterConfig.RES,
+        spd = self.monsterConfig.SPD,
+        crt = self.monsterConfig.CRT,
+    }
 end
 
 function monster:random_pos()

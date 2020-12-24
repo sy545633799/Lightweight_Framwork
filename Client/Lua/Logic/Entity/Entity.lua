@@ -9,6 +9,9 @@ require("Logic/Entity/Common/CompIndex")
 Entity = BaseClass("Entity", Updatable)
 -----------------------------------------------------------
 local compIndex = CompIndex
+local aoiTrans = AOITrans
+local aoiStatus = AOIStatus
+
 ---@param aoiData AOIData
 function Entity:ctor(aoiData)
     local sceneId = RoleModel.RoleAttrib.sceneId
@@ -39,6 +42,20 @@ function Entity:ctor(aoiData)
     self.gameObject = self.behavior.gameObject
     ---@type UnityEngine.Transform
     self.transform = self.behavior.transform
+    ---共享位置表
+    local transTab = self.behavior.TransTable
+    transTab[aoiTrans.pos_x] = aoiData.trans.pos_x
+    transTab[aoiTrans.pos_y] = aoiData.trans.pos_y
+    transTab[aoiTrans.pos_z] = aoiData.trans.pos_z
+    transTab[aoiTrans.forward] = aoiData.trans.forward
+    self.aoiData.trans = transTab
+    ---共享状态表
+    local statusTab = self.behavior.StatusTable
+    statusTab[aoiStatus.max_hp] = aoiData.status.max_hp
+    statusTab[aoiStatus.hp] = aoiData.status.hp
+    statusTab[aoiStatus.max_mp] = aoiData.status.max_mp
+    statusTab[aoiStatus.mp] = aoiData.status.mp
+    self.aoiData.status = statusTab
 end
 
 ---@ 实体元素创建的时候回调

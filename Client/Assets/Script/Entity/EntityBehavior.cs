@@ -14,13 +14,14 @@ using XLua;
 
 namespace Game
 {
-	public partial class EntityBehavior : EventObject, IMonoPoolObject<EntityBehavior> 
-    {
-		
+	public partial class EntityBehavior : EventObject, IMonoPoolObject<EntityBehavior>
+	{
+
 		private static string RecycleName = "objRecyle";
 		private static Vector3 OnRecylePos = new Vector3(-888f, -888f, -888f);
 		private static RecyclePool<LuaBase> m_CompTablePool = new RecyclePool<LuaBase>(() => XLuaManager.GetLuaEnv().NewTable());
 		private static RecyclePool<LuaBase> m_StatusTablePool = new RecyclePool<LuaBase>(() => XLuaManager.GetLuaEnv().NewTable());
+		private static RecyclePool<LuaBase> m_TransTablePool = new RecyclePool<LuaBase>(() => XLuaManager.GetLuaEnv().NewTable());
 
 		[Header("加速")]
 		public float Acceleration = 5.0f;
@@ -33,9 +34,10 @@ namespace Game
 		public float JumpSpeed = 0.1f;
 		public float MaxFallSpeed = 0.1f;
 
-		
+
 		public LuaTable StatusTable { get; private set; }
 		public LuaTable CompTable { get; private set; }
+		public LuaTable TransTable { get; private set; }
 		public Action<LuaTable> OnBodyCreate { get; set; }
 		private Dictionary<Type, EntityComp> entitiesCompList = new Dictionary<Type, EntityComp>();
 
@@ -48,18 +50,19 @@ namespace Game
 			OnBodyCreate = onBodycreated;
 			StatusTable = m_StatusTablePool.Alloc() as LuaTable;
 			CompTable = m_CompTablePool.Alloc() as LuaTable;
+			TransTable = m_TransTablePool.Alloc() as LuaTable;
 		}
 
-		public void Update () {
+		public void Update() {
 			float fUpdateTime = Time.deltaTime;
-			var Enumerator = entitiesCompList.GetEnumerator ();
-			while (Enumerator.MoveNext ()) {
-				Enumerator.Current.Value.OnUpdate (fUpdateTime * logicSpeed);
+			var Enumerator = entitiesCompList.GetEnumerator();
+			while (Enumerator.MoveNext()) {
+				Enumerator.Current.Value.OnUpdate(fUpdateTime * logicSpeed);
 			}
-            foreach (EntityComp entitycmp in entitiesCompList.Values)
-            {
-                entitycmp.OnUpdate(fUpdateTime * logicSpeed);
-            }
+			foreach (EntityComp entitycmp in entitiesCompList.Values)
+			{
+				entitycmp.OnUpdate(fUpdateTime * logicSpeed);
+			}
 
 			if (Controller != null)
 			{
@@ -77,10 +80,10 @@ namespace Game
 
 		}
 
-		public void FixedUpdate () {
-			var Enumerator = entitiesCompList.GetEnumerator ();
-			while (Enumerator.MoveNext ()) {
-				Enumerator.Current.Value.OnFixedUpdate (Time.fixedDeltaTime);
+		public void FixedUpdate() {
+			var Enumerator = entitiesCompList.GetEnumerator();
+			while (Enumerator.MoveNext()) {
+				Enumerator.Current.Value.OnFixedUpdate(Time.fixedDeltaTime);
 			}
 		}
 
@@ -93,6 +96,16 @@ namespace Game
 			}
 		}
 
+		public void SetEntityTrans(aoi_trans aoiTtrans)
+		{
+			
+		}
+
+		public void SetEntityStatus()
+		{
+			
+		}
+
 		/// <summary>
 		/// EntityBehavior回收进对象池时被调用
 		/// </summary>
@@ -101,7 +114,7 @@ namespace Game
         {
 			StatusTable.Recycle();
 			StatusTable = null;
-			for (int index = 1; index <= CompIndex.Count; index++)
+			for (int index = 1; index <= (int)CompIndex.Count; index++)
 				CompTable.Set(index, 0);
 			CompTable.Recycle();
 			CompTable = null;

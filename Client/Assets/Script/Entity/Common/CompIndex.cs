@@ -20,22 +20,19 @@ using System.Threading.Tasks;
 
 namespace Game
 { 
-	public class CompIndex
+	public enum CompIndex
 	{
-		public const int None = 0;
-		public const int Name = 1;
-		public const int HUD = 2;
-		public const int Anim = 3;
-		public const int Input = 4;
-		public const int Move = 5;
-		public const int Rotate = 6;
-		public const int Nav = 7;
-		public const int SyncState = 8;
-		public const int SyncTrans = 9;
+		None = 0,
+		Name = 1,
+		HUD = 2,
+		Anim = 3,
+		Input = 4,
+		Move = 5,
+		Rotate = 6,
+		Nav = 7,
+		SyncState = 8,
+		SyncTrans = 9,
 
-		/// <summary>
-		/// 总数
-		/// </summary>
-		public const int Count = 10;
+		Count = 10,
 	}
 }

@@ -16,7 +16,7 @@ namespace Game
 {
 	public class NameComp : EntityComp
 	{
-		protected override int compIndex => CompIndex.Name;
+		protected override CompIndex compIndex => CompIndex.Name;
 
 		public override void OnAdd()
 		{

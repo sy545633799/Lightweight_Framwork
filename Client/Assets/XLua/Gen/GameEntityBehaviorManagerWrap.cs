@@ -89,7 +89,7 @@ namespace XLua.CSObjectWrap
                 
                 {
                     
-                    Game.EntityBehaviorManager.Init(  );
+                    //Game.EntityBehaviorManager.Init(  );
                     
                     
                     
