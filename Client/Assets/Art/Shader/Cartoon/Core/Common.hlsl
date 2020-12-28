@@ -54,7 +54,7 @@ inline float3 ObjSpaceViewDir(in float4 vertex)
 inline half3 LookAtCamera(half3 positionOS)
 {
 	// //1.视口空间转剪裁空间
-	// //1) 如果乘以UNITY_MATRIX_M举证, 则面片必须正向放置, 好处是旋转90度后可以隐藏
+	// //1) 如果乘以UNITY_MATRIX_M矩阵, 则面片必须正向放置, 好处是旋转90度后可以隐藏
 	// float3 offset = mul((float3x3)UNITY_MATRIX_M,i.positionOS.xyz);//模型空间内的旋转缩放
 	// //2) 模型空间坐标
 	// float3 offset = i.positionOS.xyz;
