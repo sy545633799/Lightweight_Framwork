@@ -13,7 +13,7 @@ namespace Game {
 		where T : SettingBaseAsset<T>
 	{
 		private static T Instance;
-		public static async Task Refresh()
+		public static async Task Load()
 		{
 #if UNITY_EDITOR
 			string path = $"Assets/Art/Assets/Setting/{typeof(T).Name}.asset";

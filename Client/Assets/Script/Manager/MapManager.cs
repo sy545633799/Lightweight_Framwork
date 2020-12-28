@@ -256,7 +256,7 @@ namespace Game {
 			Name = null;
 		}
 
-		public static void Release ()
+		public static void Dispose ()
 		{
 			Cleanup();
 			m_Cam.RemoveCommandBuffer(CameraEvent.BeforeForwardAlpha, cmdBuffer);

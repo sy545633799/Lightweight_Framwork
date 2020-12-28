@@ -18,7 +18,7 @@ namespace Game
 
 			//Debug.LogError($"{table.Get<int, int>(1)}:{table.Get<int, int>(2)}:{table.Get<int, int>(3)}:{table.Get<int, int>(4)}");
 
-			
+
 		}
 
 

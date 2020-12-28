@@ -50,7 +50,7 @@ namespace Game
 			initFunctions.Add(PrefabPathAsset.Refresh);
 			initFunctions.Add(ModelConfigAsset.Refresh);
 			//setting
-			initFunctions.Add(HUDConfigAsset.Refresh);
+			initFunctions.Add(HUDConfigAsset.Load);
 			for (int i = 0; i < initFunctions.Count; i++)
 			{
 				await initFunctions[i].Invoke();
@@ -81,6 +81,7 @@ namespace Game
 			XLuaManager.Update();
 			TimeManager.Update();
 			EntityBehaviorManager.Update();
+			HUDManager.Update();
 		}
 
 		private void LateUpdate()
@@ -130,7 +131,8 @@ namespace Game
 			AOIManager.Dispose();
 			TcpManager.Dispose();
 			TimeManager.Dispose();
-			MapManager.Release();
+			MapManager.Dispose();
+			HUDManager.Dispose();
 			//why
 			await Task.Delay(1);
 		}

@@ -35,14 +35,11 @@ namespace Game {
 		public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
 		{
 			if (renderingData.cameraData.renderType != CameraRenderType.Base) return;
-			
-		//CommandBuffer cmd = HUDTitleInfo.HUDTitleRender.Instance.m_cmdBuffer;
-		//if (cmd != null)
-		//	context.ExecuteCommandBuffer(cmd);
-		//cmd = HUDNumberRender.Instance.s_cmdBuffer;
-		//if (cmd != null)
-		//	context.ExecuteCommandBuffer(cmd);
 
+			CommandBuffer cmd = HUDManager.Command;
+			if (cmd != null)
+				context.ExecuteCommandBuffer(cmd);
+			
 		}
 
 	}

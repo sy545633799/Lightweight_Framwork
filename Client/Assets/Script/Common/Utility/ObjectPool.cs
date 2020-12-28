@@ -15,7 +15,7 @@ namespace Game
 	public class ObjectPool<T> : IObjectPool
 	{
 		protected Func<T> Func;
-		protected Queue<T> m_UnusedObjects = new Queue<T>();
+		protected Queue<T> m_UnusedObjects = new Queue<T>(16);
 
 		public ObjectPool(Func<T> func, int initPoolSize = 0)
 		{
@@ -62,8 +62,12 @@ namespace Game
 		}
 	}
 
+	/// <summary>
+	/// 初始化接口, 回收处理接口
+	/// </summary>
 	public interface IDowncast
 	{
+		void OnAlloc();
 		void Downcast();
 	}
 
@@ -83,6 +87,9 @@ namespace Game
 		}
 	}
 
+	/// <summary>
+	/// Object主动调用回收接口
+	/// </summary>
 	public interface IRecycle: IDowncast
 	{
 		void Recycle();
@@ -97,12 +104,16 @@ namespace Game
 		{
 			objectPool = pool;
 		}
+
+		public virtual void OnAlloc(){}
 		public virtual void Downcast() { }
 
 		public void Recycle()
 		{
 			objectPool.Recycle((T)this);
 		}
+
+		
 	}
 
 
@@ -124,17 +135,19 @@ namespace Game
 
 		public override T Alloc()
 		{
+			T t;
 			if (m_UnusedObjects.Count > 0)
 			{
-				return m_UnusedObjects.Dequeue();
+				t = m_UnusedObjects.Dequeue();
 			}
 			else
 			{
-				T t = Func.Invoke();
-				if (null != t)
-					t.InitPool(this);
-				return t;
+				t = Func.Invoke();
+				t?.InitPool(this);
 			}
+			t?.OnAlloc();
+
+			return t;
 		}
 	}
 

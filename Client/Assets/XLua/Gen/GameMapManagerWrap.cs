@@ -365,7 +365,7 @@ namespace XLua.CSObjectWrap
                 
                 {
                     
-                    Game.MapManager.Release(  );
+                    Game.MapManager.Dispose(  );
                     
                     
                     
