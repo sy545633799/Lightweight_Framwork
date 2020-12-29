@@ -54,10 +54,34 @@ SpriteAtlas:
     - {fileID: 21300000, guid: f5a85b6d518a04543b8ccc8d5cc29e70, type: 3}
     - {fileID: 21300000, guid: f71acc6aeccb6e64b8060db41d218d6c, type: 3}
     - {fileID: 21300000, guid: 12321720d33cf4943a8995ba29894f82, type: 3}
-    totalSpriteSurfaceArea: 0
+    totalSpriteSurfaceArea: 807112
     bindAsDefault: 0
   m_MasterAtlas: {fileID: 0}
-  m_PackedSprites: []
-  m_PackedSpriteNamesToIndex: []
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 12321720d33cf4943a8995ba29894f82, type: 3}
+  - {fileID: 21300000, guid: 627e614093a1fa7479ce29ea2d6d5650, type: 3}
+  - {fileID: 21300000, guid: 453b42d046b94e54b95a43ac7a1d4fd4, type: 3}
+  - {fileID: 21300000, guid: 7fb261c1701421b438b45241d587987c, type: 3}
+  - {fileID: 21300000, guid: 92b29da3471b08248b2c7e4d2a362e23, type: 3}
+  - {fileID: 21300000, guid: 524c09c48a86c16489e48cec178ed81b, type: 3}
+  - {fileID: 21300000, guid: 26f5fa776c8a5d04b803fdc6b3f2c5dd, type: 3}
+  - {fileID: 21300000, guid: 2689bcb7354be5e4da1ea935e977731b, type: 3}
+  - {fileID: 21300000, guid: abad933a924cba84786418cb00176d2f, type: 3}
+  - {fileID: 21300000, guid: f71acc6aeccb6e64b8060db41d218d6c, type: 3}
+  - {fileID: 21300000, guid: 29e5b63bd588ecd4fb03ce3989d3aa35, type: 3}
+  - {fileID: 21300000, guid: f5a85b6d518a04543b8ccc8d5cc29e70, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - XN
+  - pinzhidi-0
+  - pinzhidi-3
+  - pinzhidi-2
+  - N
+  - pinzhidi-5
+  - pinzhi-di
+  - pinzhidi-4
+  - R
+  - SSR
+  - pinzhidi-1
+  - SR
   m_Tag: Qualty
   m_IsVariant: 0

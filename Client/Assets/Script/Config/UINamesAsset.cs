@@ -1,8 +1,12 @@
+using UnityEngine;
+
 namespace Game
 {
-	public class UINamesAsset : ConfigBaseAsset<UINames> {}
+	public class UINamesAsset : ConfigBaseAsset<UINames> { }
 	[System.Serializable]
 	public class UINames : LocationConfig
 	{
+
 	}
+
 }

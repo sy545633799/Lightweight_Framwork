@@ -46,10 +46,18 @@ SpriteAtlas:
     - {fileID: 21300000, guid: 9c4482985ef8d0b4891b571892437724, type: 3}
     - {fileID: 21300000, guid: 9192b4f184abab044a52cd074fb7cf30, type: 3}
     - {fileID: 21300000, guid: 386ccb501ca20ec459cbf503cf566928, type: 3}
-    totalSpriteSurfaceArea: 0
+    totalSpriteSurfaceArea: 40000
     bindAsDefault: 0
   m_MasterAtlas: {fileID: 0}
-  m_PackedSprites: []
-  m_PackedSpriteNamesToIndex: []
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 386ccb501ca20ec459cbf503cf566928, type: 3}
+  - {fileID: 21300000, guid: 9192b4f184abab044a52cd074fb7cf30, type: 3}
+  - {fileID: 21300000, guid: 9c4482985ef8d0b4891b571892437724, type: 3}
+  - {fileID: 21300000, guid: 428338ad6b7b3824eb247290fc5fc61a, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - zhujue_4
+  - zhujue_3
+  - zhujue_2
+  - zhujue_1
   m_Tag: Head
   m_IsVariant: 0

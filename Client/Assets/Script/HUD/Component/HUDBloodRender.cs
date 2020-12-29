@@ -20,6 +20,7 @@ namespace Game {
 			Sprite bg = HUDManager.GetSpritesByName("slider_bg");
 			PushSprite(bg, bg.rect.width, bg.rect.height, 0, 0);
 
+			
 			//	bloodMesh = PushSprite(HUDManager.GetSpritesByName("slider_yellow"), 156 * 0.5f - 10, 12 * 0.5f - 2, 0, 0);
 			//	shieldMesh = PushSprite(HUDManager.GetSpritesByName("slider_white"), 156 * 0.5f - 10, 12 * 0.5f - 2, 0, 0);
 		}

@@ -98,6 +98,7 @@ using System;
             void* pBuffer = GetBufferPointer();
 		
             // Get the header
+			
             ArrayHeader* header = (ArrayHeader*)pBuffer - 1;
 
             // Change the length

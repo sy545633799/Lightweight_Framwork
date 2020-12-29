@@ -64,14 +64,15 @@ namespace Game {
 			Command.Clear();
 			if (m_staticRenderList.Count > 0 || m_dynamicRenderList.Count > 0)
 			{
-				DepthSort(ref m_staticRenderList);
-				DepthSort(ref m_dynamicRenderList);
+				//DepthSort(ref m_staticRenderList);
+				//DepthSort(ref m_dynamicRenderList);
 				for (int i = 0; i < m_staticRenderList.Count; i++)
 				{
 					Texture _texture = m_staticRenderList.Count <= 0 ? m_dynamicRenderList[0].HUDSprite.texture : m_staticRenderList[0].HUDSprite.texture;
 					m_material.SetTexture("_MainTex", _texture);
 					Command.DrawMesh(m_staticRenderList[i].Merge(), Matrix4x4.identity, m_material);
 				}
+
 				if (m_disposeList.Count > 0)
 				{
 					for (int i = 0; i < m_disposeList.Count; i++)

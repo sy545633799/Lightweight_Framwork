@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc3d38545e7a86d4cbc055ee98cf6e6c, type: 3}
   m_Name: HUDConfigAsset
   m_EditorClassIdentifier: 
-  Atlas: {fileID: 0}
+  Atlas: {fileID: 4343727234628468602, guid: cb0d441f295e61c4d9dd994ccec91467, type: 2}
   OffsetRandomRangeR: 1
   ViewportRenderDepth: 0
   HUDNumberAnimationAttributesList: []
