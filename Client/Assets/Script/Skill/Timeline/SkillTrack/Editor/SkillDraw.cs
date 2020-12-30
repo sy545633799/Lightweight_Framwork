@@ -16,14 +16,10 @@ namespace Game.Editor {
 	
 	public class SkillDraw
 	{
-		[DrawGizmo(GizmoType.InSelectionHierarchy)]
-		static void MyGizmo(PlayableDirector playable, GizmoType gizmoType)
+		[DrawGizmo(GizmoType.NotInSelectionHierarchy | GizmoType.InSelectionHierarchy)]
+		private static void Draw(PlayableDirector director, GizmoType gizmoType)
 		{
-			//Gizmos.color = Color.red;   //绘制时颜色
-			//Gizmos.DrawSphere(Vector3.zero, 1);  //参数1绘制坐标，参数2绘制半径
-
-
-			PlayableAsset asset = playable.playableAsset;
+			PlayableAsset asset = director.playableAsset;
 			IEnumerable<PlayableBinding> bindings = asset.outputs;
 			foreach (var item in bindings)
 			{
@@ -32,9 +28,14 @@ namespace Game.Editor {
 				{
 					foreach (var item2 in skillTrack.GetClips())
 					{
-						var skillShot = item2.asset as SkillShot;
-						SkillShotPlayable shotPlayable = skillShot.template;
+						//Debug.LogError($"{playable.time} >= {item2.start}");
 						
+						if (director.time >= item2.start && director.time <= item2.end)
+						{
+							var skillShot = item2.asset as SkillShot;
+							SkillShotPlayable shotPlayable = skillShot.template;
+							shotPlayable.Shape?.DrawGizmos();
+						}
 					}
 				}
 			}

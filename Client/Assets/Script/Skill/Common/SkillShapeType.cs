@@ -1,18 +1,21 @@
 // ========================================================
 // des：
 // author: 
-// time：2020-12-15 13:07:11
+// time：2020-12-30 10:45:41
 // version：1.0
 // ========================================================
 
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Game {
-
-	public class UISkill : UIButton
+namespace Game
+{
+	public enum SkillShapeType
 	{
-		public UIImage Mask;
+		Circle = 1,
+		
 	}
 }

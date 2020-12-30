@@ -1,18 +1,18 @@
 // ========================================================
 // des：
 // author: 
-// time：2020-12-29 16:12:39
+// time：2020-12-30 11:37:33
 // version：1.0
 // ========================================================
 
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
-using Game;
+using UnityEngine;
 
 namespace Game.Editor {
-	public class SkillShotPlayableEditor : UnityEditor.Editor
+	[CustomEditor(typeof(SkillShot), true)]
+	public class SkillShotEditor : UnityEditor.Editor
 	{
 		SkillShot m_target;
 		private void OnEnable()
@@ -23,10 +23,12 @@ namespace Game.Editor {
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
+			//m_target.template.Condition = (SkillCondition)EditorGUILayout.EnumFlagsField("技能释放条件", m_target.template.Condition);
 
-			Debug.DrawLine(Vector3.one, Vector3.zero, Color.red);
+			//if (GUI.changed)
+			//	EditorUtility.SetDirty(target);
+			//serializedObject.ApplyModifiedProperties();
 		}
 
-		
 	}
 }

@@ -15,7 +15,8 @@ namespace Game
     public class SkillMixer : PlayableBehaviour
     {
         public GameObject m_GameObject;
-        public override void ProcessFrame(Playable playable, FrameData info, object playerData)
+
+		public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
             if (m_GameObject == null)
                 m_GameObject = (GameObject)playerData;;
@@ -27,6 +28,7 @@ namespace Game
                 float _weight = playable.GetInputWeight(i);
                 ScriptPlayable<SkillShotPlayable> _shotPlayable = (ScriptPlayable<SkillShotPlayable>)playable.GetInput(i);
                 SkillShotPlayable _shotbehaviour = _shotPlayable.GetBehaviour();
+				
                 float normalizedTime = (float)(_shotPlayable.GetTime() / _shotPlayable.GetDuration());
             }
         }
