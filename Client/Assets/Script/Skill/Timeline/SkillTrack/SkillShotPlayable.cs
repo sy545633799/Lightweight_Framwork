@@ -14,40 +14,59 @@ namespace Game
     [Serializable]
     public class SkillShotPlayable : PlayableBehaviour
     {
-		private GameObject m_GameObject;
-		public GameObject gameObject
-		{
-			get
-			{
-				return m_GameObject;
-			}
-			set
-			{
-				Path?.OnStart(value.transform);
-				m_GameObject = value;
-			}
-		}
+		[NonSerialized]
+		public PlayableGraph graph;
 
-		public SKillShotTargetType Target = SKillShotTargetType.Enemy;
-		public SkillShotSelectType Range = SkillShotSelectType.Single;
-		public SkillShotCastType Cast = SkillShotCastType.Once;
+		[Header("特效")]
+		public GameObject Effect;
+		[Header("技能施放初始偏移")]
+		public Vector3 Offset;
+		//[NonSerialized]
+		//[Header("自己")]
+		public ExposedReference<Transform> Self;
+		//[NonSerialized]
+		//[Header("目标")]
+		public ExposedReference<Transform> Target;
+		
+		public SKillShotTargetType TargetType = SKillShotTargetType.Enemy;
+		public SkillShotSelectType RangeType = SkillShotSelectType.Single;
+		public SkillShotCastType CastType = SkillShotCastType.Once;
 
 		public SkillPath Path = new LineSkillPath();
-		public SkillShape Shape = new CircleSkillShape();
+		public SkillShape Shape = new TriangleSkillShape();
 		public SkillSelector Selector;
+
+		private Vector3 direction;
+		private Transform m_Self;
+		private Transform m_Target;
+
+		public override void OnGraphStart(Playable playable)
+		{
+			base.OnGraphStart(playable);
+			m_Self = Self.Resolve(graph.GetResolver());
+			m_Target = Target.Resolve(graph.GetResolver());
+			direction = m_Self.forward;
+		}
 
 		public override void ProcessFrame(Playable playable, FrameData info, object playerData)
 		{
 			base.ProcessFrame(playable, info, playerData);
+			float duration = (float)playable.GetDuration();
+			float timeNow = (float)playable.GetTime();
+			float deltaTime = (float)info.deltaTime;
+			Vector3 start = (Vector3)m_Self?.transform.position + Offset;
+			Vector3 end = (Vector3)m_Target?.transform.position;
+			Path?.Update(start, end, direction, duration, timeNow, deltaTime);
 
-			Vector3 position = (Vector3)Path?.OnUpdate(playable.GetTime());
-			Shape?.OnUpdate(position);
+			//设置特效位置
+			//Effect?.transform.position = Path.Position;
 		}
 
 		public override void OnGraphStop(Playable playable)
 		{
 			base.OnGraphStop(playable);
-			Path?.OnStop();
+			
 		}
+
 	}
 }

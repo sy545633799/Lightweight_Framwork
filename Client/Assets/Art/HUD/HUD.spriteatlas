@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: HUD
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 2
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: b7094fe26ee1af34e9ba2b350c9744c6, type: 3}
+    - {fileID: 2800000, guid: c50ba4a1f30fef14db62ffde0e9d8b11, type: 3}
+    - {fileID: 2800000, guid: 632e037372c7e174ab56da815b36b580, type: 3}
+    - {fileID: 2800000, guid: bdcacced0bc4e784fa267d2ec440a206, type: 3}
+    - {fileID: 2800000, guid: 998cf554a2c107648a258fd33e99d96f, type: 3}
+    - {fileID: 2800000, guid: f92c9ed3b14087440957a093ead0beef, type: 3}
+    - {fileID: 2800000, guid: 550369a8abcdbb6459a8a05bf18b822e, type: 3}
+    - {fileID: 2800000, guid: d1fa49dda519a724e8b63138bfc1bfe8, type: 3}
+    - {fileID: 2800000, guid: a1288ff2be116e64a985525589993ab3, type: 3}
+    - {fileID: 2800000, guid: fcd052c50d3da8b489fe6b8a96256ed6, type: 3}
+    - {fileID: 2800000, guid: 8bcdcc8b57fc42c42811d8734f4d9f69, type: 3}
+    - {fileID: 2800000, guid: 48f1d44557e20f046acf233c00f36200, type: 3}
+    - {fileID: 2800000, guid: ea5df652d88ee3549b53e111c5f87df4, type: 3}
+    - {fileID: 2800000, guid: 8efd291b89392d24b9c5ac9a6c1606c6, type: 3}
+    totalSpriteSurfaceArea: 11328
+    bindAsDefault: 0
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: c50ba4a1f30fef14db62ffde0e9d8b11, type: 3}
+  - {fileID: 21300000, guid: ea5df652d88ee3549b53e111c5f87df4, type: 3}
+  - {fileID: 21300000, guid: b7094fe26ee1af34e9ba2b350c9744c6, type: 3}
+  - {fileID: 21300000, guid: a1288ff2be116e64a985525589993ab3, type: 3}
+  - {fileID: 21300000, guid: 632e037372c7e174ab56da815b36b580, type: 3}
+  - {fileID: 21300000, guid: f92c9ed3b14087440957a093ead0beef, type: 3}
+  - {fileID: 21300000, guid: 998cf554a2c107648a258fd33e99d96f, type: 3}
+  - {fileID: 21300000, guid: 48f1d44557e20f046acf233c00f36200, type: 3}
+  - {fileID: 21300000, guid: fcd052c50d3da8b489fe6b8a96256ed6, type: 3}
+  - {fileID: 21300000, guid: 550369a8abcdbb6459a8a05bf18b822e, type: 3}
+  - {fileID: 21300000, guid: 8efd291b89392d24b9c5ac9a6c1606c6, type: 3}
+  - {fileID: 21300000, guid: 8bcdcc8b57fc42c42811d8734f4d9f69, type: 3}
+  - {fileID: 21300000, guid: d1fa49dda519a724e8b63138bfc1bfe8, type: 3}
+  - {fileID: 21300000, guid: bdcacced0bc4e784fa267d2ec440a206, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - slider_bg
+  - anger8
+  - anger_bg
+  - anger4
+  - slider_white
+  - anger1
+  - anger0
+  - anger7
+  - anger5
+  - anger2
+  - anger9
+  - anger6
+  - anger3
+  - slider_yellow
+  m_Tag: HUD
+  m_IsVariant: 0

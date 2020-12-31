@@ -35,10 +35,11 @@ AOITrans = {
 AOIData =
 {
     aoiId = 1,
+    roleName = 2,
     ---@type AOIAttrib
-    attrib = 2,
+    attrib = 3,
     ---@type AOITrans
-    trans = 3,
+    trans = 4,
     ---@type AOIStatus
-    status = 4,
+    status = 5
 }

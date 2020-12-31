@@ -1,15 +1,11 @@
 // ========================================================
-// des：
-// author: 
+// des：圆形攻击区域
+// author: shenyi
 // time：2020-12-30 17:58:18
 // version：1.0
 // ========================================================
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Game
@@ -24,7 +20,7 @@ namespace Game
 
 
 #if UNITY_EDITOR
-		public override void DrawGizmos()
+		public override void DrawGizmos(Vector3 position)
 		{
 			Gizmos.color = Color.red;
 			float r = Radius * Scale;
@@ -41,13 +37,13 @@ namespace Game
 			Gizmos.color = Color.red;
 
 			// 绘制圆环
-			Vector3 beginPoint = Position;
-			Vector3 firstPoint = Position;
+			Vector3 beginPoint = position;
+			Vector3 firstPoint = position;
 			for (float theta = 0; theta < 2 * Mathf.PI; theta += m_Theta)
 			{
 				float x = r * Mathf.Cos(theta);
 				float z = r * Mathf.Sin(theta);
-				Vector3 endPoint = new Vector3(x, 0, z) + Position;
+				Vector3 endPoint = new Vector3(x, 0, z) + position;
 				if (theta == 0)
 				{
 					firstPoint = endPoint;

@@ -152,9 +152,9 @@ ParentConstraint:
   m_TranslationAtRest: {x: 0.0558, y: 1.4819, z: 0.0762}
   m_RotationAtRest: {x: 0, y: 0, z: 0}
   m_TranslationOffsets:
-  - {x: 0.123933986, y: 0.32761723, z: -0.19032526}
+  - {x: 0.05779092, y: 0.07081747, z: 0.10384991}
   m_RotationOffsets:
-  - {x: -31.15902, y: -8.2100115, z: -1.0090545}
+  - {x: -3.8232765, y: 0, z: 0}
   m_AffectTranslationX: 1
   m_AffectTranslationY: 1
   m_AffectTranslationZ: 1
@@ -740,9 +740,9 @@ ParentConstraint:
   m_TranslationAtRest: {x: -0.0558, y: 1.4819, z: 0.0762}
   m_RotationAtRest: {x: 0, y: 0, z: 0}
   m_TranslationOffsets:
-  - {x: 0.013640087, y: 0.32929903, z: -0.20726597}
+  - {x: -0.053809077, y: 0.07081747, z: 0.10384988}
   m_RotationOffsets:
-  - {x: -31.15902, y: -8.2100115, z: -1.0090545}
+  - {x: -3.8232765, y: 0, z: 0}
   m_AffectTranslationX: 1
   m_AffectTranslationY: 1
   m_AffectTranslationZ: 1
@@ -1390,7 +1390,7 @@ RotationConstraint:
   m_Enabled: 1
   m_Weight: 0.9
   m_RotationAtRest: {x: 52.302612, y: -35.60783, z: 55.94609}
-  m_RotationOffset: {x: -31.625015, y: 119.36997, z: -54.562397}
+  m_RotationOffset: {x: 20.901146, y: 114.55237, z: -88.24749}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -1757,7 +1757,7 @@ RotationConstraint:
   m_Enabled: 1
   m_Weight: 0.2
   m_RotationAtRest: {x: 40.97494, y: -147.02995, z: 120.761856}
-  m_RotationOffset: {x: -50.56012, y: -13.116817, z: 16.1202}
+  m_RotationOffset: {x: -48.974506, y: -56.758724, z: 70.03195}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -2195,7 +2195,7 @@ RotationConstraint:
   m_Enabled: 1
   m_Weight: 0.9
   m_RotationAtRest: {x: -52.302555, y: -144.39218, z: -124.053955}
-  m_RotationOffset: {x: 12.830965, y: 66.29205, z: 96.65853}
+  m_RotationOffset: {x: -20.90541, y: 65.45282, z: 91.74034}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -2277,7 +2277,7 @@ RotationConstraint:
   m_Enabled: 1
   m_Weight: 0.2
   m_RotationAtRest: {x: -40.974903, y: -32.970055, z: -59.238144}
-  m_RotationOffset: {x: 20.829536, y: -159.94342, z: 179.6945}
+  m_RotationOffset: {x: 48.967175, y: -123.25152, z: -109.98274}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -2534,7 +2534,7 @@ RotationConstraint:
   m_Enabled: 1
   m_Weight: 0.5
   m_RotationAtRest: {x: -0.089527756, y: 46.578632, z: 179.37364}
-  m_RotationOffset: {x: 18.707193, y: -157.1711, z: -49.163868}
+  m_RotationOffset: {x: 44.355263, y: -172.98503, z: -76.052986}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -2657,7 +2657,7 @@ RotationConstraint:
   m_Enabled: 1
   m_Weight: 0.5
   m_RotationAtRest: {x: 0.08951778, y: 133.42139, z: -0.6263446}
-  m_RotationOffset: {x: 13.5263, y: -5.7639356, z: 127.30634}
+  m_RotationOffset: {x: -44.343372, y: -7.011802, z: 103.94377}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1

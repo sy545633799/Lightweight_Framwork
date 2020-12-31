@@ -26,8 +26,11 @@ namespace Game
 		public override Playable CreateTrackMixer(PlayableGraph graph, GameObject owner, int inputCount)
         {
             ScriptPlayable<SkillMixer> behaviour = ScriptPlayable<SkillMixer>.Create(graph, inputCount);
+
 			
-            return behaviour;
+
+
+			return behaviour;
         }
     }
 }

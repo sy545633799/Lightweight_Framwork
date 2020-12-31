@@ -15,6 +15,9 @@ namespace Game
 {
 	public enum SkillPathType
 	{
-		
+		None = 1,
+		Liner = 2,
+		Follow = 3,
+		Curve = 4
 	}
 }

@@ -16,6 +16,8 @@ namespace Game
 	public enum SkillShapeType
 	{
 		Circle = 1,
-		
+		Sector = 2,
+		Tringle = 3,
+		Square = 4
 	}
 }

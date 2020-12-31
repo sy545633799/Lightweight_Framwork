@@ -44,17 +44,15 @@ function Entity:ctor(aoiData)
     self.transform = self.behavior.transform
     ---共享位置表
     local transTab = self.behavior.TransTable
-    transTab[aoiTrans.pos_x] = aoiData.trans.pos_x
-    transTab[aoiTrans.pos_y] = aoiData.trans.pos_y
-    transTab[aoiTrans.pos_z] = aoiData.trans.pos_z
-    transTab[aoiTrans.forward] = aoiData.trans.forward
+    for name, key in pairs(aoiTrans) do
+        transTab[key] = aoiData.trans[name]
+    end
     self.aoiData.trans = transTab
     ---共享状态表
     local statusTab = self.behavior.StatusTable
-    statusTab[aoiStatus.max_hp] = aoiData.status.max_hp
-    statusTab[aoiStatus.hp] = aoiData.status.hp
-    statusTab[aoiStatus.max_mp] = aoiData.status.max_mp
-    statusTab[aoiStatus.mp] = aoiData.status.mp
+    for name, key in pairs(aoiStatus) do
+        statusTab[key] = aoiData.status[name]
+    end
     self.aoiData.status = statusTab
 end
 

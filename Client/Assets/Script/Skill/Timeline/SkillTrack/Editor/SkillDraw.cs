@@ -34,7 +34,7 @@ namespace Game.Editor {
 						{
 							var skillShot = item2.asset as SkillShot;
 							SkillShotPlayable shotPlayable = skillShot.template;
-							shotPlayable.Shape?.DrawGizmos();
+							shotPlayable.Shape?.DrawGizmos((Vector3)shotPlayable.Path?.Position);
 						}
 					}
 				}

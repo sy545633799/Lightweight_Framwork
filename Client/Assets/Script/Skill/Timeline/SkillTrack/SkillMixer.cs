@@ -14,7 +14,8 @@ namespace Game
     [Serializable]
     public class SkillMixer : PlayableBehaviour
     {
-        public GameObject m_GameObject;
+		public PlayableGraph graph;
+		public GameObject m_GameObject;
 
 		public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
