@@ -21,22 +21,19 @@ namespace Game
 		public GameObject Effect;
 		[Header("技能施放初始偏移")]
 		public Vector3 Offset;
-		//[NonSerialized]
-		//[Header("自己")]
+		[Header("自己")]
 		public ExposedReference<Transform> Self;
-		//[NonSerialized]
-		//[Header("目标")]
+		[Header("目标")]
 		public ExposedReference<Transform> Target;
-		
+
 		public SKillShotTargetType TargetType = SKillShotTargetType.Enemy;
 		public SkillShotSelectType RangeType = SkillShotSelectType.Single;
 		public SkillShotCastType CastType = SkillShotCastType.Once;
 
-		public SkillPath Path = new LineSkillPath();
+		public SkillPath Path = new FollowSkillPath();
 		public SkillShape Shape = new TriangleSkillShape();
 		public SkillSelector Selector;
 
-		private Vector3 direction;
 		private Transform m_Self;
 		private Transform m_Target;
 
@@ -45,7 +42,7 @@ namespace Game
 			base.OnGraphStart(playable);
 			m_Self = Self.Resolve(graph.GetResolver());
 			m_Target = Target.Resolve(graph.GetResolver());
-			direction = m_Self.forward;
+			Path?.Start(m_Self, Offset);
 		}
 
 		public override void ProcessFrame(Playable playable, FrameData info, object playerData)
@@ -54,18 +51,15 @@ namespace Game
 			float duration = (float)playable.GetDuration();
 			float timeNow = (float)playable.GetTime();
 			float deltaTime = (float)info.deltaTime;
-			Vector3 start = (Vector3)m_Self?.transform.position + Offset;
-			Vector3 end = (Vector3)m_Target?.transform.position;
-			Path?.Update(start, end, direction, duration, timeNow, deltaTime);
+			Vector3 potition = (Vector3)Path?.Update(m_Target.transform, duration, timeNow, deltaTime);
 
 			//设置特效位置
-			//Effect?.transform.position = Path.Position;
+			//Effect?.transform.position = potition;
 		}
 
 		public override void OnGraphStop(Playable playable)
 		{
 			base.OnGraphStop(playable);
-			
 		}
 
 	}

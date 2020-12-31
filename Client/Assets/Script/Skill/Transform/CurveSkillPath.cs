@@ -15,7 +15,7 @@ namespace Game
 	{
 		public Bezier bezier;
 
-		protected override Vector3 OnUpdate(Vector3 start, Vector3 end, Vector3 direction, float duration, float time, float deltaTime)
+		protected override Vector3 OnUpdate(Transform target, float duration, float time, float deltaTime)
 		{
 			return bezier.GetPointAtTime(time/duration);
 		}

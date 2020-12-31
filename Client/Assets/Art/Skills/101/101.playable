@@ -153,7 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   template:
     Effect: {fileID: 0}
-    Offset: {x: 0.5, y: 1.1, z: 0.75}
+    Offset: {x: 0.5, y: 1.07, z: 0.33}
     Self:
       exposedName: 13fe36d654d6e6d4bae05f0f57e679e6
       defaultValue: {fileID: 0}

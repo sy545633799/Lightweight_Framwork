@@ -16,9 +16,9 @@ namespace Game
 		[Range(0, 10000)]
 		public float Distance = 10;
 
-		protected override Vector3 OnUpdate(Vector3 start, Vector3 end, Vector3 direction, float duration, float time, float deltaTime)
+		protected override Vector3 OnUpdate(Transform target, float duration, float time, float deltaTime)
 		{
-			return start + direction * Distance * time / duration;
+			return StartPostion + Direction * Distance * time / duration;
 		}
 
 		

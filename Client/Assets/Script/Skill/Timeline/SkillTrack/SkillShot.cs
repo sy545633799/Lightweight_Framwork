@@ -14,7 +14,6 @@ namespace Game
     [Serializable]
     public class SkillShot : PlayableAsset
 	{
-		
 		public SkillShotPlayable template = new SkillShotPlayable();
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {

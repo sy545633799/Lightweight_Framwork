@@ -14,7 +14,14 @@ namespace Game
 	public abstract class SkillPath
 	{
 		[NonSerialized]
+		public Vector3 StartPostion;
+		[NonSerialized]
+		public float Height;
+
+		[NonSerialized]
 		public Vector3 Position;
+		[NonSerialized]
+		public Vector3 Direction;
 		/// <summary>
 		/// 速度，旋转，大小曲线，TODO
 		/// </summary>
@@ -22,12 +29,22 @@ namespace Game
 		public AnimationCurve RotateAcceclerate;
 		public AnimationCurve ScaleSAcceclerate;
 
-		public void Update(Vector3 start, Vector3 end, Vector3 direction, float duration, float time, float deltaTime)
+		public void Start(Transform self, Vector3 offset)
 		{
-			Position = OnUpdate(start, end, direction, duration, time, deltaTime);
+			StartPostion = self.position + offset;
+			Position = StartPostion;
+			Direction = self.forward;
+			Height = offset.y;
 		}
 
-		protected abstract Vector3 OnUpdate(Vector3 start, Vector3 end, Vector3 direction, float duration, float time, float deltaTime);
+		public Vector3 Update(Transform target, float duration, float time, float deltaTime)
+		{
+			Position = OnUpdate(target, duration, time, deltaTime);
+			return Position;
+		}
+
+		protected abstract Vector3 OnUpdate(Transform target, float duration, float time, float deltaTime);
+		
 
 	}
 }

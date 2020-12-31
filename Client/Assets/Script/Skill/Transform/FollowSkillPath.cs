@@ -13,12 +13,15 @@ namespace Game
 	[Serializable]
 	public class FollowSkillPath : SkillPath
 	{
-		public float MoveSpeed = 5;
+		public float MoveSpeed = 10;
 
-		protected override Vector3 OnUpdate(Vector3 start, Vector3 end, Vector3 direction, float duration, float time, float deltaTime)
+		protected override Vector3 OnUpdate(Transform target, float duration, float time, float deltaTime)
 		{
-			
-			return start;
+			//暂时都先以平地计算
+			Vector3 targetPos = new Vector3(target.position.x, Height, target.position.z);
+			Direction = Vector3.Normalize(targetPos - Position);
+
+			return Position + Direction * MoveSpeed * deltaTime;
 		}
 	}
 }
