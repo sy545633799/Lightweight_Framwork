@@ -36,7 +36,7 @@ namespace Game.Editor {
 							SkillShotPlayable shotPlayable = skillShot.template;
 							Vector3 position = (Vector3)shotPlayable.Path?.Position;
 							Vector3 direction = (Vector3)shotPlayable.Path?.Direction;
-							shotPlayable.Shape?.DrawGizmos(position);
+							shotPlayable.Shape?.DrawGizmos(position, direction);
 
 						
 						}

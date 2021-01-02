@@ -31,7 +31,7 @@ namespace Game
 		public SkillShotCastType CastType = SkillShotCastType.Once;
 
 		public SkillPath Path = new FollowSkillPath();
-		public SkillShape Shape = new TriangleSkillShape();
+		public SkillShape Shape = new SectorSkillShape();
 		public SkillSelector Selector;
 
 		private Transform m_Self;

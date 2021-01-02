@@ -18,7 +18,7 @@ namespace Game
 		public float Scale = 1;
 
 #if UNITY_EDITOR
-		public abstract void DrawGizmos(Vector3 position);
+		public abstract void DrawGizmos(Vector3 position, Vector3 direction);
 #endif
 	}
 }

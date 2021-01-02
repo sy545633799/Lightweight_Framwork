@@ -16,19 +16,21 @@ namespace Game
 		public float Width = 1;
 		public float Height = 1;
 #if UNITY_EDITOR
-		public override void DrawGizmos(Vector3 position)
+		public override void DrawGizmos(Vector3 position, Vector3 direction)
 		{
 			float w = Width * Scale;
 			float h = Height * Scale;
 			// 设置颜色
 			Color defaultColor = Gizmos.color;
 			Gizmos.color = Color.green;
-			Vector3 pointA = new Vector3(-w / 2f, 0, 0) + position;
-			Vector3 pointB = new Vector3(w / 2f, 0, 0) + position;
-			Vector3 pointC = new Vector3(w / 2f, 0, h) + position;
-			Vector3 pointD = new Vector3(-w / 2f, 0, h) + position;
-			// 绘制方形
 
+
+			Vector3 right = Vector3.Normalize(Vector3.Cross(direction, Vector3.up));
+
+			Vector3 pointA = right * (w / 2f) + position;
+			Vector3 pointB = -right * (w / 2f) + position;
+			Vector3 pointC = -right * (w / 2f) + direction * h + position;
+			Vector3 pointD = right * (w / 2f) + direction * h + position;
 			// 绘制最后一条线段
 			Gizmos.DrawLine(pointA, pointB);
 			Gizmos.DrawLine(pointB, pointC);

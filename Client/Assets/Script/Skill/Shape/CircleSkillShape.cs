@@ -20,7 +20,7 @@ namespace Game
 
 
 #if UNITY_EDITOR
-		public override void DrawGizmos(Vector3 position)
+		public override void DrawGizmos(Vector3 position, Vector3 direction)
 		{
 			Gizmos.color = Color.red;
 			float r = Radius * Scale;
