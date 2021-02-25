@@ -7,11 +7,12 @@
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
 struct a2v
 {
-	float4 positionOS:POSITION;
-	float4 normalOS:NORMAL;
-	float2 texcoord:TEXCOORD;
-	float4 tangentOS:TANGENT;
-
+	float4 positionOS	: POSITION;
+	float4 normalOS		: NORMAL;
+	float4 tangentOS	: TANGENT;
+	float2 texcoord		: TEXCOORD;
+	float2 lightmapUV   : TEXCOORD1;
+	
 	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
@@ -21,9 +22,16 @@ struct v2f
 	float3 normalWS					: NORMAL;
 	float4 texcoord					: TEXCOORD0;
 	float4 texcoord2				: TEXCOORD1;
-	float4 texcoord3				: TEXCOORD2;
+	/*float4 texcoord3				: TEXCOORD2;
+	*/
+	
+#if defined(_NORMALMAP)
+	half4 tangentToWorld[3]		: TEXCOORD3;
+#else
 	half3 positionWS				:TEXCOORD3;
-	half4 tangentToWorld[3]		: TEXCOORD4;
+	//如果没有NormalMap，球谐光在Vertex, 反之在Fragment采样，跟默认Terrain相同，跟默认Lit不同，注意
+	half3 vertexSH                  : TEXCOORD4;
+#endif
 	half4 fogFactorAndVertexLight   : TEXCOORD7;
 #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
 	float4 shadowCoord              : TEXCOORD8;
@@ -31,7 +39,6 @@ struct v2f
 	UNITY_VERTEX_INPUT_INSTANCE_ID
 	UNITY_VERTEX_OUTPUT_STEREO
 };
-
 
 inline float3 UnityWorldSpaceViewDir(float3 worldPos) {
 	return _WorldSpaceCameraPos - worldPos;
@@ -50,6 +57,7 @@ inline float3 ObjSpaceViewDir(in float4 vertex)
 	float3 objSpaceCameraPos = TransformWorldToObject(_WorldSpaceCameraPos.xyz).xyz;
 	return objSpaceCameraPos - vertex.xyz;
 }
+
 
 inline half3 LookAtCamera(half3 positionOS)
 {
@@ -88,8 +96,48 @@ half4x4 CreateTangentToWorldPerVertexFantasy(half3 normal, half3 tangent, half3 
 		half4(tangent.z, binormal.z, normal.z, worldPos.z));
 }
 
+inline void CommonInitV2F(in a2v i, inout v2f o)
+{
+	o.positionCS = TransformObjectToHClip(i.positionOS.xyz);
+	half3 positionWS = TransformObjectToWorld(i.positionOS.xyz);
+#if defined(_NORMALMAP)
+	half4x4 tangentToWorld = CreateTangentToWorldPerVertexFantasy(i.normalOS, i.tangentOS, positionWS);
+	o.tangentToWorld[0] = tangentToWorld[0];
+	o.tangentToWorld[1] = tangentToWorld[1];
+	o.tangentToWorld[2] = tangentToWorld[2];
+#else
+	o.normalWS = TransformObjectToWorldDir(i.normalOS);
+	o.positionWS = positionWS;
+	o.vertexSH = SampleSH(o.normalWS.xyz);
+#endif
 
-InputData GetInputData(v2f i, half3 positionWS, half3 normalWS, half3 viewDirWS)
+	o.fogFactorAndVertexLight.r = ComputeFogFactor(o.positionCS.z);
+#if defined(_ADDITIONAL_LIGHTS_VERTEX)
+	o.fogFactorAndVertexLight.gba = VertexLighting(positionWS, TransformObjectToWorldDir(i.normalOS));
+#endif
+
+#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
+	o.shadowCoord = TransformWorldToShadowCoord(positionWS);
+#endif
+}
+
+#if defined(_NORMALMAP)
+	#define WORLD_NORMAL_POSITION_VIEWDIR(i) \
+		float4 nortex = SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, i.texcoord.xy); \
+		half3 normalTangent = UnpackNormalScale(nortex, _BumpScale).xyz; \
+		half3 normalWS = normalize(mul(half3x3(i.tangentToWorld[0].xyz, i.tangentToWorld[1].xyz, i.tangentToWorld[2].xyz), normalTangent)); \
+		half3 positionWS = half3(i.tangentToWorld[0].w, i.tangentToWorld[1].w, i.tangentToWorld[2].w); \
+		half3 SH = SampleSH(normalWS.xyz); \
+		float3 viewDirWS = normalize(UnityWorldSpaceViewDir(positionWS));
+#else
+	#define WORLD_NORMAL_POSITION_VIEWDIR(i) \
+		half3 normalWS = i.normalWS; \
+		half3 positionWS = i.positionWS; \
+		half3 SH = i.vertexSH; \
+		float3 viewDirWS = normalize(UnityWorldSpaceViewDir(positionWS));
+#endif
+
+InputData GetInputData(v2f i, half3 positionWS, half3 normalWS, half3 viewDirWS, float3 vertexSH)
 {
 	InputData inputData = (InputData)0;
 #if defined(REQUIRES_WORLD_SPACE_POS_INTERPOLATOR)
@@ -107,9 +155,8 @@ InputData GetInputData(v2f i, half3 positionWS, half3 normalWS, half3 viewDirWS)
 #endif
 	inputData.fogCoord = i.fogFactorAndVertexLight.x;
 	inputData.vertexLighting = i.fogFactorAndVertexLight.yzw;
-	//inputData.bakedGI = SAMPLE_GI(input.lightmapUV, input.vertexSH, normalWS);
+	inputData.bakedGI = SAMPLE_GI(i.texcoord.zw, vertexSH, normalWS);
 	return inputData;
 }
-
 
 #endif

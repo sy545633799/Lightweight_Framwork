@@ -47,8 +47,14 @@ v2f TerrainPassVertex(a2v i)
 	UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 	o.positionCS = TransformObjectToHClip(i.positionOS.xyz);
+	o.texcoord.xy = TRANSFORM_TEX(i.texcoord, _Albedo0);
+	o.texcoord.zw = TRANSFORM_TEX(i.texcoord, _Albedo1);
+
+	o.texcoord2.xy = TRANSFORM_TEX(i.texcoord, _Albedo2);
+	o.texcoord2.zw = TRANSFORM_TEX(i.texcoord, _Mask);
+
 	half3 positionWS = TransformObjectToWorld(i.positionOS.xyz);
-#if defined(_NORMALMAP) || defined(_USE_TERRAIN)
+#if defined(_NORMALMAP)
 	half4x4 tangentToWorld = CreateTangentToWorldPerVertexFantasy(i.normalOS, i.tangentOS, positionWS);
 	o.tangentToWorld[0] = tangentToWorld[0];
 	o.tangentToWorld[1] = tangentToWorld[1];
@@ -56,6 +62,7 @@ v2f TerrainPassVertex(a2v i)
 #else
 	o.normalWS = TransformObjectToWorldDir(i.normalOS);
 	o.positionWS = positionWS;
+	o.vertexSH = SampleSH(o.normalWS.xyz);
 #endif
 
 	o.fogFactorAndVertexLight.r = ComputeFogFactor(o.positionCS.z);
@@ -67,10 +74,7 @@ v2f TerrainPassVertex(a2v i)
 	o.shadowCoord = TransformWorldToShadowCoord(positionWS);
 #endif
 
-	o.texcoord.xy = TRANSFORM_TEX(i.texcoord, _Albedo0);
-	o.texcoord.zw = TRANSFORM_TEX(i.texcoord, _Albedo1);
-	o.texcoord2.xy = TRANSFORM_TEX(i.texcoord, _Albedo2);
-	o.texcoord2.zw = TRANSFORM_TEX(i.texcoord, _Mask);
+	
 
 	return o;
 }
@@ -81,39 +85,38 @@ half4 TerrainPassFragment(v2f i) : SV_Target
 	UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
 
 	half4 tex = SAMPLE_TEXTURE2D(_BaseMap,sampler_BaseMap,i.texcoord.xy);
-#if defined(_NORMALMAP)
-	float4 nortex = SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, i.texcoord.xy);
-	half3 normalTangent = UnpackNormalScale(nortex, _BumpScale).xyz;
-	half3 normalWS = normalize(mul(half3x3(i.tangentToWorld[0].xyz, i.tangentToWorld[1].xyz, i.tangentToWorld[2].xyz), normalTangent));
-	half3 positionWS = half3(i.tangentToWorld[0].w, i.tangentToWorld[1].w, i.tangentToWorld[2].w);
-#elif !defined(_USE_TERRAIN)
-	half3 normalWS = i.normalWS;
-	half3 positionWS = i.positionWS;
-#endif
 
-	float4 shadowCoord;
-#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
-	shadowCoord = i.shadowCoord;
-#elif defined(MAIN_LIGHT_CALCULATE_SHADOWS)
-	shadowCoord = TransformWorldToShadowCoord(positionWS);
-#else
-	shadowCoord = float4(0, 0, 0, 0);
-#endif
+//	float4 shadowCoord;
+//#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
+//	shadowCoord = i.shadowCoord;
+//#elif defined(MAIN_LIGHT_CALCULATE_SHADOWS)
+//	shadowCoord = TransformWorldToShadowCoord(positionWS);
+//#else
+//	shadowCoord = float4(0, 0, 0, 0);
+//#endif
 	/******************************************************以上貌似可以统一处理************************************************/
 
 	half4 albedo0 = SAMPLE_TEXTURE2D(_Albedo0,sampler_Albedo0,i.texcoord.xy);
 	half4 albedo1 = SAMPLE_TEXTURE2D(_Albedo1,sampler_Albedo0,i.texcoord.zw);
 	half4 albedo2 = SAMPLE_TEXTURE2D(_Albedo2,sampler_Albedo0,i.texcoord2.xy);
-	half4 normal0 = SAMPLE_TEXTURE2D(_Normal0,sampler_Normal0,i.texcoord.xy);
-	half4 normal1 = SAMPLE_TEXTURE2D(_Normal1,sampler_Normal0,i.texcoord.zw);
-	half4 normal2 = SAMPLE_TEXTURE2D(_Normal2,sampler_Normal0,i.texcoord2.xy);
 
 	half4 mask = SAMPLE_TEXTURE2D(_Mask,sampler_Mask, i.texcoord2.zw);
 	half3 blend = Blend(albedo0.a,albedo1.a,albedo2.a,mask.rgb);
 	half3 albedo = (blend.x*albedo0 + blend.y*albedo1 + blend.z*albedo2).xyz;
+	
+#if defined(_NORMALMAP)
+	half4 normal0 = SAMPLE_TEXTURE2D(_Normal0, sampler_Normal0, i.texcoord.xy);
+	half4 normal1 = SAMPLE_TEXTURE2D(_Normal1, sampler_Normal0, i.texcoord.zw);
+	half4 normal2 = SAMPLE_TEXTURE2D(_Normal2, sampler_Normal0, i.texcoord2.xy);
 	half4 bump = blend.x*normal0 + blend.y*normal1 + blend.z*normal2;
 	half3 normalWS = normalize(mul(half3x3(i.tangentToWorld[0].xyz, i.tangentToWorld[1].xyz, i.tangentToWorld[2].xyz), bump.xyz));
 	half3 positionWS = half3(i.tangentToWorld[0].w, i.tangentToWorld[1].w, i.tangentToWorld[2].w);
+	half3 SH = SampleSH(normalWS.xyz);
+#else
+	half3 normalWS = i.normalWS;
+	half3 positionWS = i.positionWS;
+	half3 SH = i.vertexSH;
+#endif
 	float3 viewDirWS = normalize(UnityWorldSpaceViewDir(positionWS));
 
 	half3 alpha = 1.0;
@@ -127,7 +130,7 @@ half4 TerrainPassFragment(v2f i) : SV_Target
 #else
 	half3 emission = 0;
 #endif
-	InputData inputData = GetInputData(i, positionWS, normalWS, viewDirWS);
+	InputData inputData = GetInputData(i, positionWS, normalWS, viewDirWS, SH);
 	half4 color = UniversalFragmentPBR(inputData, albedo, metallic, specular, smoothness, occlusion, emission, alpha);
 	color.rgb = MixFog(color.rgb, i.fogFactorAndVertexLight.x);
 

@@ -64,8 +64,8 @@
 			#pragma multi_compile_fog
 			#pragma multi_compile_instancing
 
-			#pragma shader_feature _USE_TERRAIN
-			#define _USE_TERRAIN
+			#pragma shader_feature _USE_NORMAL
+			#define _USE_NORMAL
 			#include "./Core/Terrain.hlsl"
 
 			ENDHLSL
@@ -113,8 +113,8 @@
 			#pragma multi_compile_fog
 			#pragma multi_compile_instancing
 
-			#pragma shader_feature _USE_TERRAIN
-			#define _USE_TERRAIN
+			#pragma shader_feature _USE_NORMAL
+			#define _USE_NORMAL
 			#include "./Core/Terrain.hlsl"
 
 			ENDHLSL
@@ -156,8 +156,8 @@
 			#pragma multi_compile _ LIGHTMAP_ON
 			#pragma multi_compile_fog
 
-			#pragma shader_feature _USE_TERRAIN
-			#define _USE_TERRAIN
+			#pragma shader_feature _USE_NORMAL
+			#define _USE_NORMAL
 			#include "./Core/Terrain.hlsl"
 			ENDHLSL
 		}
