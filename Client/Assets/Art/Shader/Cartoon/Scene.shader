@@ -16,8 +16,8 @@
 		[NoScaleOffset][Normal]_BumpMap("Normalmap", 2D) = "bump" {}
 		_BumpScale("BumpScale", Range(0, 1)) = 1
 		//spec
-		_SpecRange("SpecRange", Range(0, 300)) = 100
-		_SpecColor("SpecColor", Color) = (1,1,1,1)
+		_SpecColor("Specular Color", Color) = (0.5, 0.5, 0.5, 1)
+		[PowerSlider(5.0)] _Shininess("Shininess", Range(0.03, 1)) = 0.078125
 		//pbr
 		_PBRTex("Smooth(R), Metallic(G), AO(B)", 2D) = "gray" {}
 		_Smoothness("Smoothness", Range(0.0, 1.0)) = 0.5
@@ -68,6 +68,7 @@
 			#pragma multi_compile_fog
 			#pragma multi_compile_instancing
 
+			#define _SPECULAR_COLOR
 			#include "./Core/Scene.hlsl"
 			
 			ENDHLSL

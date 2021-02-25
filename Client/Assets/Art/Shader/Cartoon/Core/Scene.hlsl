@@ -13,7 +13,7 @@ float4 _BumpMap_ST;
 float _BumpScale;
 //spec
 half4 _SpecColor;
-float _SpecRange;
+float _Shininess;
 //pbr(如果没有PBRTEX，则手动输入_Smoothness和_Metallic)
 half _Smoothness;
 //如果有PBRTEX, 则没有这个选项
@@ -56,6 +56,12 @@ half4 ScenePassFragment(v2f i) :SV_TARGET
 #endif
 	half3 alpha = Alpha(tex.a, _BaseColor, _Cutoff);
 	half3 albedo = tex.rgb * _BaseColor.rgb;
+
+#if defined(_EMISSION)
+	half3 emission = SampleEmission(i.texcoord.xy, _EmissionColor.rgb, TEXTURE2D_ARGS(_EmissionMap, sampler_EmissionMap));
+#else
+	half3 emission = 0;
+#endif
 	
 #if defined(_USE_PBR)
 	//PBR
@@ -74,21 +80,10 @@ half4 ScenePassFragment(v2f i) :SV_TARGET
 	half occlusion = 1.0;
 #endif
 	half3 specular = half3(0.0h, 0.0h, 0.0h);
-
-#if defined(_EMISSION)
-	half3 emission = SampleEmission(i.texcoord.xy, _EmissionColor.rgb, TEXTURE2D_ARGS(_EmissionMap, sampler_EmissionMap)).rgb;
-#else
-	half3 emission = 0;
-#endif
 	half4 color = UniversalFragmentPBR(inputData, albedo, metallic, specular, smoothness, occlusion, emission, alpha);
 #else
 	//BlinnPhong
-#if defined(_EMISSION)
-	half3 emission = SampleEmission(i.texcoord.xy, _EmissionColor.rgb, TEXTURE2D_ARGS(_EmissionMap, sampler_EmissionMap));
-#else
-	half3 emission = 0;
-#endif
-	half4 color = UniversalFragmentBlinnPhong(inputData, _BaseColor.rgb, _SpecColor, _SpecRange, emission, alpha);
+	half4 color = UniversalFragmentBlinnPhong(inputData, (tex * _BaseColor).rgb, tex * _SpecColor, _Shininess, emission, alpha);
 #endif
 	
 	color.rgb = MixFog(color.rgb, i.fogFactorAndVertexLight.x);
