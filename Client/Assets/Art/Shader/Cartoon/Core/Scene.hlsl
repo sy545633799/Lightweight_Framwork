@@ -21,15 +21,19 @@ half _Metallic;
 half _OcclusionStrength;
 //emission
 half4 _EmissionColor;
+
+TEXTURE2D(_PBRTex);
+SAMPLER(sampler_PBRTex);
+TEXTURE2D(_EmissionTex);
+SAMPLER(sampler_EmissionTex);
+
 CBUFFER_END
 
-TEXTURE2D(_PBRTex); SAMPLER(sampler_PBRTex);
-TEXTURE2D(_EmissionTex); SAMPLER(sampler_EmissionTex);
 
 v2f ScenePassVertex(a2v i)
 {
 	v2f o = (v2f)0;
-	UNITY_SETUP_INSTANCE_ID(o);
+	UNITY_SETUP_INSTANCE_ID(i);
 	UNITY_TRANSFER_INSTANCE_ID(i, o);
 	UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 	
@@ -50,12 +54,12 @@ half4 ScenePassFragment(v2f i) :SV_TARGET
 
 	InputData inputData = GetInputData(i, positionWS, normalWS, viewDirWS, SH);
 
-	half4 tex = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.texcoord.xy);
+	half4 albedo = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.texcoord.xy);
 #if defined(_ALPHATEST_ON)
-	clip(tex.a - _Cutoff);
+	clip(albedo.a - _Cutoff);
 #endif
-	half3 alpha = Alpha(tex.a, _BaseColor, _Cutoff);
-	half3 albedo = tex.rgb * _BaseColor.rgb;
+	half3 alpha = Alpha(albedo.a, _BaseColor, _Cutoff);
+	albedo.rgb *= _BaseColor.rgb;
 
 #if defined(_EMISSION)
 	half3 emission = SampleEmission(i.texcoord.xy, _EmissionColor.rgb, TEXTURE2D_ARGS(_EmissionMap, sampler_EmissionMap));
@@ -79,11 +83,9 @@ half4 ScenePassFragment(v2f i) :SV_TARGET
 	half metallic = _Metallic;
 	half occlusion = 1.0;
 #endif
-	half3 specular = half3(0.0h, 0.0h, 0.0h);
-	half4 color = UniversalFragmentPBR(inputData, albedo, metallic, specular, smoothness, occlusion, emission, alpha);
+	half4 color = UniversalFragmentPBR(inputData, albedo.rgb, metallic, half3(0.0h, 0.0h, 0.0h), smoothness, occlusion, emission, alpha);
 #else
-	//BlinnPhong
-	half4 color = UniversalFragmentBlinnPhong(inputData, (tex * _BaseColor).rgb, tex * _SpecColor, _Shininess, emission, alpha);
+	half4 color = UniversalFragmentBlinnPhong(inputData, albedo.rgb, albedo * _SpecColor, _Shininess, emission, alpha);
 #endif
 	
 	color.rgb = MixFog(color.rgb, i.fogFactorAndVertexLight.x);

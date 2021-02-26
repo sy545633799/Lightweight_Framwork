@@ -1,14 +1,19 @@
 ﻿#ifndef TETTRAIN_H
 #define TETTRAIN_H
 #include "./Common.hlsl"
+
 CBUFFER_START(UnityPerMaterial)
-TEXTURE2D(_Albedo0);
-SAMPLER(sampler_Albedo0);
-float4 _Albedo0_ST;
-TEXTURE2D(_Albedo1);
-float4 _Albedo1_ST;
-TEXTURE2D(_Albedo2);
-float4 _Albedo2_ST;
+half4 _SpecColor;
+float _Shininess;
+TEXTURE2D(_Splat0);
+SAMPLER(sampler_Splat0);
+float4 _Splat0_ST;
+TEXTURE2D(_Splat1);
+float4 _Splat1_ST;
+TEXTURE2D(_Splat2);
+float4 _Splat2_ST;
+TEXTURE2D(_Splat3);
+float4 _Splat3_ST;
 TEXTURE2D(_Normal0);
 SAMPLER(sampler_Normal0);
 float4 _Normal0_ST;
@@ -16,14 +21,24 @@ TEXTURE2D(_Normal1);
 float4 _Normal1_ST;
 TEXTURE2D(_Normal2);
 float4 _Normal2_ST;
-TEXTURE2D(_Mask);
-float4 _Mask_ST;
-SAMPLER(sampler_Mask);
-half4 _Color;
+TEXTURE2D(_Normal3);
+float4 _Normal3_ST;
+TEXTURE2D(_Control);
+float4 _Control_ST;
+float4 _Control_TexelSize;
+SAMPLER(sampler_Control);
+
+half4 _BaseColor;
 half _Metallic0;
 half _Metallic1;
 half _Metallic2;
+half _Metallic3;
+half _Smoothness0;
+half _Smoothness1;
+half _Smoothness2;
+half _Smoothness3;
 half _Hightthreshold;
+
 CBUFFER_END
 
 
@@ -41,41 +56,21 @@ inline half3 Blend(half high1, half high2, half high3, half3 control)
 
 v2f TerrainPassVertex(a2v i)
 {	
-	v2f o;
-	UNITY_SETUP_INSTANCE_ID(o);
+	v2f o = (v2f)0;
+	UNITY_SETUP_INSTANCE_ID(i);
 	UNITY_TRANSFER_INSTANCE_ID(i, o);
 	UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
-	o.positionCS = TransformObjectToHClip(i.positionOS.xyz);
-	o.texcoord.xy = TRANSFORM_TEX(i.texcoord, _Albedo0);
-	o.texcoord.zw = TRANSFORM_TEX(i.texcoord, _Albedo1);
-
-	o.texcoord2.xy = TRANSFORM_TEX(i.texcoord, _Albedo2);
-	o.texcoord2.zw = TRANSFORM_TEX(i.texcoord, _Mask);
-
-	half3 positionWS = TransformObjectToWorld(i.positionOS.xyz);
-#if defined(_NORMALMAP)
-	half4x4 tangentToWorld = CreateTangentToWorldPerVertexFantasy(i.normalOS, i.tangentOS, positionWS);
-	o.tangentToWorld[0] = tangentToWorld[0];
-	o.tangentToWorld[1] = tangentToWorld[1];
-	o.tangentToWorld[2] = tangentToWorld[2];
-#else
-	o.normalWS = TransformObjectToWorldDir(i.normalOS);
-	o.positionWS = positionWS;
-	o.vertexSH = SampleSH(o.normalWS.xyz);
+	CommonInitV2F(i, o);
+	o.texcoord.xy = TRANSFORM_TEX(i.texcoord, _Control);
+#ifdef LIGHTMAP_ON
+	o.texcoord.zw = i.lightmapUV.xy * unity_LightmapST.xy + unity_LightmapST.zw;
 #endif
 
-	o.fogFactorAndVertexLight.r = ComputeFogFactor(o.positionCS.z);
-#if defined(_ADDITIONAL_LIGHTS_VERTEX)
-	o.fogFactorAndVertexLight.gba = VertexLighting(positionWS, TransformObjectToWorldDir(i.normalOS));
-#endif
-
-#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
-	o.shadowCoord = TransformWorldToShadowCoord(positionWS);
-#endif
-
-	
-
+	o.texcoord2.xy = TRANSFORM_TEX(i.texcoord, _Splat0);
+	o.texcoord2.zw = TRANSFORM_TEX(i.texcoord, _Splat1);
+	o.texcoord3.xy = TRANSFORM_TEX(i.texcoord, _Splat2);
+	o.texcoord3.zw = TRANSFORM_TEX(i.texcoord, _Splat3);
 	return o;
 }
 
@@ -84,56 +79,51 @@ half4 TerrainPassFragment(v2f i) : SV_Target
 	UNITY_SETUP_INSTANCE_ID(i);
 	UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
 
-	half4 tex = SAMPLE_TEXTURE2D(_BaseMap,sampler_BaseMap,i.texcoord.xy);
+	float2 splatUV = (i.texcoord.xy * (_Control_TexelSize.zw - 1.0f) + 0.5f) * _Control_TexelSize.xy;
+	half4 splatControl = SAMPLE_TEXTURE2D(_Control, sampler_Control, splatUV);
+	half4 albedo = 0.0h;
+	albedo += SAMPLE_TEXTURE2D(_Splat0, sampler_Splat0, i.texcoord2.xy) * half4(splatControl.rrr, 1.0h);
+	albedo += SAMPLE_TEXTURE2D(_Splat1, sampler_Splat0, i.texcoord2.zw) * half4(splatControl.ggg, 1.0h);
+	albedo += SAMPLE_TEXTURE2D(_Splat2, sampler_Splat0, i.texcoord3.xy) * half4(splatControl.bbb, 1.0h);
+	albedo += SAMPLE_TEXTURE2D(_Splat3, sampler_Splat0, i.texcoord3.zw) * half4(splatControl.aaa, 1.0h);
 
-//	float4 shadowCoord;
-//#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
-//	shadowCoord = i.shadowCoord;
-//#elif defined(MAIN_LIGHT_CALCULATE_SHADOWS)
-//	shadowCoord = TransformWorldToShadowCoord(positionWS);
-//#else
-//	shadowCoord = float4(0, 0, 0, 0);
-//#endif
-	/******************************************************以上貌似可以统一处理************************************************/
-
-	half4 albedo0 = SAMPLE_TEXTURE2D(_Albedo0,sampler_Albedo0,i.texcoord.xy);
-	half4 albedo1 = SAMPLE_TEXTURE2D(_Albedo1,sampler_Albedo0,i.texcoord.zw);
-	half4 albedo2 = SAMPLE_TEXTURE2D(_Albedo2,sampler_Albedo0,i.texcoord2.xy);
-
-	half4 mask = SAMPLE_TEXTURE2D(_Mask,sampler_Mask, i.texcoord2.zw);
-	half3 blend = Blend(albedo0.a,albedo1.a,albedo2.a,mask.rgb);
-	half3 albedo = (blend.x*albedo0 + blend.y*albedo1 + blend.z*albedo2).xyz;
-	
-#if defined(_NORMALMAP)
-	half4 normal0 = SAMPLE_TEXTURE2D(_Normal0, sampler_Normal0, i.texcoord.xy);
-	half4 normal1 = SAMPLE_TEXTURE2D(_Normal1, sampler_Normal0, i.texcoord.zw);
-	half4 normal2 = SAMPLE_TEXTURE2D(_Normal2, sampler_Normal0, i.texcoord2.xy);
-	half4 bump = blend.x*normal0 + blend.y*normal1 + blend.z*normal2;
-	half3 normalWS = normalize(mul(half3x3(i.tangentToWorld[0].xyz, i.tangentToWorld[1].xyz, i.tangentToWorld[2].xyz), bump.xyz));
+#ifdef _NORMALMAP
+	half3 normalTS = 0.0f;
+	normalTS += UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal0, sampler_Normal0, i.texcoord2.xy), splatControl.r);
+	normalTS += UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal1, sampler_Normal1, i.texcoord2.zw), splatControl.g);
+	normalTS += UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal2, sampler_Normal2, i.texcoord3.xy), splatControl.b);
+	normalTS += UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal3, sampler_Normal3, i.texcoord3.zw), splatControl.a);
+	normalTS = normalize(normalTS.xyz);
+	half3 normalWS = TransformTangentToWorld(normalTS, half3x3(i.tangentToWorld[0].xyz, i.tangentToWorld[1].xyz, i.tangentToWorld[2].xyz));
 	half3 positionWS = half3(i.tangentToWorld[0].w, i.tangentToWorld[1].w, i.tangentToWorld[2].w);
 	half3 SH = SampleSH(normalWS.xyz);
+	float3 viewDirWS = normalize(UnityWorldSpaceViewDir(positionWS));
 #else
 	half3 normalWS = i.normalWS;
 	half3 positionWS = i.positionWS;
 	half3 SH = i.vertexSH;
-#endif
 	float3 viewDirWS = normalize(UnityWorldSpaceViewDir(positionWS));
+#endif
 
-	half3 alpha = 1.0;
-	half smoothness = tex.a;
-	half metallic = dot(blend, half3(_Metallic0, _Metallic1, _Metallic2));
-	half occlusion = 1.0;
-	half3 specular = half3(0.0h, 0.0h, 0.0h);
+	InputData inputData = GetInputData(i, positionWS, normalWS, viewDirWS, SH);
 
 #if defined(_EMISSION)
-	half3 emission = SampleEmission(i.texcoord.xy, _EmissionColor.rgb, TEXTURE2D_ARGS(_EmissionMap, sampler_EmissionMap)).rgb;
+	half3 emission = SampleEmission(i.texcoord.xy, _EmissionColor.rgb, TEXTURE2D_ARGS(_EmissionMap, sampler_EmissionMap));
 #else
 	half3 emission = 0;
 #endif
-	InputData inputData = GetInputData(i, positionWS, normalWS, viewDirWS, SH);
-	half4 color = UniversalFragmentPBR(inputData, albedo, metallic, specular, smoothness, occlusion, emission, alpha);
+	
+#if defined(_USE_PBR)
+	half4 smoothness = dot(splatControl, half4(_Smoothness0, _Smoothness1, _Smoothness2, _Smoothness3));
+	half metallic = dot(splatControl, half4(_Metallic0, _Metallic1, _Metallic2, _Metallic3));
+	half4 color = UniversalFragmentPBR(inputData, albedo, metallic, half3(0.0h, 0.0h, 0.0h), smoothness, 1.0, emission, 1);
+#else
+	half4 color = UniversalFragmentBlinnPhong(inputData, albedo.rgb, albedo * _SpecColor, _Shininess, emission, 1);
+#endif
+
+
 	color.rgb = MixFog(color.rgb, i.fogFactorAndVertexLight.x);
 
-	return color;
+	return half4(color.rgb, 1.0h);
 }
 #endif

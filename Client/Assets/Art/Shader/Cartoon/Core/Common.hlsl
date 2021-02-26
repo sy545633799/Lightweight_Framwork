@@ -22,8 +22,7 @@ struct v2f
 	float3 normalWS					: NORMAL;
 	float4 texcoord					: TEXCOORD0;
 	float4 texcoord2				: TEXCOORD1;
-	/*float4 texcoord3				: TEXCOORD2;
-	*/
+	float4 texcoord3				: TEXCOORD2;
 	
 #if defined(_NORMALMAP)
 	half4 tangentToWorld[3]		: TEXCOORD3;
@@ -81,19 +80,20 @@ inline half3 LookAtCamera(half3 positionOS)
 	return localPos;
 }
 
-half4x4 CreateTangentToWorldPerVertexFantasy(half3 normal, half3 tangent, half3 worldPos)
+half4x4 CreateTangentToWorldPerVertexFantasy(half3 normalOS, half4 tangentOS, half3 worldPos)
 {
 	//假设一个对象的scale设置为(-1, 1, 1)，这意味着它是镜像的.
 	//在这种情况下，我们必须翻转副法线，来正确地镜像切线空间.
 	//事实上，当奇数维数为负时，我们必须这样做.
 	//UnityShaderVariables通过定义half4 unity_WorldTransformParams变量来帮助我们完成这个任务.
 	//half sign = tangentSign * unity_WorldTransformParams.w;
-	half3 binormal = cross(normal, tangent);
+	real sign = tangentOS.w * GetOddNegativeScale();
+	half3 bitangentOS = cross(normalOS, tangentOS.xyz) * sign;
 	return half4x4(
-		half4(tangent.x, binormal.x, normal.x, worldPos.x),
-		half4(tangent.y, binormal.y, normal.y, worldPos.y),
-		half4(tangent.z, binormal.z, normal.z, worldPos.z),
-		half4(tangent.z, binormal.z, normal.z, worldPos.z));
+		half4(tangentOS.x, tangentOS.y, tangentOS.z, worldPos.x),
+		half4(bitangentOS.x, bitangentOS.y, bitangentOS.z, worldPos.y),
+		half4(normalOS.x, normalOS.y, normalOS.z, worldPos.z),
+		half4(tangentOS.z, bitangentOS.z, normalOS.z, worldPos.z));
 }
 
 inline void CommonInitV2F(in a2v i, inout v2f o)
@@ -123,9 +123,8 @@ inline void CommonInitV2F(in a2v i, inout v2f o)
 
 #if defined(_NORMALMAP)
 	#define WORLD_NORMAL_POSITION_VIEWDIR(i) \
-		float4 nortex = SAMPLE_TEXTURE2D(_BumpMap, sampler_BumpMap, i.texcoord.xy); \
-		half3 normalTangent = UnpackNormalScale(nortex, _BumpScale).xyz; \
-		half3 normalWS = normalize(mul(half3x3(i.tangentToWorld[0].xyz, i.tangentToWorld[1].xyz, i.tangentToWorld[2].xyz), normalTangent)); \
+		half3 normalTS = SampleNormal(i.texcoord.xy, TEXTURE2D_ARGS(_BumpMap, sampler_BumpMap), _BumpScale); \
+		half3 normalWS = TransformTangentToWorld(normalTS, half3x3(i.tangentToWorld[0].xyz, i.tangentToWorld[1].xyz, i.tangentToWorld[2].xyz)); \
 		half3 positionWS = half3(i.tangentToWorld[0].w, i.tangentToWorld[1].w, i.tangentToWorld[2].w); \
 		half3 SH = SampleSH(normalWS.xyz); \
 		float3 viewDirWS = normalize(UnityWorldSpaceViewDir(positionWS));

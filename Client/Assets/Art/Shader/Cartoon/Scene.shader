@@ -17,7 +17,7 @@
 		_BumpScale("BumpScale", Range(0, 1)) = 1
 		//spec
 		_SpecColor("Specular Color", Color) = (0.5, 0.5, 0.5, 1)
-		[PowerSlider(5.0)] _Shininess("Shininess", Range(0.03, 1)) = 0.078125
+		[PowerSlider(5.0)] _Shininess("Shininess", Range(1, 30)) = 10
 		//pbr
 		_PBRTex("Smooth(R), Metallic(G), AO(B)", 2D) = "gray" {}
 		_Smoothness("Smoothness", Range(0.0, 1.0)) = 0.5
@@ -68,7 +68,7 @@
 			#pragma multi_compile_fog
 			#pragma multi_compile_instancing
 
-			#define _SPECULAR_COLOR
+			#define _SPECULAR_COLOR 1
 			#include "./Core/Scene.hlsl"
 			
 			ENDHLSL
@@ -117,7 +117,7 @@
 			#pragma multi_compile_fog
 			#pragma multi_compile_instancing
 
-			#define _SPECULAR_COLOR
+			#define _SPECULAR_COLOR 1
 			#include "./Core/Scene.hlsl"
 
 			ENDHLSL
@@ -157,7 +157,6 @@
 			#pragma shader_feature _EMISSION
 			#pragma shader_feature _ALPHATEST_ON
 			#pragma shader_feature _ALPHABLEND_ON
-			#pragma shader_feature _USE_PBR
 
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
@@ -166,7 +165,7 @@
 			#pragma multi_compile_fog
 			#pragma multi_compile_instancing
 
-			#define _USE_PBR 
+			#define _USE_PBR 1
 			#define _ADDITIONAL_LIGHTS_VERTEX
 
 			#include "./Core/Scene.hlsl"
