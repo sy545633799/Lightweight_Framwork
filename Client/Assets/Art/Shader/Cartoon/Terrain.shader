@@ -36,7 +36,9 @@
 		[HideInInspector] _MainTex("BaseMap (RGB)", 2D) = "grey" {}
 		[HideInInspector] _BaseColor("Main Color", Color) = (1,1,1,1)
 
-		_Hightthreshold("_Hightthreshold",Range(0,1)) = 0.3
+		//emission
+		_EmissionColor("Color", Color) = (0,0,0)
+		_EmissionMap("Emission", 2D) = "white" {}
 	
 	}
 

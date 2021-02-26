@@ -12,6 +12,7 @@ struct a2v
 	float4 tangentOS	: TANGENT;
 	float2 texcoord		: TEXCOORD;
 	float2 lightmapUV   : TEXCOORD1;
+	half4 color : COLOR;
 	
 	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
@@ -35,6 +36,11 @@ struct v2f
 #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
 	float4 shadowCoord              : TEXCOORD8;
 #endif
+
+#if defined(_SOFTPARTICLES_ON) || defined(_FADING_ON) || defined(_DISTORTION_ON)
+	float4 projectedPosition        : TEXCOORD9;
+#endif
+
 	UNITY_VERTEX_INPUT_INSTANCE_ID
 	UNITY_VERTEX_OUTPUT_STEREO
 };
