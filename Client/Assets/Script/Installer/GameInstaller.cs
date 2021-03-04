@@ -19,18 +19,15 @@ namespace Game
 			Application.targetFrameRate = GameSettings.MobileFrameRate;
 			int width = Screen.width;
 			int high = Screen.height;
-			if (width > 1920)
+			if (high > 1334)
 			{
-				float aspect = (float)(width) / (float)high;
-				width = 1920;
-				high = (int)(1920.0f / aspect);
+				float aspect = (float)(high) / (float)width;
+				high = 1334;
+				width = (int)(1334.0f / aspect);
 			}
 
-			Debug.Log(Screen.width + "-" + Screen.height);
-			Screen.SetResolution(Screen.width, Screen.height, true);
-			Debug.Log(Screen.width + ":" + Screen.height);
+			Screen.SetResolution(width, height, true);
 #endif
-			//TaskInfo info = TimeManager.AddTaskYearly(11, 4, 5, 0, 0, 0, null);
 		}
 
 		public async void Start()
@@ -61,7 +58,8 @@ namespace Game
 			TcpManager.Init();
 			MapManager.Init();
 			AOIManager.Init();
-			XLuaManager.Init();
+            HUDManager.Init();
+            XLuaManager.Init();
 			XLuaManager.Inject<GameSettings>("GameSettings", GameSettings);
 			XLuaManager.StartGame();
 			LuaLoadedTime = DateTime.UtcNow.Ticks;

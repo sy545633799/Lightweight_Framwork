@@ -1,7 +1,7 @@
 ﻿#ifndef TOONOUTLINE_H
 #define TOONOUTLINE_H
 
-#include "Character.hlsl"
+#include "./Common.hlsl"
 
 struct appdata {
 	float4 vertex : POSITION;
@@ -27,15 +27,15 @@ OutLineV2F vert(appdata v) //to do
 	float4 nearUpperRight = mul(unity_CameraInvProjection, float4(1, 1, UNITY_NEAR_CLIP_VALUE, _ProjectionParams.y));//将近裁剪面右上角位置的顶点变换到观察空间
 	float aspect = abs(nearUpperRight.y / nearUpperRight.x);//求得屏幕宽高比
 	float2 scal = float2(ndcNormal.x*aspect, ndcNormal.y) * 0.01;
-	scal = o.pos.z < _Outlinethreshold ? scal : 0;
+	//scal = o.pos.z < _Outlinethreshold ? scal : 0;
 
-	o.pos.xy += _OutlineWidth * scal;
 	return o;
 }
 
 half4 frag(v2f i) : SV_Target
 {
 	UNITY_SETUP_INSTANCE_ID(i);
-	return half4(_OutlineColor.rgb,1.0);
+	//return half4(_OutlineColor.rgb,1.0);
+	return 0;
 }
 #endif

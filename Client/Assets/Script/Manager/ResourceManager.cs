@@ -93,6 +93,7 @@ namespace Game
 
 		private static async Task LuaLoadUIInternerl(XLua.LuaTable table, UIConfig info)
 		{
+            Debug.LogError(info.Path);
 			GameObject result = await Addressables.InstantiateAsync(info.Path).Task;
 			Canvas canvas = result.GetComponent<Canvas>();
 			canvas.worldCamera = Camera.main;

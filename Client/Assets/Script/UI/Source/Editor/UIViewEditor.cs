@@ -560,7 +560,7 @@ return {className}");
 			{
 				Sprite sprite = images[i].sprite;
 				string spritePath = AssetDatabase.GetAssetPath(sprite);
-				if (string.IsNullOrEmpty(spritePath))
+				if (string.IsNullOrEmpty(spritePath) || !spritePath.Contains("Assets/Art/Picture/"))
 				{
 					Debug.LogError($"{goPathDic[images[i].transform]}带有默认图片, 请去除");
 				}
