@@ -68,7 +68,7 @@ half4 ScenePassFragment(v2f i) :SV_TARGET
 #if defined(_EMISSION)
 	half3 emission = SampleEmission(i.texcoord.xy, _EmissionColor.rgb, TEXTURE2D_ARGS(_EmissionMap, sampler_EmissionMap));
 #else
-	half3 emission = 0;
+	half3 emission = _EmissionColor.rgb;
 #endif
 	
 #if defined(_USE_PBR)
@@ -76,7 +76,6 @@ half4 ScenePassFragment(v2f i) :SV_TARGET
 	half4 pbr = SAMPLE_TEXTURE2D(_MetallicGlossMap, sampler_MetallicGlossMap, i.texcoord.xy);
 	half smoothness = pbr.a * _Smoothness;;
 	half metallic = pbr.r;
-	half occlusion = 1.0;
 //#if defined(SHADER_API_GLES)
 //	half occlusion = pbr.b;
 //#else

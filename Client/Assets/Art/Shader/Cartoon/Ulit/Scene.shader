@@ -26,7 +26,7 @@
 		_Metallic("Metallic", Range(0.0, 1.0)) = 0.0
 		_OcclusionStrength("OcclusionStrength", Range(0.0, 1.0)) = 1.0
 		//emission
-		_EmissionColor("Color", Color) = (0,0,0)
+		[HDR]_EmissionColor("Color", Color) = (0,0,0)
 		_EmissionMap("Emission", 2D) = "white" {}
 
 	}
