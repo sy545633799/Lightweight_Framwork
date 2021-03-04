@@ -144,7 +144,7 @@ public class ShaderGUIUtil : ShaderGUI
 				case ShaderLOD.None: material.shader.maximumLOD = 0; break;
 			}
 
-			//TODO:������ò��Ҳû��
+			//TODO:material.shader.maximumLOD的设置并不能保存到预制体中
 			if (mode != lodMode)
 			{
 				//Debug.Log($"Set {material.name} maximumLOD: {material.shader.maximumLOD}");

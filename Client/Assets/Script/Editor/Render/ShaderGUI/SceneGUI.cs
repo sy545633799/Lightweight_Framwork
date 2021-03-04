@@ -68,13 +68,13 @@ namespace Game.Editor {
 				var blend = ShaderGUIUtil.DrawBlendModePopup(material, materialEditor, blendMode);
 				if (blend == ShaderGUIUtil.BlendMode.Cutout)
 					materialEditor.ShaderProperty(alphaCutoff, alphaCutoff.displayName, 1);
-				materialEditor.ShaderProperty(cullMode, cullMode.displayName);
+				materialEditor.ShaderProperty(cullMode, "Cull Mode");
 
 				EditorGUILayout.LabelField("主贴图");
 				materialEditor.TexturePropertySingleLine(new GUIContent("Albedo Map (RGB)"), albedoMap, albedoColor);
 				materialEditor.TextureScaleOffsetProperty(albedoMap);
 
-				if (lod == ShaderLOD.High)
+				if (lod == ShaderLOD.High || (lod == ShaderLOD.None && Shader.globalMaximumLOD >= 300))
 				{
 					materialEditor.TexturePropertySingleLine(new GUIContent("Metallic"), metallicMap);
 					if (metallicMap.textureValue == null)
@@ -89,13 +89,13 @@ namespace Game.Editor {
 					materialEditor.RangeProperty(smoothness, "光滑度");
 				}
 
-				if (lod == ShaderLOD.Middle)
+				if (lod == ShaderLOD.Low || lod == ShaderLOD.Middle || (lod == ShaderLOD.None && Shader.globalMaximumLOD <= 200))
 				{
 					materialEditor.RangeProperty(shininess, "高光强度");
 					materialEditor.ColorProperty(specularColor, "高光颜色");
 				}
 
-				if (lod != ShaderLOD.Low)
+				if (lod == ShaderLOD.Middle || lod == ShaderLOD.High || (lod == ShaderLOD.None && Shader.globalMaximumLOD >= 200))
 				{
 					materialEditor.TexturePropertySingleLine(new GUIContent("法线贴图"), bumpMap);
 					//materialEditor.TextureScaleOffsetProperty(bumpMap);
@@ -113,6 +113,7 @@ namespace Game.Editor {
 					material.EnableKeyword("_EMISSION");
 				else
 					material.DisableKeyword("_EMISSION");
+				materialEditor.ColorProperty(emissionColorForRendering, "自发光颜色");
 
 				materialEditor.RenderQueueField();
 			}

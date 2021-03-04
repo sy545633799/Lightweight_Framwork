@@ -24,5 +24,5 @@ public enum EffectType
 public class ShaderGUIHelper
 {
 	public static string[] LodNames =
-			{ "(-1)使用全局LOD", "(100)Low", "(200)Middel", "(300)High" };
+			{ "(0)使用全局LOD", "(100)Low", "(200)Middel", "(300)High" };
 }
