@@ -118,7 +118,7 @@ inline void CommonInitV2F(in a2v i, inout v2f o)
 #endif
 
 	o.fogFactorAndVertexLight.r = ComputeFogFactor(o.positionCS.z);
-#if defined(_ADDITIONAL_LIGHTS_VERTEX)
+#if defined(_ADDITIONAL_LIGHTS_VERTEX) 
 	o.fogFactorAndVertexLight.gba = VertexLighting(positionWS, TransformObjectToWorldDir(i.normalOS));
 #endif
 
@@ -161,5 +161,6 @@ InputData GetInputData(v2f i, half3 positionWS, half3 normalWS, half3 viewDirWS,
 	inputData.bakedGI = SAMPLE_GI(i.texcoord.zw, vertexSH, normalWS);
 	return inputData;
 }
+
 
 #endif

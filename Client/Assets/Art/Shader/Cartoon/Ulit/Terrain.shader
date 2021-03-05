@@ -39,7 +39,11 @@
 		//emission
 		_EmissionColor("Color", Color) = (0,0,0)
 		_EmissionMap("Emission", 2D) = "white" {}
-	
+
+		//给depthOnlyPass用
+		[HideInInspector] _Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0
+		[HideInInspector] _BaseMap("MainTex", 2D) = "white" {}
+		[HideInInspector] _BaseColor("Color", Color) = (1,1,1,1)
 	}
 
 	SubShader
@@ -60,12 +64,12 @@
 			#pragma vertex TerrainPassVertex
 			#pragma fragment TerrainPassFragment
 			#pragma prefer_hlslcc gles
-			#pragma exclude_renderers 
-			#pragma shader_feature _ADDITIONAL_LIGHTS_VERTEX	
+			#pragma exclude_renderers 	
+
+			//#pragma shader_feature _NORMALMAP
+			#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
 			//目前URP只有逐顶点条件下的多光源
 			// #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
-			//#pragma shader_feature _NORMALMAP
-
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
 			#pragma multi_compile _ _SHADOWS_SOFT
@@ -74,10 +78,12 @@
 			
 			#define _NORMALMAP
 			#define _USE_PBR 1
-			#include "./Terrain.hlsl"
+			#include "./TerrainInput.hlsl"
+			#include "./TerrainPass.hlsl"
 			ENDHLSL
 		}
 		UsePass "Common/Shadow/Default/ShadowCaster"
+		UsePass "Cartoon/DepthOnly/Terrain/DepthOnly"
 	}
 
 
@@ -108,8 +114,7 @@
 			#pragma shader_feature _ADDITIONAL_LIGHTS_VERTEX	
 			//目前URP只有逐顶点条件下的多光源
 			// #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
-			//#pragma shader_feature _NORMALMAP
-
+			#pragma shader_feature _NORMALMAP
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
 			#pragma multi_compile _ _SHADOWS_SOFT
@@ -119,12 +124,13 @@
 
 			#define _NORMALMAP 1
 			#define _SPECULAR_COLOR 1
-			#include "./Terrain.hlsl"
-
+			#include "./TerrainInput.hlsl"
+			#include "./TerrainPass.hlsl"
 			ENDHLSL
 		}
 
 		UsePass "Common/Shadow/Default/ShadowCaster"
+		UsePass "Cartoon/DepthOnly/Terrain/DepthOnly"
 	}
 
 	SubShader
@@ -163,12 +169,14 @@
 			#pragma multi_compile_instancing
 
 			#define _SPECULAR_COLOR 1
-			#include "./Terrain.hlsl"
+			#include "./TerrainInput.hlsl"
+			#include "./TerrainPass.hlsl"
 
 			ENDHLSL
 		}
 
 		UsePass "Common/Shadow/Default/ShadowCaster"
+		UsePass "Cartoon/DepthOnly/Terrain/DepthOnly"
 	}
 
 }
