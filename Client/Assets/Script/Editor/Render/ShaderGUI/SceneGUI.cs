@@ -12,7 +12,8 @@ using UnityEngine;
 using static ShaderGUIUtil;
 using static UnityEditor.Rendering.Universal.ShaderGUI.LitGUI;
 
-namespace Game.Editor {
+namespace Game.Editor
+{
 	public class SceneGUI : ShaderGUI
 	{
 		MaterialProperty blendMode = null;
@@ -108,12 +109,11 @@ namespace Game.Editor {
 						material.DisableKeyword("_NORMALMAP");
 				}
 
-				materialEditor.TexturePropertySingleLine(new GUIContent("自发光贴图"), emissionMap);
+				materialEditor.TexturePropertySingleLine(new GUIContent("自发光贴图"), emissionMap, emissionColorForRendering);
 				if (emissionMap.textureValue != null)
 					material.EnableKeyword("_EMISSION");
 				else
 					material.DisableKeyword("_EMISSION");
-				materialEditor.ColorProperty(emissionColorForRendering, "自发光颜色");
 
 				materialEditor.RenderQueueField();
 			}

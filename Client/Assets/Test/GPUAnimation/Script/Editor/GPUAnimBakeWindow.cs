@@ -12,7 +12,7 @@ public class GPUAnimBakeWindow : EditorWindow {
 	}
 	public bakeType type = bakeType.SkeletonAnim;
 	GameObject go;
-	baseBaker baker;
+	BaseBaker baker;
 	string savePath = "Assets/";
 	SkinnedMeshRenderer skm;
 	public int framesOfAll = 0;
@@ -24,7 +24,7 @@ public class GPUAnimBakeWindow : EditorWindow {
 	Material material;
 	Vector3 translate;
 	Vector3 rotation;
-	public Matrix4x4 matrices;
+	Matrix4x4 matrices;
 	Vector3 scale = new Vector3 (1, 1, 1);
 	List<GPUAnimationData> animDatas = new List<GPUAnimationData> ();
 
@@ -53,11 +53,11 @@ public class GPUAnimBakeWindow : EditorWindow {
 			if (animator) {
 				List<AnimationClip> animClips = animator.runtimeAnimatorController.animationClips.ToList ();
 				foreach (var clip in animClips) animDatas.Add (new GPUAnimationData (clip));
-				baker = new AnimatorBaker () as baseBaker;
+				baker = new AnimatorBaker();
 			} else if (animation) {
 				List<AnimationState> stateClips = new List<AnimationState> (animation.Cast<AnimationState> ());
 				foreach (var clip in stateClips) animDatas.Add (new GPUAnimationData (clip));
-				baker = new AnimationBaker () as baseBaker;
+				baker = new AnimationBaker();
 			} else {
 				EditorUtility.DisplayDialog ("Err", "No Animator/Animation Component Attached！", "OK");
 				return;
@@ -171,7 +171,7 @@ public class GPUAnimBakeWindow : EditorWindow {
 		return t >= n? t : t * 2;
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	class baseBaker {
+	class BaseBaker {
 		public GPUAnimBakeWindow window { get; set; }
 		protected virtual void PlayAnim (string name) { }
 		protected virtual void SetAnimTime (GPUAnimationData anim, float f) { }
@@ -232,7 +232,7 @@ public class GPUAnimBakeWindow : EditorWindow {
 			window.framesOfAll += anim.frameCount;
 		}
 	}
-	class AnimatorBaker : baseBaker {
+	class AnimatorBaker : BaseBaker {
 		protected override void PlayAnim (string name) {
 			window.animator.Play (name);
 		}
@@ -240,7 +240,7 @@ public class GPUAnimBakeWindow : EditorWindow {
 			anim.animClip.SampleAnimation (window.animator.gameObject, sampleTime);
 		}
 	}
-	class AnimationBaker : baseBaker {
+	class AnimationBaker : BaseBaker {
 		protected override void PlayAnim (string name) {
 			window.animation.Play (name);
 		}

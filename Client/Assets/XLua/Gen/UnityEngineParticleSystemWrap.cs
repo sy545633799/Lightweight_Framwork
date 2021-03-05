@@ -81,8 +81,9 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 2, 0, 0);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 3, 0, 0);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "ResetPreMappedBufferMemory", _m_ResetPreMappedBufferMemory_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "SetMaximumPreMappedBufferCounts", _m_SetMaximumPreMappedBufferCounts_xlua_st_);
             
 			
             
@@ -872,6 +873,31 @@ namespace XLua.CSObjectWrap
                 {
                     
                     UnityEngine.ParticleSystem.ResetPreMappedBufferMemory(  );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetMaximumPreMappedBufferCounts_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+            
+            
+                
+                {
+                    int _vertexBuffersCount = LuaAPI.xlua_tointeger(L, 1);
+                    int _indexBuffersCount = LuaAPI.xlua_tointeger(L, 2);
+                    
+                    UnityEngine.ParticleSystem.SetMaximumPreMappedBufferCounts( _vertexBuffersCount, _indexBuffersCount );
                     
                     
                     

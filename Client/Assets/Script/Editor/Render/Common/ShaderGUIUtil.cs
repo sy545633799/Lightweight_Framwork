@@ -297,4 +297,28 @@ public class ShaderGUIUtil : ShaderGUI
             material.DisableKeyword("REFLECTDIRECTION");
         }
     }
+
+	public static void SetKeyword(Material m, string keyword, bool state)
+	{
+		if (state)
+			m.EnableKeyword(keyword);
+		else
+			m.DisableKeyword(keyword);
+	}
+
+	public static void DoEmissionArea(MaterialEditor materialEditor, MaterialProperty emissionMap, MaterialProperty emissionColorForRendering)
+	{
+		Material material = materialEditor.target as Material;
+		if (materialEditor.EmissionEnabledProperty())
+		{
+			bool hadEmissionTexture = emissionMap.textureValue != null;
+			materialEditor.TexturePropertyWithHDRColor(EditorGUIUtility.TrTextContent("Color", "Emission (RGB)"), emissionMap, emissionColorForRendering, false);
+
+			float brightness = emissionColorForRendering.colorValue.maxColorComponent;
+			if (emissionMap.textureValue != null && !hadEmissionTexture && brightness <= 0f)
+				emissionColorForRendering.colorValue = Color.white;
+			materialEditor.LightmapEmissionFlagsProperty(MaterialEditor.kMiniTextureFieldLabelIndentLevel, true);
+		}
+	}
+
 }

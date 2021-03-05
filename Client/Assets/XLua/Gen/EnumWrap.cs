@@ -438,7 +438,7 @@ namespace XLua.CSObjectWrap
 		    Utils.BeginObjectRegister(typeof(UnityEngine.RuntimePlatform), L, translator, 0, 0, 0, 0);
 			Utils.EndObjectRegister(typeof(UnityEngine.RuntimePlatform), L, translator, null, null, null, null, null);
 			
-			Utils.BeginClassRegister(typeof(UnityEngine.RuntimePlatform), L, null, 37, 0, 0);
+			Utils.BeginClassRegister(typeof(UnityEngine.RuntimePlatform), L, null, 38, 0, 0);
             
             Utils.RegisterObject(L, translator, Utils.CLS_IDX, "OSXEditor", UnityEngine.RuntimePlatform.OSXEditor);
             
@@ -475,6 +475,8 @@ namespace XLua.CSObjectWrap
             Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Lumin", UnityEngine.RuntimePlatform.Lumin);
             
             Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Stadia", UnityEngine.RuntimePlatform.Stadia);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "CloudRendering", UnityEngine.RuntimePlatform.CloudRendering);
             
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "__CastFrom", __CastFrom);
             
@@ -564,6 +566,10 @@ namespace XLua.CSObjectWrap
 				else if (LuaAPI.xlua_is_eq_str(L, 1, "Stadia"))
                 {
                     translator.PushUnityEngineRuntimePlatform(L, UnityEngine.RuntimePlatform.Stadia);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "CloudRendering"))
+                {
+                    translator.PushUnityEngineRuntimePlatform(L, UnityEngine.RuntimePlatform.CloudRendering);
                 }
 				else
                 {

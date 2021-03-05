@@ -78,6 +78,8 @@ namespace GPUAnim {
 			}
 		}
 
+        
+
 		public bool IsPlaying (string name) {
 			return currentAnim.Equals (name);
 		}

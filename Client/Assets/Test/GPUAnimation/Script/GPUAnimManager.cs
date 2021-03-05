@@ -40,6 +40,7 @@ namespace GPUAnim {
 					GPUAnimation gpuAnim = o.GetComponentInChildren<GPUAnimation> ();
 					gpuAnim._gameObject = o;
 					group = new GPUAnimGroup (gpuAnim);
+                    Debug.LogError(o.name);
 					GroupDic.Add (o.name, group);
 					o.SetActive (false);
 					// DestroyImmediate (o);

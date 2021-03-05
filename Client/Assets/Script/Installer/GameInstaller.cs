@@ -26,7 +26,7 @@ namespace Game
 				width = (int)(1334.0f / aspect);
 			}
 
-			Screen.SetResolution(width, height, true);
+			Screen.SetResolution(width, high, true);
 #endif
 		}
 

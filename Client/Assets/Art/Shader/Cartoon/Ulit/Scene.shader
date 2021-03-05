@@ -55,8 +55,8 @@
 			#pragma fragment ScenePassFragment
 			#pragma prefer_hlslcc gles
 			#pragma exclude_renderers d3d11_9x
-
-			#pragma shader_feature _ADDITIONAL_LIGHTS_VERTEX	
+	
+			
 			//目前URP只有逐顶点条件下的多光源
 			// #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
 			#pragma shader_feature _NORMALMAP
@@ -65,6 +65,7 @@
 			#pragma shader_feature _ALPHATEST_ON
 			#pragma shader_feature _ALPHABLEND_ON
 
+			#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
 			#pragma multi_compile _ _SHADOWS_SOFT
@@ -72,9 +73,7 @@
 			#pragma multi_compile_fog
 			#pragma multi_compile_instancing
 
-			#define _USE_PBR
-			#define _ADDITIONAL_LIGHTS_VERTEX
-
+			#define _USE_PBR	
 			#include "./Scene.hlsl"
 
 			ENDHLSL
@@ -164,7 +163,7 @@
 			//目前URP只有逐顶点条件下的多光源
 			// #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
 			//#pragma shader_feature _NORMALMAP
-			#pragma shader_feature _EMISSION
+			//#pragma shader_feature _EMISSION
 			#pragma shader_feature _ALPHATEST_ON
 			#pragma shader_feature _ALPHABLEND_ON
 

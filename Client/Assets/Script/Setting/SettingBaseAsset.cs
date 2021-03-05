@@ -22,7 +22,7 @@ namespace Game {
 			//编辑器情况下无法使用await
 			//using (zstring.Block())
 			//{
-				 Instance = await ResourceManager.LoadAsset($"Assets/Art/Assets/Setting/{typeof(T).Name}.asset") as SettingBaseAsset<T>;
+				 Instance = await ResourceManager.LoadAsset($"Assets/Art/Assets/Setting/{typeof(T).Name}.asset") as T;
 			//}
 #endif
 		}

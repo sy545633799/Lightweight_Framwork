@@ -41,7 +41,7 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.CLS_IDX, "LoadPreElement", _m_LoadPreElement_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "AddSceneElements", _m_AddSceneElements_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "Cleanup", _m_Cleanup_xlua_st_);
-            Utils.RegisterFunc(L, Utils.CLS_IDX, "Release", _m_Release_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "Dispose", _m_Dispose_xlua_st_);
             
 			
             
@@ -356,7 +356,7 @@ namespace XLua.CSObjectWrap
         }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_Release_xlua_st_(RealStatePtr L)
+        static int _m_Dispose_xlua_st_(RealStatePtr L)
         {
 		    try {
             

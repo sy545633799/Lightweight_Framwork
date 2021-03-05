@@ -27,8 +27,10 @@ namespace CatlikePipeline
 		/// </summary>
 		private void PrepareForSceneWindow(Camera camera)
 		{
+#if UNITY_EDITOR
 			if (camera.cameraType == CameraType.SceneView)
 				ScriptableRenderContext.EmitWorldGeometryForSceneView(camera);
+#endif
 		}
 
 		private void HandleLights(CullingResults cullingResults)

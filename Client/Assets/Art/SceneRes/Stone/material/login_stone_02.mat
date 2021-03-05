@@ -114,7 +114,7 @@ Material:
     - _HeightFogMin: -1
     - _LightIntensity: 1
     - _LightmapSpec: 0
-    - _Metallic: 0.4
+    - _Metallic: 0.256
     - _Mode: 0
     - _NormalScale: 1.03
     - _Occlusion: 0.5
@@ -131,8 +131,8 @@ Material:
     - _RimThreshold: 1
     - _SelfShadowON: 1
     - _ShadowRange: 0.02
-    - _Shininess: 7.62
-    - _Smoothness: 0.401
+    - _Shininess: 15.02
+    - _Smoothness: 0.468
     - _SmoothnessTextureChannel: 0
     - _SpecRange: 187
     - _SpecSmooth: 0.008
@@ -155,5 +155,5 @@ Material:
     - _MaskedDarkSideColor: {r: 0.75, g: 0.6, b: 0.65, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
-    - _SpecColor: {r: 0.9622642, g: 0.13163051, b: 0.13163051, a: 1}
+    - _SpecColor: {r: 0.9245283, g: 0.17007834, b: 0.17007834, a: 1}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
