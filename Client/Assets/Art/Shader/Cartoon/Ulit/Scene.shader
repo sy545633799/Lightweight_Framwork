@@ -164,7 +164,7 @@
 			//目前URP只有逐顶点条件下的多光源
 			// #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
 			//#pragma shader_feature _NORMALMAP
-			//#pragma shader_feature _EMISSION
+			#pragma shader_feature _EMISSION
 			#pragma shader_feature _ALPHATEST_ON
 			#pragma shader_feature _ALPHABLEND_ON
 

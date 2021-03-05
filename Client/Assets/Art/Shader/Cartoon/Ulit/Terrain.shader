@@ -42,7 +42,92 @@
 	
 	}
 
-		SubShader
+	SubShader
+	{
+		Tags
+		{
+			"RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "IgnoreProjector" = "True"
+		}
+		LOD 300
+		pass
+		{
+			Name "ForwardLit"
+			Tags{"LightMode" = "UniversalForward"}
+			Blend[_SrcBlend][_DstBlend]
+			ZWrite[_ZWrite]
+			Cull[_Cull]
+			HLSLPROGRAM
+			#pragma vertex TerrainPassVertex
+			#pragma fragment TerrainPassFragment
+			#pragma prefer_hlslcc gles
+			#pragma exclude_renderers 
+			#pragma shader_feature _ADDITIONAL_LIGHTS_VERTEX	
+			//目前URP只有逐顶点条件下的多光源
+			// #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
+			//#pragma shader_feature _NORMALMAP
+
+			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+			#pragma multi_compile _ _SHADOWS_SOFT
+			#pragma multi_compile _ LIGHTMAP_ON
+			#pragma multi_compile_fog
+			
+			#define _NORMALMAP
+			#define _USE_PBR 1
+			#include "./Terrain.hlsl"
+			ENDHLSL
+		}
+		UsePass "Common/Shadow/Default/ShadowCaster"
+	}
+
+
+	SubShader
+	{
+		Tags
+		{
+			"RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "IgnoreProjector" = "True"
+		}
+
+		LOD 200
+
+		pass
+		{
+			Name "ForwardLit"
+			Tags{"LightMode" = "UniversalForward"}
+
+			Blend[_SrcBlend][_DstBlend]
+			ZWrite[_ZWrite]
+			Cull[_Cull]
+
+			HLSLPROGRAM
+			#pragma vertex TerrainPassVertex
+			#pragma fragment TerrainPassFragment
+			#pragma prefer_hlslcc gles
+			#pragma exclude_renderers d3d11_9x
+
+			#pragma shader_feature _ADDITIONAL_LIGHTS_VERTEX	
+			//目前URP只有逐顶点条件下的多光源
+			// #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
+			//#pragma shader_feature _NORMALMAP
+
+			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+			#pragma multi_compile _ _SHADOWS_SOFT
+			#pragma multi_compile _ LIGHTMAP_ON
+			#pragma multi_compile_fog
+			#pragma multi_compile_instancing
+
+			#define _NORMALMAP 1
+			#define _SPECULAR_COLOR 1
+			#include "./Terrain.hlsl"
+
+			ENDHLSL
+		}
+
+		UsePass "Common/Shadow/Default/ShadowCaster"
+	}
+
+	SubShader
 	{
 		Tags
 		{
@@ -86,85 +171,4 @@
 		UsePass "Common/Shadow/Default/ShadowCaster"
 	}
 
-	SubShader
-	{
-		Tags
-		{
-			"RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "IgnoreProjector" = "True"
-		}
-
-		LOD 200
-
-		pass
-		{
-			Name "ForwardLit"
-			Tags{"LightMode" = "UniversalForward"}
-
-			Blend[_SrcBlend][_DstBlend]
-			ZWrite[_ZWrite]
-			Cull[_Cull]
-
-			HLSLPROGRAM
-			#pragma vertex TerrainPassVertex
-			#pragma fragment TerrainPassFragment
-			#pragma prefer_hlslcc gles
-			#pragma exclude_renderers d3d11_9x
-
-			#pragma shader_feature _ADDITIONAL_LIGHTS_VERTEX	
-			//目前URP只有逐顶点条件下的多光源
-			// #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
-			#pragma shader_feature _NORMALMAP
-
-			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
-			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
-			#pragma multi_compile _ _SHADOWS_SOFT
-			#pragma multi_compile _ LIGHTMAP_ON
-			#pragma multi_compile_fog
-			#pragma multi_compile_instancing
-
-			#define _SPECULAR_COLOR 1
-			#include "./Terrain.hlsl"
-
-			ENDHLSL
-		}
-
-		UsePass "Common/Shadow/Default/ShadowCaster"
-	}
-
-	SubShader
-	{
-		Tags
-		{
-			"RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "IgnoreProjector" = "True"
-		}
-		LOD 300
-		pass
-		{
-			Name "ForwardLit"
-			Tags{"LightMode" = "UniversalForward"}
-			Blend[_SrcBlend][_DstBlend]
-			ZWrite[_ZWrite]
-			Cull[_Cull]
-			HLSLPROGRAM
-			#pragma vertex TerrainPassVertex
-			#pragma fragment TerrainPassFragment
-			#pragma prefer_hlslcc gles
-			#pragma exclude_renderers 
-			#pragma shader_feature _ADDITIONAL_LIGHTS_VERTEX	
-			//目前URP只有逐顶点条件下的多光源
-			// #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
-			#pragma shader_feature _NORMALMAP
-
-			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
-			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
-			#pragma multi_compile _ _SHADOWS_SOFT
-			#pragma multi_compile _ LIGHTMAP_ON
-			#pragma multi_compile_fog
-			
-			#define _USE_PBR 1
-			#include "./Terrain.hlsl"
-			ENDHLSL
-		}
-		UsePass "Common/Shadow/Default/ShadowCaster"
-	}
 }

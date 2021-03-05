@@ -23,10 +23,13 @@ TEXTURE2D(_Normal0);
 SAMPLER(sampler_Normal0);
 float4 _Normal0_ST;
 TEXTURE2D(_Normal1);
+SAMPLER(sampler_Normal1);
 float4 _Normal1_ST;
 TEXTURE2D(_Normal2);
+SAMPLER(sampler_Normal2);
 float4 _Normal2_ST;
 TEXTURE2D(_Normal3);
+SAMPLER(sampler_Normal3);
 float4 _Normal3_ST;
 TEXTURE2D(_Control);
 float4 _Control_ST;
@@ -43,6 +46,9 @@ half _Smoothness1;
 half _Smoothness2;
 half _Smoothness3;
 half _Hightthreshold;
+half4 _EmissionColor;
+TEXTURE2D(_EmissionTex);
+SAMPLER(sampler_EmissionTex);
 
 CBUFFER_END
 
@@ -87,23 +93,23 @@ half4 TerrainPassFragment(v2f i) : SV_Target
 	normalTS += UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal2, sampler_Normal2, i.texcoord3.xy), splatControl.b);
 	normalTS += UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal3, sampler_Normal3, i.texcoord3.zw), splatControl.a);
 	normalTS = normalize(normalTS.xyz);
-	half3 normalWS = TransformTangentToWorld(normalTS, half3x3(i.tangentToWorld[0].xyz, i.tangentToWorld[1].xyz, i.tangentToWorld[2].xyz));
-	half3 positionWS = half3(i.tangentToWorld[0].w, i.tangentToWorld[1].w, i.tangentToWorld[2].w);
+	float sgn = i.tangentWS.w;
+	float3 bitangent = sgn * cross(i.normalWS.xyz, i.tangentWS.xyz);
+	half3 normalWS = NormalizeNormalPerPixel(TransformTangentToWorld(normalTS, half3x3(i.tangentWS.xyz, bitangent.xyz, i.normalWS.xyz)));
 	half3 SH = SampleSH(normalWS.xyz);
-	float3 viewDirWS = normalize(UnityWorldSpaceViewDir(positionWS));
 #else
 	half3 normalWS = i.normalWS;
-	half3 positionWS = i.positionWS;
 	half3 SH = i.vertexSH;
-	float3 viewDirWS = normalize(UnityWorldSpaceViewDir(positionWS));
 #endif
 
+	half3 positionWS = i.positionWS;
+	float3 viewDirWS = normalize(UnityWorldSpaceViewDir(positionWS));
 	InputData inputData = GetInputData(i, positionWS, normalWS, viewDirWS, SH);
 
 #if defined(_EMISSION)
 	half3 emission = SampleEmission(i.texcoord.xy, _EmissionColor.rgb, TEXTURE2D_ARGS(_EmissionMap, sampler_EmissionMap));
 #else
-	half3 emission = 0;
+	half3 emission = _EmissionColor.rgb;
 #endif
 	
 #if defined(_USE_PBR)

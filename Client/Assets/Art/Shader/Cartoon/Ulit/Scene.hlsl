@@ -53,9 +53,9 @@ half4 ScenePassFragment(v2f i) :SV_TARGET
 	UNITY_SETUP_INSTANCE_ID(i);
 	UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
 	WORLD_NORMAL_POSITION_VIEWDIR(i);
+
 	half3 positionWS = i.positionWS;
 	float3 viewDirWS = SafeNormalize(UnityWorldSpaceViewDir(positionWS));
-
 	InputData inputData = GetInputData(i, positionWS, normalWS, viewDirWS, SH);
 
 	half4 albedo = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.texcoord.xy);
@@ -74,7 +74,7 @@ half4 ScenePassFragment(v2f i) :SV_TARGET
 #if defined(_USE_PBR)
 #if defined(_METALLICSPECGLOSSMAP)
 	half4 pbr = SAMPLE_TEXTURE2D(_MetallicGlossMap, sampler_MetallicGlossMap, i.texcoord.xy);
-	half smoothness = pbr.a * _Smoothness;;
+	half smoothness = pbr.a * _Smoothness;
 	half metallic = pbr.r;
 //#if defined(SHADER_API_GLES)
 //	half occlusion = pbr.b;
