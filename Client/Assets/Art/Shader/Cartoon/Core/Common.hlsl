@@ -58,6 +58,7 @@ struct v2f
 	UNITY_VERTEX_OUTPUT_STEREO
 };
 
+
 inline float3 UnityWorldSpaceViewDir(float3 worldPos) {
 	return _WorldSpaceCameraPos - worldPos;
 }

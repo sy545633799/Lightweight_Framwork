@@ -1,4 +1,4 @@
-Shader "Cartoon/Ulit/FXMain" {
+Shader "Cartoon/Effect/FXMain" {
 	Properties
 	{
 		_BaseMap("Base Map", 2D) = "white" {}
@@ -43,7 +43,7 @@ Shader "Cartoon/Ulit/FXMain" {
 
 		// Editmode props
 		[HideInInspector] _QueueOffset("Queue offset", Float) = 0.0
-
+		
 		// ObsoleteProperties
 		[HideInInspector] _FlipbookMode("flipbook", Float) = 0
 		[HideInInspector] _Mode("mode", Float) = 0

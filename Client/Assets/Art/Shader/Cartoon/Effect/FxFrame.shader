@@ -1,4 +1,4 @@
-﻿Shader "Cartoon/Ulit/FxFrame"
+﻿Shader "Cartoon/Effect/FxFrame"
 {
 	Properties
 	{
