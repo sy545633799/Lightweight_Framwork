@@ -21,7 +21,7 @@
 		_SpecColor("Specular Color", Color) = (0.5, 0.5, 0.5, 1)
 		[PowerSlider(5.0)] _Shininess("Shininess", Range(1, 30)) = 10
 		//pbr
-		_MetallicGlossMap("Metallic(R), (G未定), (B未定), Smooth(A)", 2D) = "gray" {}
+		_MetallicGlossMap("Metallic(R), AlphaTest(G), (B未定), Smooth(A)", 2D) = "gray" {}
 		_Smoothness("Smoothness", Range(0.0, 1.0)) = 0.5
 		_Metallic("Metallic", Range(0.0, 1.0)) = 0.0
 		_OcclusionStrength("OcclusionStrength", Range(0.0, 1.0)) = 1.0
