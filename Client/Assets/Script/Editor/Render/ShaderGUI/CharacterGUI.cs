@@ -45,6 +45,8 @@ namespace Game.Editor {
 		MaterialProperty emissionColorForRendering = null;
 		MaterialProperty emissionMap = null;
 
+		GUIStyle headStyle;
+
 		public void FindProperties(MaterialProperty[] props)
 		{
 			blendMode = FindProperty("_Mode", props);
@@ -54,7 +56,6 @@ namespace Game.Editor {
 			alphaCutoff = FindProperty("_Cutoff", props);
 			//mask
 			maskMap = FindProperty("_MaskMap", props);
-			//outline 
 			outlineWidth = FindProperty("_OutlineWidth", props);
 			outlineColor = FindProperty("_OutlineColor", props);
 			outlineScaledMaxDistance = FindProperty("_OutlineScaledMaxDistance", props);
@@ -78,6 +79,11 @@ namespace Game.Editor {
 			//emission
 			emissionColorForRendering = FindProperty("_EmissionColor", props);
 			emissionMap = FindProperty("_EmissionMap", props);
+
+
+			//outline 
+			headStyle = new GUIStyle();
+			headStyle.fontSize = 16;
 		}
 
 		public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] props)
@@ -106,13 +112,12 @@ namespace Game.Editor {
 					else
 						material.DisableKeyword("_MASKMAP");
 				}
-				
 
-				EditorGUILayout.LabelField("描边相关");
+				EditorGUILayout.LabelField("描边", headStyle);
 				materialEditor.ColorProperty(outlineColor, "描边颜色");
 				materialEditor.RangeProperty(outlineWidth, "描边宽度");
 				materialEditor.RangeProperty(outlineScaledMaxDistance, "描边距离系数");
-				EditorGUILayout.LabelField("阴影相关");
+				EditorGUILayout.LabelField("阴影", headStyle);
 				materialEditor.ColorProperty(brightSideColor, "明部颜色");
 				materialEditor.ColorProperty(darkSideColor, "暗部颜色");
 				materialEditor.RangeProperty(rampthreshold, "明暗部系数调整");
@@ -121,14 +126,16 @@ namespace Game.Editor {
 
 				if (lod != ShaderLOD.Low)
 				{
+					EditorGUILayout.LabelField("高光", headStyle);
 					materialEditor.ColorProperty(specularColor, "高光颜色");
 					materialEditor.RangeProperty(shininess, "高光范围");
 					materialEditor.RangeProperty(specTrail, "高光拖尾");
 					materialEditor.FloatProperty(specular, "高光强度");
 				}
 
-				if (lod != ShaderLOD.Low && lod != ShaderLOD.High)
+				if (lod != ShaderLOD.Low && lod != ShaderLOD.Middle)
 				{
+					EditorGUILayout.LabelField("边光", headStyle);
 					materialEditor.ColorProperty(rimColor, "边缘光颜色");
 					materialEditor.RangeProperty(rimThreshold, "范围宽度");
 					materialEditor.RangeProperty(rimPower, "边缘正面影响参数");
@@ -136,7 +143,7 @@ namespace Game.Editor {
 					materialEditor.RangeProperty(rimMax, "边缘光最大值");
 				}
 
-				EditorGUILayout.LabelField("自发光");
+				EditorGUILayout.LabelField("自发光", headStyle);
 				materialEditor.TexturePropertyWithHDRColor(new GUIContent("自发光贴图"), emissionMap, emissionColorForRendering, true);
 				if (emissionMap.textureValue != null)
 					material.EnableKeyword("_EMISSION");
