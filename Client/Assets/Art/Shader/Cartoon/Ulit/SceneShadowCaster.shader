@@ -22,10 +22,12 @@
 			#pragma vertex vert
 			#pragma fragment frag
 			#pragma multi_compile_instancing
-		#include "./SceneInput.hlsl"
+			#include "./SceneInput.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
 
+			TEXTURE2D(_MetallicGlossMap);
+			SAMPLER(sampler_MetallicGlossMap);
 			struct a2v
 			{
 				float4 vertex : POSITION;
