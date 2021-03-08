@@ -2,7 +2,7 @@
 {
 	Properties
 	{
-		[HideInInspector] _BlendMode("BlendMode", float) = 0
+		[HideInInspector] _Mode("__blend", float) = 0
 		[HideInInspector][Enum(Off, 0, On, 1)] _ZWrite("__zw", Float) = 1.0
 		[HideInInspector][Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("__src", Float) = 1.0
 		[HideInInspector][Enum(UnityEngine.Rendering.BlendMode)] _DstBlend("__dst", Float) = 0.0
@@ -67,6 +67,7 @@
 			#pragma exclude_renderers d3d11_9x
 
 			#pragma shader_feature _NORMALMAP
+			#pragma shader_feature _MASKMAP
 			#pragma shader_feature _EMISSION
 			#pragma shader_feature _ALPHATEST_ON
 			#pragma shader_feature _ALPHABLEND_ON
@@ -93,101 +94,104 @@
 		UsePass "Cartoon/DepthOnly/Character/DepthOnly"
 	}
 
-	//SubShader
-	//{
-	//	Tags
-	//	{
-	//		"RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "IgnoreProjector" = "True"
-	//	}
+	SubShader
+	{
+		Tags
+		{
+			"RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "IgnoreProjector" = "True"
+		}
 
-	//	LOD 200
+		LOD 200
 
-	//	pass
-	//	{
-	//		Name "ForwardLit"
-	//		Tags{"LightMode" = "UniversalForward"}
+		pass
+		{
+			Name "ForwardLit"
+			Tags{"LightMode" = "UniversalForward"}
 
-	//		Blend[_SrcBlend][_DstBlend]
-	//		ZWrite[_ZWrite]
-	//		Cull[_Cull]
+			Blend[_SrcBlend][_DstBlend]
+			ZWrite[_ZWrite]
+			Cull[_Cull]
 
-	//		HLSLPROGRAM
-	//		#pragma vertex CharacterPassVertex
-	//		#pragma fragment CharacterPassFragment
-	//		#pragma prefer_hlslcc gles
-	//		#pragma exclude_renderers d3d11_9x
+			HLSLPROGRAM
+			#pragma vertex CharacterPassVertex
+			#pragma fragment CharacterPassFragment
+			#pragma prefer_hlslcc gles
+			#pragma exclude_renderers d3d11_9x
 
-	//		#pragma shader_feature _ADDITIONAL_LIGHTS_VERTEX	
-	//		//目前URP只有逐顶点条件下的多光源
-	//		// #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
-	//		#pragma shader_feature _NORMALMAP
-	//		#pragma shader_feature _ALPHATEST_ON
-	//		#pragma shader_feature _ALPHABLEND_ON
+			#pragma shader_feature _NORMALMAP
+			#pragma shader_feature _MASKMAP
+			#pragma shader_feature _EMISSION
+			#pragma shader_feature _ALPHATEST_ON
+			#pragma shader_feature _ALPHABLEND_ON
 
-	//		#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
-	//		#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
-	//		#pragma multi_compile _ _SHADOWS_SOFT
-	//		#pragma multi_compile _ LIGHTMAP_ON
-	//		#pragma multi_compile_fog
-	//		#pragma multi_compile_instancing
+			//目前URP只有逐顶点条件下的多光源
+			// #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
+			#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+			#pragma multi_compile _ _SHADOWS_SOFT
+			#pragma multi_compile _ LIGHTMAP_ON
+			#pragma multi_compile_fog
+			#pragma multi_compile_instancing
 
-	//		#pragma shader_feature _USE_RIM
-	//		#define _USE_RIM 
-	//		#include "./Character.hlsl"
+			#define _USE_SPECULAR 
+			#include "./CharacterInput.hlsl"
+			#include "./CharacterPass.hlsl"
 
-	//		ENDHLSL
-	//	}
-	//	UsePass "Cartoon/Common/Outline/Outline"
-	//	UsePass "Common/Shadow/Default/ShadowCaster"
-	//	
-	//		
-	//}
+			ENDHLSL
+		}
+		UsePass "Cartoon/Outline/Character/Outline"
+		UsePass "Common/Shadow/Default/ShadowCaster"
+		UsePass "Cartoon/DepthOnly/Character/DepthOnly"
+	}
 
-	//SubShader
-	//{
-	//	Tags
-	//	{
-	//		"RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "IgnoreProjector" = "True"
-	//	}
+	SubShader
+	{
+		Tags
+		{
+			"RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "IgnoreProjector" = "True"
+		}
 
-	//	LOD 300
-	//	pass
-	//	{
-	//		Name "ForwardLit"
-	//		Tags{"LightMode" = "UniversalForward"}
+		LOD 100
 
-	//		Blend[_SrcBlend][_DstBlend]
-	//		ZWrite[_ZWrite]
-	//		Cull[_Cull]
+		pass
+		{
+			Name "ForwardLit"
+			Tags{"LightMode" = "UniversalForward"}
 
-	//		HLSLPROGRAM
-	//		#pragma vertex CharacterPassVertex
-	//		#pragma fragment CharacterPassFragment
-	//		#pragma prefer_hlslcc gles
-	//		#pragma exclude_renderers d3d11_9x
+			Blend[_SrcBlend][_DstBlend]
+			ZWrite[_ZWrite]
+			Cull[_Cull]
 
-	//		#pragma shader_feature _ADDITIONAL_LIGHTS_VERTEX	
-	//		//目前URP只有逐顶点条件下的多光源
-	//		// #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
-	//		#pragma shader_feature _NORMALMAP
-	//		#pragma shader_feature _ALPHATEST_ON
-	//		#pragma shader_feature _ALPHABLEND_ON
+			HLSLPROGRAM
+			#pragma vertex CharacterPassVertex
+			#pragma fragment CharacterPassFragment
+			#pragma prefer_hlslcc gles
+			#pragma exclude_renderers d3d11_9x
 
-	//		#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
-	//		#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
-	//		#pragma multi_compile _ _SHADOWS_SOFT
-	//		#pragma multi_compile _ LIGHTMAP_ON
-	//		#pragma multi_compile_fog
-	//		#pragma multi_compile_instancing
+			#pragma shader_feature _NORMALMAP
+			#pragma shader_feature _EMISSION
+			#pragma shader_feature _ALPHATEST_ON
+			#pragma shader_feature _ALPHABLEND_ON
 
-	//		#pragma shader_feature _USE_MASK
-	//		#define _USE_MASK 
-	//		#include "./Character.hlsl"
+			//目前URP只有逐顶点条件下的多光源
+			// #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
+			#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+			#pragma multi_compile _ _SHADOWS_SOFT
+			#pragma multi_compile _ LIGHTMAP_ON
+			#pragma multi_compile_fog
+			#pragma multi_compile_instancing
 
-	//		ENDHLSL
-	//	}
-	//	UsePass "Cartoon/Common/Outline/Outline"
-	//	UsePass "Common/Shadow/Default/ShadowCaster"
+			#include "./CharacterInput.hlsl"
+			#include "./CharacterPass.hlsl"
 
-	//}
+			ENDHLSL
+		}
+		UsePass "Cartoon/Outline/Character/Outline"
+		UsePass "Common/Shadow/Default/ShadowCaster"
+		UsePass "Cartoon/DepthOnly/Character/DepthOnly"
+	}
+	CustomEditor "Game.Editor.CharacterGUI"
 }

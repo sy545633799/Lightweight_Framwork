@@ -37,13 +37,10 @@ CBUFFER_END
 
 TEXTURE2D(_MaskMap); SAMPLER(sampler_MaskMap);
 
-half4 UniversalFragmentCartoon(InputData inputData, half3 albedo, half3 emission, half alpha)
+half4 UniversalFragmentCartoon(InputData inputData, half3 albedo, half4 mask, half3 emission, half alpha)
 {
 	half3 color = albedo;
 
-#if defined(_MASKMAP)
-	half4 mask = tex2D(_MaskTex, i.uv.zw);
-#endif
 	Light mainLight = GetMainLight(inputData.shadowCoord);
 	half attenuatedLightColor = (mainLight.distanceAttenuation * mainLight.shadowAttenuation);
 	half lightAtten = (dot(mainLight.direction, inputData.normalWS) * 0.5 + 0.5) * attenuatedLightColor;;
@@ -94,6 +91,6 @@ half4 UniversalFragmentCartoon(InputData inputData, half3 albedo, half3 emission
 
 	half3 finalColor = color * mainLight.color + emission;
 
-	return half4(color, alpha);
+	return half4(finalColor, alpha);
 }
 
