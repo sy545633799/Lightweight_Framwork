@@ -29,7 +29,7 @@ half4 CharacterPassFragment(v2f i) :SV_TARGET
 
 	half4 albedo = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.texcoord.xy);
 #if defined(_ALPHATEST_ON)
-	clip(albedo.a - _Cutoff);
+	clip(albedo.a - _Cutoff); 
 #endif
 	half3 alpha = Alpha(albedo.a, _BaseColor, _Cutoff);
 	albedo.rgb *= _BaseColor.rgb;

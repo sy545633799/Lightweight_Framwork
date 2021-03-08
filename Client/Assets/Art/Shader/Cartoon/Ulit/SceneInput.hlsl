@@ -20,4 +20,5 @@ half _OcclusionStrength;
 //emission
 half4 _EmissionColor;
 
+float3 _LightDirection;
 CBUFFER_END

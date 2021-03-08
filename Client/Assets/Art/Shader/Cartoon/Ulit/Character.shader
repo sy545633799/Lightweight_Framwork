@@ -16,7 +16,7 @@
 		_MaskMap("Mask r(遮罩阴影) g(未定）b (高光通道)", 2D) = "white" {}
 
 		[Header(Outline)]
-		_OutlineWidth("描边宽度",Range(0,1)) = 0.626
+		_OutlineWidth("描边宽度",Range(0,1)) = 0.626 
 		_OutlineColor("描边颜色",COLOR) = (0.264,0.0137,0.0137,1)
 		_OutlineScaledMaxDistance("描边距离系数",Range(0.0,100.0)) = 15.0
 		[Header(Shadow)]
