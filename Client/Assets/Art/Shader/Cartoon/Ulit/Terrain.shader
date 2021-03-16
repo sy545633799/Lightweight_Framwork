@@ -82,7 +82,7 @@
 			#include "./TerrainPass.hlsl"
 			ENDHLSL
 		}
-
+		UsePass "Cartoon/Shadow/Terrain/ShadowCaster"
 		UsePass "Cartoon/DepthOnly/Terrain/DepthOnly"
 	}
 
@@ -129,6 +129,7 @@
 			ENDHLSL
 		}
 
+		UsePass "Cartoon/Shadow/Terrain/ShadowCaster"
 		UsePass "Cartoon/DepthOnly/Terrain/DepthOnly"
 	}
 
@@ -174,15 +175,7 @@
 			ENDHLSL
 		}
 
+		UsePass "Cartoon/Shadow/Terrain/ShadowCaster"
 		UsePass "Cartoon/DepthOnly/Terrain/DepthOnly"
-	}
-
-
-	SubShader
-	{
-		Tags{ "Queue" = "Geometry" }
-		LOD 90
-		UsePass "Common/Shadow/Default/ShadowCaster"
-
 	}
 }

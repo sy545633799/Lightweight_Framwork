@@ -9,7 +9,7 @@
 		[HideInInspector][Enum(UnityEngine.Rendering.CullMode)] _Cull("__cull", Float) = 2.0
 
 
-		_Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
+		[Gamma]_Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
 
 		//diffuse
 		[MainColor] _BaseColor("Color", Color) = (1,1,1,1)
@@ -76,7 +76,7 @@
 
 			ENDHLSL
 		}
-
+		UsePass "Cartoon/Shadow/Scene/ShadowCaster"
 		UsePass "Cartoon/DepthOnly/Scene/DepthOnly"
 		
 	}
@@ -126,7 +126,7 @@
 
 			ENDHLSL
 		}
-
+		UsePass "Cartoon/Shadow/Scene/ShadowCaster"
 		UsePass "Cartoon/DepthOnly/Scene/DepthOnly"
 	}
 
@@ -176,17 +176,9 @@
 
 			ENDHLSL
 		}
-
+		UsePass "Cartoon/Shadow/Scene/ShadowCaster"
 		UsePass "Cartoon/DepthOnly/Scene/DepthOnly"
 	}
 
-	SubShader
-	{
-		Tags{ "Queue" = "Geometry" }
-		LOD 90
-
-		UsePass "Common/Shadow/Default/ShadowCaster"
-		
-	}
 	CustomEditor "Game.Editor.SceneGUI"
 }

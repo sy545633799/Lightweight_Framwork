@@ -33,6 +33,8 @@ half _RimThreshold;
 half3 _RimColor;
 //emission
 half4 _EmissionColor;
+
+float3 _LightDirection;
 CBUFFER_END
 
 TEXTURE2D(_MaskMap); SAMPLER(sampler_MaskMap);

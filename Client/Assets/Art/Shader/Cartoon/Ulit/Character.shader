@@ -8,7 +8,7 @@
 		[HideInInspector][Enum(UnityEngine.Rendering.BlendMode)] _DstBlend("__dst", Float) = 0.0
 		[HideInInspector][Enum(UnityEngine.Rendering.CullMode)] _Cull("__cull", Float) = 2.0
 
-		_Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
+		[Gamma]_Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
 		//diffuse
 		[MainColor] _BaseColor("Color(a通道为是否有积雪)", Color) = (1,1,1,1)
 		[MainTexture] _BaseMap("MainTex", 2D) = "white" {}
@@ -90,6 +90,7 @@
 			ENDHLSL
 		}
 		UsePass "Cartoon/Outline/Character/Outline"
+		UsePass "Cartoon/Shadow/Character/ShadowCaster"
 		UsePass "Cartoon/DepthOnly/Character/DepthOnly"
 	}
 
@@ -140,6 +141,7 @@
 			ENDHLSL
 		}
 		UsePass "Cartoon/Outline/Character/Outline"
+		UsePass "Cartoon/Shadow/Character/ShadowCaster"
 		UsePass "Cartoon/DepthOnly/Character/DepthOnly"
 	}
 
@@ -188,18 +190,8 @@
 			ENDHLSL
 		}
 		UsePass "Cartoon/Outline/Character/Outline"
+		UsePass "Cartoon/Shadow/Character/ShadowCaster"
 		UsePass "Cartoon/DepthOnly/Character/DepthOnly"
-	}
-
-
-	SubShader
-	{
-		Tags{ "Queue" = "Geometry" }
-
-		LOD 90
-
-		UsePass "Common/Shadow/Default/ShadowCaster"
-
 	}
 
 	CustomEditor "Game.Editor.CharacterGUI"

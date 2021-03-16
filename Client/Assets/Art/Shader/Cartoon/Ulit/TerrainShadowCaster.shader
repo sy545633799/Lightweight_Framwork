@@ -1,4 +1,4 @@
-﻿Shader "Cartoon/Shadow/Scene"
+﻿Shader "Cartoon/Shadow/Terrain"
 {
 	Properties
 	{
@@ -21,7 +21,7 @@
 			#pragma vertex vert
 			#pragma fragment frag
 			#pragma multi_compile_instancing
-			#include "./SceneInput.hlsl"
+			#include "./TerrainInput.hlsl"
 			#include "../Core/ShadowCaster.hlsl"
 			ENDHLSL
 		}

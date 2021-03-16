@@ -1,9 +1,9 @@
-﻿Shader "Cartoon/Shadow/Scene"
+﻿Shader "Cartoon/Shadow/Character"
 {
 	Properties
 	{
-		[MainTexture] _BaseMap("MainTex", 2D) = "white" {}
-		_MetallicGlossMap("Metallic(R), AlphaTest(G), (B未定), Smooth(A)", 2D) = "gray" {}
+		_Color("Color Tint", Color) = (0.5,0.5,0.5)
+		_MainTex("MainTex",2D) = "white"{}
 	}
 
 	SubShader
@@ -21,7 +21,7 @@
 			#pragma vertex vert
 			#pragma fragment frag
 			#pragma multi_compile_instancing
-			#include "./SceneInput.hlsl"
+			#include "./CharacterInput.hlsl"
 			#include "../Core/ShadowCaster.hlsl"
 			ENDHLSL
 		}
