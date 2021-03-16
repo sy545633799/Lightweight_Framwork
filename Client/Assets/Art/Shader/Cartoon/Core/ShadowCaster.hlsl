@@ -1,65 +1,53 @@
 ﻿#ifndef TOON_SHADOW_CASTER_PASS_INCLUDED
 #define TOON_SHADOW_CASTER_PASS_INCLUDED
 
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
+#include "./Common.hlsl"
 
-struct a2v
+struct v2f2
 {
-	float4 vertex : POSITION;
-	float3 normal : NORMAL;
+	float4 positionCS : SV_POSITION;
 #ifdef _ALPHATEST_ON
-	half2 uv : TEXCOORD0;
+	half2 texcoord : TEXCOORD0;
 #endif
 	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
-struct v2f
+v2f2 vert(a2v i)
 {
-	float4 pos : SV_POSITION;
-#ifdef _ALPHATEST_ON
-	half2 uv : TEXCOORD0;
-#endif
-	UNITY_VERTEX_INPUT_INSTANCE_ID
-};
+	v2f2 o;
+	UNITY_SETUP_INSTANCE_ID(i);
+	UNITY_TRANSFER_INSTANCE_ID(i, o);
 
-v2f vert(a2v  v)
-{
-	v2f o;
-	UNITY_SETUP_INSTANCE_ID(v);
-	UNITY_TRANSFER_INSTANCE_ID(v, o);
+
 #ifdef _ALPHATEST_ON
-	o.uv = TRANSFORM_TEX(v.uv, _BaseMap);
+	o.texcoord = TRANSFORM_TEX(i.texcoord.xy, _BaseMap);
 #endif
-	float3 worldPos = TransformObjectToWorld(v.vertex.xyz);
+	float3 worldPos = TransformObjectToWorld(i.positionOS.xyz);
 
 #ifdef VERTEXWAVE_ON
 	worldPos.xz -= WaveGrass(worldPos, _WaveParams);
 #endif
-
-	float3 worldNormal = TransformObjectToWorldNormal(v.normal);
-	o.pos = TransformWorldToHClip(ApplyShadowBias(worldPos, worldNormal, _LightDirection));
+	Light MainLight = GetMainLight();
+	float3 worldNormal = TransformObjectToWorldNormal(i.normalOS);
+	o.positionCS = TransformWorldToHClip(ApplyShadowBias(worldPos, worldNormal, MainLight.direction));
 
 #if UNITY_REVERSED_Z
-	o.pos.z = min(o.pos.z, o.pos.w * UNITY_NEAR_CLIP_VALUE);
+	o.positionCS.z = min(o.positionCS.z, o.positionCS.w * UNITY_NEAR_CLIP_VALUE);
 #else
-	o.pos.z = max(o.pos.z, o.pos.w * UNITY_NEAR_CLIP_VALUE);
+	o.positionCS.z = max(o.positionCS.z, o.positionCS.w * UNITY_NEAR_CLIP_VALUE);
 #endif
 
 	return o;
 }
 
-half4 frag(v2f i) :SV_Target
+half4 frag(v2f2 i) :SV_Target
 {
 	UNITY_SETUP_INSTANCE_ID(i);
 #ifdef _ALPHATEST_ON
-		half alpha = SAMPLE_TEXTURE2D(_BaseMap,sampler_BaseMap, i.uv).a;
+		half alpha = SAMPLE_TEXTURE2D(_BaseMap,sampler_BaseMap, i.texcoord).a;
 		clip(alpha - _Cutoff);
 #endif
 	return 0;
 }
-
 
 #endif

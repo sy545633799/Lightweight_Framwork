@@ -16,13 +16,15 @@
 			Tags{"LightMode" = "ShadowCaster"}
 			ColorMask 0
 			HLSLPROGRAM
-			#pragma target 3.5
-			#pragma shader_feature _CLIPPING
+			#pragma target 2.0
+			#include "./SceneInput.hlsl"
+			#include "../Core/ShadowCaster.hlsl"
+
+			#pragma shader_feature _ALPHATEST_ON
 			#pragma vertex vert
 			#pragma fragment frag
 			#pragma multi_compile_instancing
-			#include "./SceneInput.hlsl"
-			#include "../Core/ShadowCaster.hlsl"
+			
 			ENDHLSL
 		}
 	}

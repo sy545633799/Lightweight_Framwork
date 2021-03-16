@@ -46,6 +46,4 @@ half4 _EmissionColor;
 //给DepthOnlyPass用
 half _Cutoff;
 float4 _BaseMap_ST;
-
-float3 _LightDirection;
 CBUFFER_END
