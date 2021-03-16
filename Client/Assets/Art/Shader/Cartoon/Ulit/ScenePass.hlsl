@@ -38,21 +38,23 @@ half4 ScenePassFragment(v2f i) :SV_TARGET
 
 	half4 albedo = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.texcoord.xy);
 	//half3 alpha = Alpha(albedo.a, _BaseColor, _Cutoff);
-	half alpha = albedo.a * _BaseColor.a;
+#if defined(_ALPHATEST_ON)
+	clip(albedo.a - _Cutoff);
+#endif
+
 	albedo.rgb *= _BaseColor.rgb;
+	half alpha = _BaseColor.a;
 
 #if defined(_EMISSION)
 	half3 emission = SampleEmission(i.texcoord.xy, _EmissionColor.rgb, TEXTURE2D_ARGS(_EmissionMap, sampler_EmissionMap));
 #else
 	half3 emission = _EmissionColor.rgb;
 #endif
-	
+
 #if defined(_METALLICSPECGLOSSMAP)
 	half4 pbr = SAMPLE_TEXTURE2D(_MetallicGlossMap, sampler_MetallicGlossMap, i.texcoord.xy);
-	#if defined(_ALPHATEST_ON)
-		clip(pbr.g - _Cutoff);
-	#endif
 #endif
+
 
 #if defined(_USE_PBR)
 #if defined(_METALLICSPECGLOSSMAP)

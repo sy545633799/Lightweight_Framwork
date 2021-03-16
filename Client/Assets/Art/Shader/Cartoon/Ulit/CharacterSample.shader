@@ -89,7 +89,6 @@
 
 			ENDHLSL
 		}
-		UsePass "Common/Shadow/Default/ShadowCaster"
 		UsePass "Cartoon/DepthOnly/Character/DepthOnly"
 	}
 
@@ -139,7 +138,6 @@
 
 			ENDHLSL
 		}
-		UsePass "Common/Shadow/Default/ShadowCaster"
 		UsePass "Cartoon/DepthOnly/Character/DepthOnly"
 	}
 
@@ -187,8 +185,17 @@
 
 			ENDHLSL
 		}
-		UsePass "Common/Shadow/Default/ShadowCaster"
+
 		UsePass "Cartoon/DepthOnly/Character/DepthOnly"
 	}
+
+	SubShader
+	{
+		Tags{ "Queue" = "Geometry" }
+		LOD 90
+		UsePass "Common/Shadow/Default/ShadowCaster"
+	
+	}
+
 	CustomEditor "Game.Editor.CharacterGUI"
 }

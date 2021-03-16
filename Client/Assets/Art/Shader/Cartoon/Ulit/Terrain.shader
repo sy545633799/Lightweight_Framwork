@@ -1,4 +1,4 @@
-﻿Shader "Cartoon/Terrain"
+﻿Shader "Cartoon/Ulit/Terrain"
 {
 	Properties
 	{
@@ -82,7 +82,7 @@
 			#include "./TerrainPass.hlsl"
 			ENDHLSL
 		}
-		UsePass "Common/Shadow/Default/ShadowCaster"
+
 		UsePass "Cartoon/DepthOnly/Terrain/DepthOnly"
 	}
 
@@ -129,7 +129,6 @@
 			ENDHLSL
 		}
 
-		UsePass "Common/Shadow/Default/ShadowCaster"
 		UsePass "Cartoon/DepthOnly/Terrain/DepthOnly"
 	}
 
@@ -175,8 +174,15 @@
 			ENDHLSL
 		}
 
-		UsePass "Common/Shadow/Default/ShadowCaster"
 		UsePass "Cartoon/DepthOnly/Terrain/DepthOnly"
 	}
 
+
+	SubShader
+	{
+		Tags{ "Queue" = "Geometry" }
+		LOD 90
+		UsePass "Common/Shadow/Default/ShadowCaster"
+
+	}
 }

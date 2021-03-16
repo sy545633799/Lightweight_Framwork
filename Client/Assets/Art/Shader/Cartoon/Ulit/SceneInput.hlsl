@@ -21,4 +21,6 @@ half _OcclusionStrength;
 half4 _EmissionColor;
 
 float3 _LightDirection;
+float4 _WaveParams;
+
 CBUFFER_END

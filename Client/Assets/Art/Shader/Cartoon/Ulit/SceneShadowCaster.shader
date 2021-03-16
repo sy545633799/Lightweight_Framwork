@@ -22,7 +22,7 @@
 			#pragma vertex vert
 			#pragma fragment frag
 			#pragma multi_compile_instancing
-			#include "./SceneInput.hlsl"
+		#include "./SceneInput.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
 
@@ -55,11 +55,11 @@
 #if defined(_ALPHATEST_ON)
 				o.uv = v.uv.xy * _BaseMap_ST.xy + _BaseMap_ST.zw;
 #endif
-				//float3 worldPos = TransformObjectToWorld(v.vertex.xyz);
-				//float3 worldNormal = TransformObjectToWorldNormal(v.normal);
-				//o.pos = TransformWorldToHClip(ApplyShadowBias(worldPos, worldNormal, _LightDirection));
-
-				o.pos = TransformObjectToHClip(v.vertex.xyz);
+				float3 worldPos = TransformObjectToWorld(v.vertex.xyz);
+				float3 worldNormal = TransformObjectToWorldNormal(v.normal);
+				o.pos = TransformWorldToHClip(ApplyShadowBias(worldPos, worldNormal, _LightDirection));
+				 
+				//o.pos = TransformObjectToHClip(v.vertex.xyz);
 			
 			#if UNITY_REVERSED_Z
 				o.pos.z = min(o.pos.z, o.pos.w * UNITY_NEAR_CLIP_VALUE);

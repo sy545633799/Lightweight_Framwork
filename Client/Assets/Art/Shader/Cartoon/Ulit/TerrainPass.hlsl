@@ -37,9 +37,9 @@ half4 TerrainPassFragment(v2f i) : SV_Target
 	half4 albedo = 0.0h;
 
 	albedo += SAMPLE_TEXTURE2D(_Splat0, sampler_Splat0, i.texcoord2.xy) * half4(splatControl.rrr, 1.0h);
-	albedo += SAMPLE_TEXTURE2D(_Splat1, sampler_Splat0, i.texcoord2.zw) * half4(splatControl.ggg, 1.0h);
-	albedo += SAMPLE_TEXTURE2D(_Splat2, sampler_Splat0, i.texcoord3.xy) * half4(splatControl.bbb, 1.0h);
-	albedo += SAMPLE_TEXTURE2D(_Splat3, sampler_Splat0, i.texcoord3.zw) * half4(splatControl.aaa, 1.0h);
+	albedo += SAMPLE_TEXTURE2D(_Splat1, sampler_Splat1, i.texcoord2.zw) * half4(splatControl.ggg, 1.0h);
+	albedo += SAMPLE_TEXTURE2D(_Splat2, sampler_Splat2, i.texcoord3.xy) * half4(splatControl.bbb, 1.0h);
+	albedo += SAMPLE_TEXTURE2D(_Splat3, sampler_Splat3, i.texcoord3.zw) * half4(splatControl.aaa, 1.0h);
 
 #ifdef _NORMALMAP
 	half3 normalTS = 0.0f;

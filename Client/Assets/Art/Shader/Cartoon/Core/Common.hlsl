@@ -26,32 +26,41 @@ struct v2f
 {
 	float4 positionCS				: SV_POSITION;
 	half3 normalWS					: NORMAL;
-	float4 texcoord					: TEXCOORD0;
-
 #if defined(_USE_OUTPUT_COLOR)
 	half4 color				: COLOR;
 #endif
-#if defined(_USE_TEXCOORD2)
-	float4 texcoord2				: TEXCOORD1;
-#endif
-#if defined(_USE_TEXCOORD3)
-	float4 texcoord3				: TEXCOORD2;
-#endif
+	float4 texcoord					: TEXCOORD0;
 
 #if defined(REQUIRES_WORLD_SPACE_POS_INTERPOLATOR)
-	half3 positionWS				: TEXCOORD3;
+	half3 positionWS				: TEXCOORD1;
 #endif
 
 #if defined(_NORMALMAP)
-	half4 tangentWS		: TEXCOORD4;
+	half4 tangentWS		: TEXCOORD2;
 #else
 	//如果没有NormalMap，球谐光在Vertex, 反之在Fragment采样，跟默认Terrain相同，跟默认Lit不同，注意
-	half3 vertexSH                  : TEXCOORD4;
+	half3 vertexSH                  : TEXCOORD2;
 #endif
 
-	half4 fogFactorAndVertexLight   : TEXCOORD5;
+	half4 fogFactorAndVertexLight   : TEXCOORD3;
 #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
-	float4 shadowCoord              : TEXCOORD6;
+	float4 shadowCoord              : TEXCOORD4;
+#endif
+
+#if defined(_USE_TEXCOORD2)
+	float4 texcoord2				: TEXCOORD5;
+#endif
+
+#if defined(_USE_TEXCOORD3)
+	float4 texcoord3				: TEXCOORD6;
+#endif
+
+#if defined(_USE_TEXCOORD4)
+	float4 texcoord4				: TEXCOORD7;
+#endif
+
+#if defined(_USE_TEXCOORD5)
+	float4 texcoord5				: TEXCOORD8;
 #endif
 
 	UNITY_VERTEX_INPUT_INSTANCE_ID

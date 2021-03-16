@@ -22,7 +22,7 @@ struct v2f
 v2f DepthOnlyVertex(a2v i)
 {
 	v2f o = (v2f)0;
-	UNITY_SETUP_INSTANCE_ID(input);
+	UNITY_SETUP_INSTANCE_ID(i); 
 	UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 	o.texcoord.xy = TRANSFORM_TEX(i.texcoord, _BaseMap);
