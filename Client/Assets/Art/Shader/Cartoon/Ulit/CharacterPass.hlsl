@@ -28,10 +28,16 @@ half4 CharacterPassFragment(v2f i) :SV_TARGET
 	InputData inputData = GetInputData(i, positionWS, normalWS, viewDirWS, SH);
 
 	half4 albedo = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.texcoord.xy);
+	//half3 alpha = Alpha(albedo.a, _BaseColor, _Cutoff);
 #if defined(_ALPHATEST_ON)
-	clip(albedo.a - _Cutoff); 
+	half alpha = _BaseColor.a;
+	clip(albedo.a - _Cutoff);
+#elif defined(_ALPHABLEND_ON)
+	half alpha = _BaseColor.a * albedo.a;
+#else
+	half alpha = _BaseColor.a;
 #endif
-	half3 alpha = Alpha(albedo.a, _BaseColor, _Cutoff);
+	
 	albedo.rgb *= _BaseColor.rgb;
 
 #if defined(_EMISSION)

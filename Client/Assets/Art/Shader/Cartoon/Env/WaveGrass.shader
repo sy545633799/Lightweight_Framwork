@@ -2,11 +2,11 @@
 {
     Properties
     {
-		[HideInInspector] _Mode("__blend", float) = 0
+	/*	[HideInInspector] _Mode("__blend", float) = 0
 		[HideInInspector][Enum(Off, 0, On, 1)] _ZWrite("__zw", Float) = 1.0
 		[HideInInspector][Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("__src", Float) = 1.0
 		[HideInInspector][Enum(UnityEngine.Rendering.BlendMode)] _DstBlend("__dst", Float) = 0.0
-		[HideInInspector][Enum(UnityEngine.Rendering.CullMode)] _Cull("__cull", Float) = 2.0
+		[HideInInspector][Enum(UnityEngine.Rendering.CullMode)] _Cull("__cull", Float) = 2.0*/
 
 		[MainColor] _BaseColor("Color", Color) = (0.2552059, 0.3584906, 0.1843182, 1)
 		[MainTexture] _BaseMap("BaseMap", 2D) = "white" {}
@@ -23,9 +23,9 @@
         Pass
         {
 			Tags{"LightMode" = "UniversalForward" }
-			Blend[_SrcBlend][_DstBlend]
-			ZWrite[_ZWrite]
-			Cull[_Cull]
+			//Blend[_SrcBlend][_DstBlend]
+			//ZWrite[_ZWrite]
+			//Cull[_Cull]
 
 			HLSLPROGRAM
             #pragma vertex vert
@@ -62,8 +62,8 @@
 				half3 positionWS = TransformObjectToWorld(i.positionOS.xyz);
 				half2 uv = half2( positionWS.x / _WindScale.z + _WindScale.x * _WindSpeed * _Time.x, positionWS.z / _WindScale.w + _WindScale.y * _WindSpeed * _Time.x);
 				half noise = SAMPLE_TEXTURE2D_LOD(_GradientNoiseMap, sampler_GradientNoiseMap, uv * _WindDensity, 1).r;
-				half3 offset = noise * half3(_WindScale.x, _WindDensity * -0.1, _WindScale.y) * max(i.positionOS.y - _BttomHeight, 0);
-				o.positionCS = TransformObjectToHClip(i.positionOS.xyz);
+				half3 offset = noise * half3(-_WindScale.x, _WindStrenth * -0.1, -_WindScale.y) * max(i.positionOS.y - _BttomHeight, 0);
+				o.positionCS = TransformObjectToHClip(i.positionOS.xyz + offset);
 
 				o.texcoord.xy = TRANSFORM_TEX(i.texcoord, _BaseMap);
 				
