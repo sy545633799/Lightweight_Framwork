@@ -24,13 +24,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _BttomHeight: 1.52
+    - _BttomHeight: 0
     - _Cull: 2
     - _DstBlend: 0
     - _Mode: 0
+    - _ShadowFade: 0.59
     - _SrcBlend: 1
-    - _TopColorRange: 0.532
+    - _TopColorRange: 0.833
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 0.25520587, g: 0.35849056, b: 0.18431816, a: 1}
-    - _TopColor: {r: 0.1215686, g: 0.4671336, b: 0.509804, a: 1}
+    - _TopColor: {r: 0.40138838, g: 0.41313633, b: 0.41509432, a: 1}
