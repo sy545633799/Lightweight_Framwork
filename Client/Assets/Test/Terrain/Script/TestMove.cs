@@ -90,6 +90,6 @@ public class TestMove : MonoBehaviour
 		controller.Move((motion + Vector3.down * GravitySpeed) * Time.deltaTime * MoveSpeed);
 
 		animator.SetFloat("Velocity X", motion.sqrMagnitude);
-
+		Shader.SetGlobalVector("_PlayerPos", transform.position);
 	}
 }
