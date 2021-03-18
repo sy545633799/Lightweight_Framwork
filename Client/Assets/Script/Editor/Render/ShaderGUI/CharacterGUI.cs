@@ -38,8 +38,6 @@ namespace Game.Editor {
 		//rim
 		MaterialProperty rimThreshold = null;
 		MaterialProperty rimPower = null;
-		MaterialProperty rimMin = null;
-		MaterialProperty rimMax = null;
 		MaterialProperty rimColor = null;
 		//emission
 		MaterialProperty emissionColorForRendering = null;
@@ -73,8 +71,6 @@ namespace Game.Editor {
 			//rim
 			rimThreshold = FindProperty("_RimThreshold", props);
 			rimPower = FindProperty("_RimPower", props);
-			rimMin = FindProperty("_RimMin", props);
-			rimMax = FindProperty("_RimMax", props);
 			rimColor = FindProperty("_RimColor", props);
 			//emission
 			emissionColorForRendering = FindProperty("_EmissionColor", props);
@@ -139,8 +135,6 @@ namespace Game.Editor {
 					materialEditor.ColorProperty(rimColor, "边缘光颜色");
 					materialEditor.RangeProperty(rimThreshold, "范围宽度");
 					materialEditor.RangeProperty(rimPower, "边缘正面影响参数");
-					materialEditor.RangeProperty(rimMin, "边缘光最小值");
-					materialEditor.RangeProperty(rimMax, "边缘光最大值");
 				}
 
 				EditorGUILayout.LabelField("自发光", headStyle);

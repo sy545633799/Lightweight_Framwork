@@ -19,13 +19,14 @@ public class TerrainSlicing : ScriptableWizard
 
 	void OnWizardOtherButton()
 	{
-
 		terrain = GameObject.FindObjectOfType<Terrain>();
+
 		if (terrain == null)
 		{
 			Debug.LogError("找不到地形!");
 			return;
 		}
+
 		if (System.IO.Directory.Exists(PrefabFolder))
 			System.IO.Directory.Delete(PrefabFolder, true);
 		System.IO.Directory.CreateDirectory(PrefabFolder);
@@ -109,7 +110,7 @@ public class TerrainSlicing : ScriptableWizard
 					float offsetY = (newData.size.z * y) % splatProtos[i].tileSize.y + splatProtos[i].tileOffset.y;
 					newSplats[i].tileOffset = new Vector2(offsetX, offsetY);
 				}
-				
+
 				newData.terrainLayers = newSplats;
 
 				//设置混合贴图
@@ -138,40 +139,28 @@ public class TerrainSlicing : ScriptableWizard
 
 	private static void CreateTexture(TerrainData child, string assetName, int x1, int y1)
 	{
-		string path = PrefabFolder + "Terrains/Texture/" + assetName + ".png";
-		string AssetName = AssetDatabase.GetAssetPath(terrain.terrainData) as string;
-		UnityEngine.Object[] AssetName2 = AssetDatabase.LoadAllAssetsAtPath(AssetName);
-		if (AssetName2 != null && AssetName2.Length > 1)
+		string path = PrefabFolder + "Terrains/Texture/" + assetName + "0.png";
+		Texture2D[] alphamapTextures = terrain.terrainData.alphamapTextures;
+
+		Texture2D texture = null;
+		if (alphamapTextures.Length == 0)
 		{
-			for (var b = 0; b < AssetName2.Length; b++)
-			{
-				if (AssetName2[b].name == "SplatAlpha 0")
-				{
-					Texture2D texture = AssetName2[b] as Texture2D;
-					byte[] bytes = texture.EncodeToPNG();
-					File.WriteAllBytes(path, bytes);
-					AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
-				}
-			}
+			texture = new Texture2D(1, 1);
+			byte[] bytes = texture.EncodeToPNG();
+			File.WriteAllBytes(path, bytes);
 		}
-		else
+
+		for (int i = 0; i < alphamapTextures.Length; i++)
 		{
-			path = PrefabFolder + "Terrains/Texture/" + assetName + ".png";
-			Texture2D NewMaskText = new Texture2D(512, 512, TextureFormat.ARGB32, true);
-			Color[] ColorBase = new Color[512 * 512];
-			for (var t = 0; t < ColorBase.Length; t++)
-			{
-				ColorBase[t] = new Color(1, 0, 0, 0);
-			}
-			NewMaskText.SetPixels(ColorBase);
-			byte[] data = NewMaskText.EncodeToPNG();
-			File.WriteAllBytes(path, data);
-			AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+			texture = alphamapTextures[i];
+			byte[] bytes = texture.EncodeToPNG();
+			path = $"{PrefabFolder}Terrains/Texture/{assetName}_{i}.png";
+			File.WriteAllBytes(path, bytes);
 		}
+
+
+
 		AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
-
-		UpdateProgress();
-
 		TextureImporter TextureI = AssetImporter.GetAtPath(path) as TextureImporter;
 		TextureI.textureType = TextureImporterType.Default;
 		TextureImporterPlatformSettings tSetting = new TextureImporterPlatformSettings();
@@ -186,47 +175,63 @@ public class TerrainSlicing : ScriptableWizard
 		AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
 		UpdateProgress();
 
-
-		Material Tmaterial = new Material(Shader.Find("Cartoon/Ulit/Terrain"));
-		AssetDatabase.CreateAsset(Tmaterial, $"{PrefabFolder}Terrains/Material/{assetName}.mat");
-		AssetDatabase.ImportAsset($"{PrefabFolder}Terrains/Material/{assetName}.mat", ImportAssetOptions.ForceUpdate);
-		AssetDatabase.Refresh();
-		string texPath = $"{PrefabFolder}Terrains/Texture/{assetName}.png";
-		Texture test = (Texture)AssetDatabase.LoadAssetAtPath(texPath, typeof(Texture));
-		Tmaterial.SetTexture("_Control", test);
-		float scale = 1 / (float)SlicingSize;
-		Tmaterial.SetTextureScale("_Control", new Vector2(scale, scale));
-		Tmaterial.SetTextureOffset("_Control", new Vector2(scale * x1, scale * y1));
+		Material Tmaterial = null;
+		if (alphamapTextures.Length == 1)
+		{
+			Tmaterial = new Material(Shader.Find("Cartoon/Ulit/Terrain"));
+			string texPath = $"{PrefabFolder}Terrains/Texture/{assetName}_0.png";
+			Texture test = (Texture)AssetDatabase.LoadAssetAtPath(texPath, typeof(Texture));
+			Tmaterial.SetTexture($"_Control", test);
+			float scale = 1 / (float)SlicingSize;
+			Tmaterial.SetTextureScale($"_Control", new Vector2(scale, scale));
+			Tmaterial.SetTextureOffset($"_Control", new Vector2(scale * x1, scale * y1));
+		}
+		else
+		{
+			Tmaterial = new Material(Shader.Find("Cartoon/Ulit/Terrain8Blend"));
+			for (int i = 0; i < alphamapTextures.Length; i++)
+			{
+				string texPath = $"{PrefabFolder}Terrains/Texture/{assetName}_{i}.png";
+				Texture test = (Texture)AssetDatabase.LoadAssetAtPath(texPath, typeof(Texture));
+				Tmaterial.SetTexture($"_Control{i}", test);
+				float scale = 1 / (float)SlicingSize;
+				Tmaterial.SetTextureScale($"_Control{i}", new Vector2(scale, scale));
+				Tmaterial.SetTextureOffset($"_Control{i}", new Vector2(scale * x1, scale * y1));
+			}
+		}
 
 		TerrainLayer[] texts = child.terrainLayers;
 		for (int e = 0; e < texts.Length; e++)
 		{
-			if (e < 4)
+			if (e < 8)
 			{
 				Tmaterial.SetTexture("_Splat" + (e), texts[e].diffuseTexture);
-				Tmaterial.SetTextureScale("_Splat" + (e), texts[e].tileSize * 8.9f);
+				Tmaterial.SetTextureScale("_Splat" + (e), texts[e].tileSize * 300f);
 				Tmaterial.SetTexture("_Normal" + (e), texts[e].normalMapTexture);
-				Tmaterial.SetTextureScale("_Normal" + (e), texts[e].tileSize * 8.9f);
+				Tmaterial.SetTextureScale("_Normal" + (e), texts[e].tileSize * 300f);
 			}
 		}
 
+		AssetDatabase.CreateAsset(Tmaterial, $"{PrefabFolder}Terrains/Material/{assetName}.mat");
+		AssetDatabase.ImportAsset($"{PrefabFolder}Terrains/Material/{assetName}.mat", ImportAssetOptions.ForceUpdate);
+		AssetDatabase.Refresh();
 		UpdateProgress();
 	}
 
 
 
-	private static void ConvertUTerrain(TerrainData child, string assetName, int x1, int y1)
+	private static void ConvertUTerrain(TerrainData data, string assetName, int x1, int y1)
 	{
-		
+
 		AssetDatabase.Refresh();
-		int w = child.heightmapResolution;
-		int h = child.heightmapResolution;
+		int w = data.heightmapResolution;
+		int h = data.heightmapResolution;
 		float tRes = w / Resolution;
 
-		Vector3 meshScale = child.size;
+		Vector3 meshScale = data.size;
 		meshScale = new Vector3(meshScale.x / (h - 1) * tRes, meshScale.y, meshScale.z / (w - 1) * tRes);
 		Vector2 uvScale = new Vector2((float)(1.0 / (w - 1)), (float)(1.0 / (h - 1)));
-		float[,] tData = child.GetHeights(0, 0, w, h);
+		float[,] tData = data.GetHeights(0, 0, w, h);
 		w = (int)((w - 1) / tRes + 1);
 		h = (int)((h - 1) / tRes + 1);
 		Vector3[] tVertices = new Vector3[w * h];
@@ -300,7 +305,7 @@ public class TerrainSlicing : ScriptableWizard
 			Debug.Log("Error saving file: " + err.Message);
 		}
 		sw.Close();
-		
+
 		FileUtil.CopyFileOrDirectory(assetName + ".obj", PrefabFolder + "Terrains/Meshes/" + assetName + ".obj");
 		FileUtil.DeleteFileOrDirectory(assetName + ".obj");
 		AssetDatabase.ImportAsset(PrefabFolder + "Terrains/Meshes/" + assetName + ".obj", ImportAssetOptions.ForceUpdate);
@@ -314,40 +319,33 @@ public class TerrainSlicing : ScriptableWizard
 
 		AssetDatabase.Refresh();
 
-		Vector3 position = terrain.transform.position + new Vector3(x1 * child.size.z, 0, y1 * child.size.z);
+		Vector3 position = terrain.transform.position + new Vector3(x1 * data.size.z, 0, y1 * data.size.z);
 		GameObject forRotate = (GameObject)GameObject.Instantiate(prefab, position, Quaternion.identity) as GameObject;
 		Transform childCheck = forRotate.transform.Find("default");
-		GameObject Child = childCheck.gameObject;
+		GameObject terrainGo = childCheck.gameObject;
 		forRotate.transform.DetachChildren();
 		GameObject.DestroyImmediate(forRotate);
-		Child.name = assetName;
-		Child.AddComponent<T4MObjSC>();
-		Child.transform.rotation = Quaternion.Euler(0, 90, 0);
+		terrainGo.name = assetName;
+		terrainGo.transform.rotation = Quaternion.Euler(0, 90, 0);
 
 		UpdateProgress();
 
 		Material Tmaterial = AssetDatabase.LoadAssetAtPath<Material>($"{PrefabFolder}Terrains/Material/{assetName}.mat");
-		//Application des Parametres sur le Script
-		Child.GetComponent<T4MObjSC>().T4MMaterial = Tmaterial;
-		Child.GetComponent<T4MObjSC>().ConvertType = "UT";
 
 		//Regalges Divers
 		int vertexInfo = 0;
 		int partofT4MObj = 0;
 		int trisInfo = 0;
-		int countchild = Child.transform.childCount;
+		int countchild = terrainGo.transform.childCount;
 		if (countchild > 0)
 		{
-			Renderer[] T4MOBJPART = Child.GetComponentsInChildren<Renderer>();
+			Renderer[] T4MOBJPART = terrainGo.GetComponentsInChildren<Renderer>();
 			for (int i = 0; i < T4MOBJPART.Length; i++)
 			{
 				if (!T4MOBJPART[i].gameObject.AddComponent<MeshCollider>())
 					T4MOBJPART[i].gameObject.AddComponent<MeshCollider>();
 				T4MOBJPART[i].gameObject.isStatic = true;
 				T4MOBJPART[i].material = Tmaterial;
-				T4MOBJPART[i].gameObject.layer = 30;
-				T4MOBJPART[i].gameObject.AddComponent<T4MPartSC>();
-				Child.GetComponent<T4MObjSC>().T4MMesh = T4MOBJPART[0].GetComponent<MeshFilter>();
 				partofT4MObj += 1;
 				vertexInfo += T4MOBJPART[i].gameObject.GetComponent<MeshFilter>().sharedMesh.vertexCount;
 				trisInfo += T4MOBJPART[i].gameObject.GetComponent<MeshFilter>().sharedMesh.triangles.Length / 3;
@@ -355,12 +353,11 @@ public class TerrainSlicing : ScriptableWizard
 		}
 		else
 		{
-			Child.AddComponent<MeshCollider>();
-			Child.isStatic = true;
-			Child.GetComponent<Renderer>().material = Tmaterial;
-			Child.layer = 30;
-			vertexInfo += Child.GetComponent<MeshFilter>().sharedMesh.vertexCount;
-			trisInfo += Child.GetComponent<MeshFilter>().sharedMesh.triangles.Length / 3;
+			terrainGo.AddComponent<MeshCollider>();
+			terrainGo.isStatic = true;
+			terrainGo.GetComponent<Renderer>().material = Tmaterial;
+			vertexInfo += terrainGo.GetComponent<MeshFilter>().sharedMesh.vertexCount;
+			trisInfo += terrainGo.GetComponent<MeshFilter>().sharedMesh.triangles.Length / 3;
 			partofT4MObj += 1;
 		}
 
@@ -368,12 +365,12 @@ public class TerrainSlicing : ScriptableWizard
 		UpdateProgress();
 
 
-		GameObject BasePrefab2 = PrefabUtility.CreatePrefab(PrefabFolder + "Terrains/Prefab/" + assetName + ".prefab", Child);
+		GameObject BasePrefab2 = PrefabUtility.CreatePrefab(PrefabFolder + "Terrains/Prefab/" + assetName + ".prefab", terrainGo);
 		AssetDatabase.ImportAsset(PrefabFolder + "Terrains/Prefab/" + assetName + ".prefab", ImportAssetOptions.ForceUpdate);
 		GameObject forRotate2 = (GameObject)PrefabUtility.InstantiatePrefab(BasePrefab2) as GameObject;
-		GameObject.DestroyImmediate(Child.gameObject);
-		Child = forRotate2.gameObject;
-		EditorUtility.SetSelectedRenderState(Child.GetComponent<Renderer>(), EditorSelectedRenderState.Wireframe);
+		GameObject.DestroyImmediate(terrainGo.gameObject);
+		terrainGo = forRotate2.gameObject;
+		EditorUtility.SetSelectedRenderState(terrainGo.GetComponent<Renderer>(), EditorSelectedRenderState.Wireframe);
 
 
 		EditorUtility.ClearProgressBar();
@@ -392,10 +389,36 @@ public class TerrainSlicing : ScriptableWizard
 		//AssetDatabase.ImportAsset (T4MPrefabFolder+"Terrains/Meshes/"+FinalExpName+".obj", ImportAssetOptions.TryFastReimportFromMetaData);
 		AssetDatabase.ImportAsset(PrefabFolder + "Terrains/Meshes/" + assetName + ".obj", ImportAssetOptions.ForceSynchronousImport);
 		AssetDatabase.StopAssetEditing();
-		PrefabUtility.ResetToPrefabState(Child);
+		PrefabUtility.ResetToPrefabState(terrainGo);
+
+		ExportTrees(data, terrainGo);
 	}
 
-	
+
+	private static void ExportTrees(TerrainData data, GameObject terrainGo)
+	{
+		GameObject[] trees = new GameObject[data.treePrototypes.Length];
+		GameObject[] parents = new GameObject[data.treePrototypes.Length];
+		TreePrototype[] prototype = data.treePrototypes;
+		for (int i = 0; i < prototype.Length; i++)
+		{
+			trees[i] = prototype[i].prefab;
+			parents[i] = new GameObject(trees[i].name);
+			parents[i].transform.SetParent(terrainGo.transform);
+		}
+		for (int i = 0; i < data.treeInstances.Length; i++)
+		{
+			TreeInstance instance = data.treeInstances[i];
+			GameObject tree = GameObject.Instantiate(trees[instance.prototypeIndex]);
+			tree.transform.position = Vector3.Scale(instance.position, data.size);
+
+			tree.transform.eulerAngles = new Vector3(0, instance.rotation, 0);
+			//tree.transform.widthScale = instance.widthScale;
+			tree.transform.SetParent(parents[instance.prototypeIndex].transform);
+		}
+	}
+
+
 
 	private static int counter;
 	private static int tCount;

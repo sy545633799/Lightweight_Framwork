@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -83,51 +84,53 @@ namespace Game {
 			x = targetX;
 			y = targetY;
 			targetDistance = distance;
-	
-	
-			//TODO
-			Vector2 lastPos = Vector2.zero;
-			InputManager.onDownScene.AddListener(pos =>
+
+
+			Dictionary<int, InputManager.ClickStatus> clickMap = InputManager.ClickMap;
+			InputManager.onDragScene.AddListener((index, status) =>
 			{
-	            hadOnDown = true;
-	            lastPos = pos;
-            });
-	
-			InputManager.onDragScene.AddListener(pos =>
-			{
-	            hadOnDrag = true;
-	            if (lastPos == Vector2.zero) return;
-	
-				if (Math.Abs(pos.x - lastPos.x) > Math.Abs(pos.y - lastPos.y))
+				Vector2 delta;
+
+#if UNITY_EDITOR || UNITY_STANDALONE
+				if (index != 1) return;
+				delta = status.Delta;
+#else
+				if (Input.touchCount != 2) return;
+				if (index == 0 && clickMap[1].IsDown && !clickMap[1].IsMove)
+				{
+					delta = clickMap[0].Delta;
+				}
+				else if (index == 1 && clickMap[0].IsDown && !clickMap[0].IsMove)
+				{
+					delta = clickMap[1].Delta;
+				}
+				else
+					return;
+#endif
+				if (Math.Abs(delta.x) > Math.Abs(delta.y))
 				{
 					if (allowXTilt)
 					{
-						float deltaX = Mathf.Clamp(pos.x - lastPos.x,-10, 10);
+						float deltaX = Mathf.Clamp(delta.x, -10, 10);
 						targetX += deltaX * xSpeed * 0.01f;
-                        if (IsBattleModel)
-                            targetX = ClampAngle(targetX, xMinLimit, xMaxLimit);
-                    }
+						if (IsBattleModel)
+							targetX = ClampAngle(targetX, xMinLimit, xMaxLimit);
+					}
 				}
 				else if (allowYTilt)
 				{
-					float deltaY = Mathf.Clamp(pos.y - lastPos.y, -10, 10);
+					float deltaY = Mathf.Clamp(delta.y, -10, 10);
 					targetY -= deltaY * ySpeed * 0.01f;
 					targetY = ClampAngle(targetY, yMinLimit, yMaxLimit);
 				}
-	
-				lastPos = pos;
-            });
-	
-			InputManager.onUpScene.AddListener(pos =>
+
+			});
+
+
+			InputManager.onWheelEvent.AddListener(call =>
 			{
-	            if (hadOnDown && hadOnDrag)
-	            {
-	                //Util.CallMethod("Game", "CameraOnEndDrag");
-	                hadOnDown = false;
-	                hadOnDrag = false;
-	            }
-	            lastPos = Vector2.zero;
-            });
+				distance = Mathf.Clamp(distance + call, minDistance, maxDistance);
+			});
 
 
 			DontDestroyOnLoad(this);

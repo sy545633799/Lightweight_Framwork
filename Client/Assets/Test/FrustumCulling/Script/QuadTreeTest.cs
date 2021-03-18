@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class QuadTreeTest : MonoBehaviour
 {
-	[BurstCompile(CompileSynchronously = true)]
+	//[BurstCompile(CompileSynchronously = true)]
 	struct VelocityJob : IJobParallelFor
 	{
 		[ReadOnly]
