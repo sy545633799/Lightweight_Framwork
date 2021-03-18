@@ -7,8 +7,6 @@
 
 TEXTURE2D(_MetallicGlossMap);
 SAMPLER(sampler_MetallicGlossMap);
-TEXTURE2D(_EmissionTex);
-SAMPLER(sampler_EmissionTex);
 
 v2f ScenePassVertex(a2v i)
 {

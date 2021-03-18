@@ -16,26 +16,24 @@
 		_MaskMap("Mask r(遮罩阴影) g(未定）b (高光通道)", 2D) = "white" {}
 
 		[Header(Outline)]
-		_OutlineWidth("描边宽度",Range(0,1)) = 0.626 
-		_OutlineColor("描边颜色",COLOR) = (0.264,0.0137,0.0137,1)
-		_OutlineScaledMaxDistance("描边距离系数",Range(0.0,100.0)) = 15.0
+		_OutlineWidth("_OutlineWidth",Range(0,1)) = 0.626 
+		_OutlineColor("_OutlineColor",COLOR) = (0.264,0.0137,0.0137,1)
+		_OutlineScaledMaxDistance("_OutlineScaledMaxDistance",Range(0.0,100.0)) = 15.0
 		[Header(Shadow)]
-		_BrightSideColor("明部颜色",COLOR) = (1,1,1,1)
-		_DarkSideColor("暗部颜色",COLOR) = (0.83,0.73,0.77,1)
-		_Rampthreshold("明暗部系数调整",Range(0,1)) = 0.5
-		_ShadowRange("阴影边界范围", Range(0, 0.2)) = 0
-		_FaceShadowRange("脸部与阴影边界范围", Range(0.001, 1)) = 0.1
+		_BrightSideColor("_BrightSideColor",COLOR) = (1,1,1,1)
+		_DarkSideColor("_DarkSideColor",COLOR) = (0.83,0.73,0.77,1)
+		_Rampthreshold("_Rampthreshold",Range(0,1)) = 0.5
+		_ShadowRange("_ShadowRange", Range(0, 0.2)) = 0
+		_FaceShadowRange("_FaceShadowRange", Range(0.001, 1)) = 0.1
 		[Header(Specular)]
-		_Shininess("高光范围", Range(0,1)) = 1
-		_SpecTrail("高光拖尾", Range(0,1)) = 0
-		_Specular("高光强度", float) = 1
-		_SpecularColor("高光颜色", COLOR) = (1.0,1.0,1.0,1)
+		_Shininess("_Shininess", Range(0,1)) = 1
+		_SpecTrail("_SpecTrail", Range(0,1)) = 0
+		_Specular("_Specular", Float) = 1
+		_SpecularColor("_SpecularColor", COLOR) = (1.0,1.0,1.0,1)
 		[Header(Rim)]
-		_RimThreshold("范围宽度", Range(0,1)) = 0.893
-		_RimPower("边缘正面影响参数", Range(0,1)) = 0
-		_RimMin("边缘光最小值", Range(0,1)) = 0.161
-		_RimMax("边缘光最大值", Range(0,1)) = 1
-		[HDR]_RimColor("边缘光颜色", COLOR) = (1.0,1.0,1.0,1.0)
+		_RimThreshold("_RimThreshold", Range(0,1)) = 0.893
+		_RimPower("_RimPower", Range(0,1)) = 0
+		[HDR]_RimColor("_RimColor", COLOR) = (1.0,1.0,1.0,1.0)
 
 		//emission
 		[HDR]_EmissionColor("Color", Color) = (0,0,0)
@@ -66,13 +64,12 @@
 			#pragma prefer_hlslcc gles
 			#pragma exclude_renderers d3d11_9x
 
-			#pragma shader_feature _NORMALMAP
 			#pragma shader_feature _MASKMAP
 			#pragma shader_feature _EMISSION
 			#pragma shader_feature _ALPHATEST_ON
 
 			//目前URP只有逐顶点条件下的多光源
-			// #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
+			 #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
 			#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
@@ -89,8 +86,8 @@
 			ENDHLSL
 		}
 		UsePass "Cartoon/Outline/Character/Outline"
-		UsePass "Cartoon/Shadow/Character/ShadowCaster"
-		UsePass "Cartoon/DepthOnly/Character/DepthOnly"
+		/*UsePass "Cartoon/Shadow/Character/ShadowCaster"
+		UsePass "Cartoon/DepthOnly/Character/DepthOnly" */
 	}
 
 	SubShader
@@ -117,7 +114,6 @@
 			#pragma prefer_hlslcc gles
 			#pragma exclude_renderers d3d11_9x
 
-			#pragma shader_feature _NORMALMAP
 			#pragma shader_feature _MASKMAP
 			#pragma shader_feature _EMISSION
 			#pragma shader_feature _ALPHATEST_ON
@@ -167,7 +163,6 @@
 			#pragma prefer_hlslcc gles
 			#pragma exclude_renderers d3d11_9x
 
-			#pragma shader_feature _NORMALMAP
 			#pragma shader_feature _EMISSION
 			#pragma shader_feature _ALPHATEST_ON
 

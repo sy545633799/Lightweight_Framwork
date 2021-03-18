@@ -12,13 +12,12 @@
 		//diffuse
 		[MainColor] _BaseColor("Color(a通道为是否有积雪)", Color) = (1,1,1,1)
 		[MainTexture] _BaseMap("MainTex", 2D) = "white" {}
+		//bump
+		[NoScaleOffset][Normal]_BumpMap("Normalmap", 2D) = "bump" {}
+		_BumpScale("BumpScale", Range(0, 1)) = 1
 		//mask
 		_MaskMap("Mask r(遮罩阴影) g(未定）b (高光通道)", 2D) = "white" {}
 
-		[Header(Outline)]
-		_OutlineWidth("描边宽度",Range(0,1)) = 0.626
-		_OutlineColor("描边颜色",COLOR) = (0.264,0.0137,0.0137,1)
-		_OutlineScaledMaxDistance("描边距离系数",Range(0.0,100.0)) = 15.0
 		[Header(Shadow)]
 		_BrightSideColor("明部颜色",COLOR) = (1,1,1,1)
 		_DarkSideColor("暗部颜色",COLOR) = (0.83,0.73,0.77,1)
@@ -33,8 +32,6 @@
 		[Header(Rim)]
 		_RimThreshold("范围宽度", Range(0,1)) = 0.893
 		_RimPower("边缘正面影响参数", Range(0,1)) = 0
-		_RimMin("边缘光最小值", Range(0,1)) = 0.161
-		_RimMax("边缘光最大值", Range(0,1)) = 1
 		[HDR]_RimColor("边缘光颜色", COLOR) = (1.0,1.0,1.0,1.0)
 
 		//emission
@@ -165,7 +162,6 @@
 			#pragma prefer_hlslcc gles
 			#pragma exclude_renderers d3d11_9x
 
-			#pragma shader_feature _NORMALMAP
 			#pragma shader_feature _EMISSION
 			#pragma shader_feature _ALPHATEST_ON
 
@@ -189,5 +185,5 @@
 		UsePass "Cartoon/DepthOnly/Character/DepthOnly"
 	}
 
-	CustomEditor "Game.Editor.CharacterGUI"
+	CustomEditor "Game.Editor.CharacterSampleGUI"
 }

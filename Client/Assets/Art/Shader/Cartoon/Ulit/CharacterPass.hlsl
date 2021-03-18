@@ -45,15 +45,8 @@ half4 CharacterPassFragment(v2f i) :SV_TARGET
 #else
 	half3 emission = _EmissionColor.rgb;
 #endif
-
-#if defined(_MASKMAP)
-	half4 mask = SAMPLE_TEXTURE2D(_MaskMap, sampler_MaskMap, i.texcoord.xy);
-	half4 color = UniversalFragmentCartoon(inputData, albedo, mask, emission, alpha);
-#else
-	half4 color = UniversalFragmentCartoon(inputData, albedo, 0, emission, alpha);
-#endif
 	
-
+	half4 color = UniversalFragmentCartoon(inputData, albedo, i.texcoord.xy, emission, alpha);
 	color.rgb = MixFog(color.rgb, i.fogFactorAndVertexLight.x);
 
 	return color;

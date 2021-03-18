@@ -12,6 +12,9 @@ half _Cutoff;
 //diffuse
 float4 _BaseMap_ST;
 half4 _BaseColor;
+//bump
+float4 _BumpMap_ST;
+float _BumpScale;
 //outline
 float _OutlineWidth;
 float3 _OutlineColor;
@@ -26,8 +29,6 @@ half _Shininess;
 half3 _SpecularColor;
 half _SpecTrail;
 half _Specular;
-half _RimMin;
-half _RimMax;
 half _RimPower;
 half _RimThreshold;
 half3 _RimColor;
@@ -38,8 +39,8 @@ CBUFFER_END
 
 TEXTURE2D(_MaskMap); SAMPLER(sampler_MaskMap);
 
-half4 UniversalFragmentCartoon(InputData inputData, half3 albedo, half4 mask, half3 emission, half alpha)
-{
+half4 UniversalFragmentCartoon(InputData inputData, half3 albedo, half2 uv, half3 emission, half alpha)
+{ 
 	half3 color = albedo;  
 
 	Light mainLight = GetMainLight(inputData.shadowCoord);
@@ -48,6 +49,7 @@ half4 UniversalFragmentCartoon(InputData inputData, half3 albedo, half4 mask, ha
 	lightAtten = (smoothstep(_Rampthreshold - _ShadowRange, _Rampthreshold + _ShadowRange, lightAtten));
 
 #if defined(_MASKMAP)
+	half4 mask = SAMPLE_TEXTURE2D(_MaskMap, sampler_MaskMap, uv);
 	lightAtten = lerp(1, lightAtten, smoothstep(0.001, _FaceShadowRange, mask.r));//R通道做遮罩//考虑加算
 #endif
 	half3 rampColor = lightAtten * _BrightSideColor + (1 - lightAtten) *  _DarkSideColor;
@@ -69,7 +71,6 @@ half4 UniversalFragmentCartoon(InputData inputData, half3 albedo, half4 mask, ha
 #if defined(_USE_RIM)
 	half ndotv = max(0, dot(inputData.normalWS, inputData.viewDirectionWS));
 	half rim = 1 - saturate(ndotv);
-	rim = smoothstep(_RimMin, _RimMax, rim);
 	rim = smoothstep(0, _RimThreshold, rim);
 	half3 rimColor = rim * _RimPower * _RimColor;
 	color.rgb += rimColor * lightAtten;
