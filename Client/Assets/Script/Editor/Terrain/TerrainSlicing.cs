@@ -39,7 +39,7 @@ public class TerrainSlicing : ScriptableWizard
 		if (SlicingSize == 1)
 		{
 			CreateTexture(terrain.terrainData, terrain.name, 0, 0);
-			ConvertUTerrain(terrain.terrainData, terrain.name, 0, 0);
+			ConvertUTerrain(terrain.terrainData, terrain.name, 0, 0, true);
 		}
 		else if (SlicingSize > 1)
 		{
@@ -220,17 +220,23 @@ public class TerrainSlicing : ScriptableWizard
 
 
 
-	private static void ConvertUTerrain(TerrainData data, string assetName, int x1, int y1)
+	private static void ConvertUTerrain(TerrainData data, string assetName, int x1, int y1, bool isTotal = false)
 	{
 
 		AssetDatabase.Refresh();
+
 		int w = data.heightmapResolution;
 		int h = data.heightmapResolution;
-		float tRes = w / Resolution;
+		float tRes = 0;
+		if (isTotal)
+			tRes = (float)w / (float)Resolution;
+		else
+			tRes = (float)w / (float)Resolution;
 
 		Vector3 meshScale = data.size;
 		meshScale = new Vector3(meshScale.x / (h - 1) * tRes, meshScale.y, meshScale.z / (w - 1) * tRes);
 		Vector2 uvScale = new Vector2((float)(1.0 / (w - 1)), (float)(1.0 / (h - 1)));
+
 		float[,] tData = data.GetHeights(0, 0, w, h);
 		w = (int)((w - 1) / tRes + 1);
 		h = (int)((h - 1) / tRes + 1);
@@ -365,19 +371,13 @@ public class TerrainSlicing : ScriptableWizard
 		UpdateProgress();
 
 
-		GameObject BasePrefab2 = PrefabUtility.CreatePrefab(PrefabFolder + "Terrains/Prefab/" + assetName + ".prefab", terrainGo);
+		GameObject BasePrefab2 = PrefabUtility.SaveAsPrefabAssetAndConnect(terrainGo, PrefabFolder + "Terrains/Prefab/" + assetName + ".prefab", InteractionMode.AutomatedAction);
 		AssetDatabase.ImportAsset(PrefabFolder + "Terrains/Prefab/" + assetName + ".prefab", ImportAssetOptions.ForceUpdate);
-		GameObject forRotate2 = (GameObject)PrefabUtility.InstantiatePrefab(BasePrefab2) as GameObject;
-		GameObject.DestroyImmediate(terrainGo.gameObject);
-		terrainGo = forRotate2.gameObject;
 		EditorUtility.SetSelectedRenderState(terrainGo.GetComponent<Renderer>(), EditorSelectedRenderState.Wireframe);
 
-
 		EditorUtility.ClearProgressBar();
-
 		AssetDatabase.DeleteAsset(PrefabFolder + "Terrains/Meshes/Materials");
 		AssetDatabase.StartAssetEditing();
-		//Modification des attribut du mesh avant de le préfabriquer
 		ModelImporter OBJI = ModelImporter.GetAtPath(PrefabFolder + "Terrains/Meshes/" + assetName + ".obj") as ModelImporter;
 		OBJI.globalScale = 1;
 		OBJI.splitTangentsAcrossSeams = true;
@@ -386,10 +386,8 @@ public class TerrainSlicing : ScriptableWizard
 		OBJI.generateAnimations = ModelImporterGenerateAnimations.None;
 		OBJI.meshCompression = ModelImporterMeshCompression.Off;
 		OBJI.normalSmoothingAngle = 180f;
-		//AssetDatabase.ImportAsset (T4MPrefabFolder+"Terrains/Meshes/"+FinalExpName+".obj", ImportAssetOptions.TryFastReimportFromMetaData);
 		AssetDatabase.ImportAsset(PrefabFolder + "Terrains/Meshes/" + assetName + ".obj", ImportAssetOptions.ForceSynchronousImport);
 		AssetDatabase.StopAssetEditing();
-		PrefabUtility.ResetToPrefabState(terrainGo);
 
 		ExportTrees(data, terrainGo);
 	}
@@ -409,7 +407,7 @@ public class TerrainSlicing : ScriptableWizard
 		for (int i = 0; i < data.treeInstances.Length; i++)
 		{
 			TreeInstance instance = data.treeInstances[i];
-			GameObject tree = GameObject.Instantiate(trees[instance.prototypeIndex]);
+			GameObject tree = PrefabUtility.InstantiatePrefab(trees[instance.prototypeIndex]) as GameObject;
 			tree.transform.position = Vector3.Scale(instance.position, data.size);
 
 			tree.transform.eulerAngles = new Vector3(0, instance.rotation, 0);
