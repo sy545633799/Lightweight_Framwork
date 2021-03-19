@@ -27,7 +27,7 @@ v2f ScenePassVertex(a2v i)
 half4 ScenePassFragment(v2f i) :SV_TARGET
 {
 	UNITY_SETUP_INSTANCE_ID(i);
-	UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
+	// UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
 	WORLD_NORMAL_POSITION_VIEWDIR(i);
 
 	half3 positionWS = i.positionWS;

@@ -1,4 +1,4 @@
-﻿Shader "Unlit/WaveGrass"
+﻿Shader "Unlit/Env/WaveGrass"
 {
 	Properties
 	{
@@ -49,14 +49,6 @@
 #define REQUIRES_WORLD_SPACE_POS_INTERPOLATOR 1
 			#include "../Core/Common.hlsl"
 
-			//wind
-			half _WindSpeed;
-			half _WindDensity;
-			half _WindStrenth;
-			half4 _WindScale;
-			//player
-			half3 _PlayerPos;
-
 			CBUFFER_START(UnityPerMaterial)
 			half _Cutoff;
 			float4 _BaseMap_ST;
@@ -73,10 +65,9 @@
 
 			TEXTURE2D(_GradientNoiseMap); SAMPLER(sampler_GradientNoiseMap);
 
-			//做了顶点偏移就不能用srp bather?
 			v2f vert(a2v i)
 			{
-				v2f o = (v2f)0;
+				v2f o; 
 				UNITY_SETUP_INSTANCE_ID(i);
 				UNITY_TRANSFER_INSTANCE_ID(i, o);
 

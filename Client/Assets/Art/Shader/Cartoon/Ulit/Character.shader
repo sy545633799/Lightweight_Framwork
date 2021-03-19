@@ -86,8 +86,8 @@
 			ENDHLSL
 		}
 		UsePass "Cartoon/Outline/Character/Outline"
-		/*UsePass "Cartoon/Shadow/Character/ShadowCaster"
-		UsePass "Cartoon/DepthOnly/Character/DepthOnly" */
+		UsePass "Cartoon/Shadow/Character/ShadowCaster"
+		UsePass "Cartoon/DepthOnly/Character/DepthOnly" 
 	}
 
 	SubShader

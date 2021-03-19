@@ -5,6 +5,16 @@
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareOpaqueTexture.hlsl"
+//wind
+half _WindSpeed;
+half _WindDensity;
+half _WindStrenth;
+half4 _WindScale;
+//player
+half3 _PlayerPos;
+
 struct a2v
 {
 	float4 positionOS	: POSITION;

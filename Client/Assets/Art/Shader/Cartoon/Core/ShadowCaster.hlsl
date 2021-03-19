@@ -28,6 +28,10 @@ v2f2 vert(a2v i)
 	Light MainLight = GetMainLight();
 	float3 worldNormal = TransformObjectToWorldNormal(i.normalOS);
 	o.positionCS = TransformWorldToHClip(ApplyShadowBias(worldPos, worldNormal, MainLight.direction));
+	
+	//urp管线中， opengl的近裁面为-1, 远裁面为1, UNITY_REVERSED_Z为1, 其他平台的近裁面为1, 远裁面为0, UNITY_REVERSED_Z为0
+	//@catlike 用normalbias 修复阴影痤疮时，当渲染定向光的阴影投射器时，近平面尽可能地向前移动。这可以提高深度精度，但是这意味着不在摄像机视线范围内的阴影投射器可以终止在近平面的前面，这会导致它们在不应该被投射时被修剪。
+	//通过在ShadowCasterPassVertex中将顶点位置固定到近平面来解决此问题，可以有效地展平位于近平面前面的阴影投射器，将它们变成粘在近平面上的花纹。我们通过获取剪辑空间Z和W坐标的最大值或定义UNITY_REVERSED_Z时的最小值来做到这一点。要将正确的符号用于W坐标，请乘以UNITY_NEAR_CLIP_VALUE
 #if UNITY_REVERSED_Z
 	o.positionCS.z = min(o.positionCS.z, o.positionCS.w * UNITY_NEAR_CLIP_VALUE);
 #else

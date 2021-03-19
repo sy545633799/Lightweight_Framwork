@@ -30,7 +30,7 @@ v2f TerrainPassVertex(a2v i)
 half4 TerrainPassFragment(v2f i) : SV_Target
 {
 	UNITY_SETUP_INSTANCE_ID(i);
-	UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
+	// UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
 
 	float2 splatUV = (i.texcoord.xy * (_Control_TexelSize.zw - 1.0f) + 0.5f) * _Control_TexelSize.xy;
 	half4 splatControl = SAMPLE_TEXTURE2D(_Control, sampler_Control, splatUV);

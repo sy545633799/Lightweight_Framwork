@@ -34,7 +34,7 @@ Shader "Cartoon/Common/DepthOnly"
 			float4 _BaseMap_ST;
 			half _Cutoff;
 			
-			#include "../Core/ShadowCaster.hlsl"
+			#include "../Core/DepthOnly.hlsl"
 
 			ENDHLSL
 		}
