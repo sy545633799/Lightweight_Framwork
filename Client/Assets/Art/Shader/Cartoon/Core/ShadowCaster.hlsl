@@ -24,13 +24,10 @@ v2f2 vert(a2v i)
 #endif
 	float3 worldPos = TransformObjectToWorld(i.positionOS.xyz);
 
-#ifdef VERTEXWAVE_ON
-	worldPos.xz -= WaveGrass(worldPos, _WaveParams);
-#endif
+	
 	Light MainLight = GetMainLight();
 	float3 worldNormal = TransformObjectToWorldNormal(i.normalOS);
 	o.positionCS = TransformWorldToHClip(ApplyShadowBias(worldPos, worldNormal, MainLight.direction));
-
 #if UNITY_REVERSED_Z
 	o.positionCS.z = min(o.positionCS.z, o.positionCS.w * UNITY_NEAR_CLIP_VALUE);
 #else

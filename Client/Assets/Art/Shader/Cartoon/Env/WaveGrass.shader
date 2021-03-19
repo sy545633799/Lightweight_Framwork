@@ -37,7 +37,7 @@
 			#pragma vertex vert
 			#pragma fragment frag
 			#pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
-			#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+			#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
 			#pragma multi_compile _ _SHADOWS_SOFT
@@ -46,7 +46,16 @@
 			#pragma multi_compile_fog
 			#pragma multi_compile_instancing
 
+#define REQUIRES_WORLD_SPACE_POS_INTERPOLATOR 1
 			#include "../Core/Common.hlsl"
+
+			//wind
+			half _WindSpeed;
+			half _WindDensity;
+			half _WindStrenth;
+			half4 _WindScale;
+			//player
+			half3 _PlayerPos;
 
 			CBUFFER_START(UnityPerMaterial)
 			half _Cutoff;
@@ -55,13 +64,7 @@
 			float4 _GradientNoiseMap_ST;
 			half4 _TopColor;
 			half _TopColorRange;
-			//wind
-			half _WindSpeed;
-			half _WindDensity;
-			half _WindStrenth;
-			half4 _WindScale;
-			//player
-			half3 _PlayerPos;
+			
 			half _PlayerStrength;
 			half _PushRadius;
 			//shadow
@@ -70,6 +73,7 @@
 
 			TEXTURE2D(_GradientNoiseMap); SAMPLER(sampler_GradientNoiseMap);
 
+			//做了顶点偏移就不能用srp bather?
 			v2f vert(a2v i)
 			{
 				v2f o = (v2f)0;
@@ -82,16 +86,19 @@
 				half noise = SAMPLE_TEXTURE2D_LOD(_GradientNoiseMap, sampler_GradientNoiseMap, uv * _WindDensity, 1).r;
 				half offsetH = i.texcoord.y * _WindStrenth;
 				half3 offset = noise * half3(-_WindScale.x * offsetH, -offsetH, -_WindScale.y * offsetH);
+				positionWS.xyz += offset;
 				//计算人物的影响
 				float dis = distance(_PlayerPos, positionWS);
 				float pushDown = saturate((1 - dis + _PushRadius) * i.texcoord.y * _PlayerStrength);
 				float3 direction = normalize(positionWS.xyz - _PlayerPos.xyz);
 				direction.y *= 0.5;
-				positionWS.xyz += direction * pushDown;
-
-				positionWS.xyz += offset;
+				positionWS.xyz += direction * pushDown;				
+				
 				o.positionCS = mul(UNITY_MATRIX_VP, half4(positionWS, 1));
 				o.texcoord.xy = TRANSFORM_TEX(i.texcoord, _BaseMap);
+
+				o.positionWS = positionWS;
+				o.normalWS = TransformObjectToWorldDir(i.normalOS);
 
 				o.fogFactorAndVertexLight.r = ComputeFogFactor(o.positionCS.z);
 #if defined(_ADDITIONAL_LIGHTS_VERTEX) 
@@ -130,6 +137,7 @@
 
 				return half4(color, alpha);
 			}
+
 			ENDHLSL
 		}
 	}

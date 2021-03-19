@@ -128,7 +128,7 @@
 
 			ENDHLSL
 		}
-		//UsePass "Cartoon/Shadow/Scene/ShadowCaster"
+		UsePass "Cartoon/Shadow/Scene/ShadowCaster"
 		UsePass "Cartoon/DepthOnly/Scene/DepthOnly"
 	}
 
