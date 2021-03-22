@@ -51,7 +51,7 @@ struct v2f
 #if defined(_NORMALMAP)
 	half4 tangentWS		: TEXCOORD2;
 #else
-	//如果没有NormalMap，球谐光在Vertex, 反之在Fragment采样，跟默认Terrain相同，跟默认Lit不同，注意
+	//如果没有NormalMap，球谐光在Vertex采样, 反之在Fragment采样，跟默认Terrain相同，跟默认Lit不同，注意
 	half3 vertexSH                  : TEXCOORD2;
 #endif
 

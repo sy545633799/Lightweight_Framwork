@@ -3,16 +3,9 @@
 
 #include "./Common.hlsl"
 
-struct v2f2
+v2f vert(a2v i)
 {
-	float4 positionCS : SV_POSITION;
-	UNITY_VERTEX_INPUT_INSTANCE_ID
-};
-
-v2f2 vert(a2v i)
-{
-	v2f2 o;
-	//UNITY_INITIALIZE_OUTPUT(v2f2, o);
+	v2f o;
 	UNITY_SETUP_INSTANCE_ID(i);
 	UNITY_TRANSFER_INSTANCE_ID(i, o);
 
@@ -31,11 +24,11 @@ v2f2 vert(a2v i)
 	return o;
 }
 
-half4 frag(v2f2 i) : SV_TARGET
+half4 frag(v2f i) : SV_TARGET
 {
 	UNITY_SETUP_INSTANCE_ID(i);
 	Light mainLight = GetMainLight();
-	return half4(_OutlineColor.rgb * mainLight.color,1);
+	return half4(_OutlineColor.rgb * mainLight.color, 1);
 }
 
 #endif

@@ -3,24 +3,14 @@
 
 #include "./Common.hlsl"
 
-struct v2f2
+v2f vert(a2v i)
 {
-	float4 positionCS : SV_POSITION;
-#ifdef _ALPHATEST_ON
-	half2 texcoord : TEXCOORD0;
-#endif
-	UNITY_VERTEX_INPUT_INSTANCE_ID
-};
-
-v2f2 vert(a2v i)
-{
-	v2f2 o;
+	v2f o;
 	UNITY_SETUP_INSTANCE_ID(i);
 	UNITY_TRANSFER_INSTANCE_ID(i, o);
 
-
-#ifdef _ALPHATEST_ON
-	o.texcoord = TRANSFORM_TEX(i.texcoord.xy, _BaseMap);
+#if defined(_ALPHATEST_ON)
+	o.texcoord.xy = TRANSFORM_TEX(i.texcoord.xy, _BaseMap);
 #endif
 
 	float3 positionWS = ApplyVertexTransform(i);
@@ -40,7 +30,7 @@ v2f2 vert(a2v i)
 	return o;
 }
 
-half4 frag(v2f2 i) :SV_Target
+half4 frag(v2f i) :SV_Target
 {
 	UNITY_SETUP_INSTANCE_ID(i);
 #ifdef _ALPHATEST_ON
