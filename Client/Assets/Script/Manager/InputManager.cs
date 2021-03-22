@@ -90,7 +90,7 @@ namespace Game
 					ClickMap[i].IsDown = true;
 					ClickMap[i].Position = Input.mousePosition;
 					ClickMap[i].Delta = Vector2.zero;
-					if (IsOverGUI())
+					if (IsOverGUI(i))
 						ClickMap[i].IsOverUI = true;
 					else
 						ClickMap[i].IsOverUI = false;
@@ -120,7 +120,7 @@ namespace Game
 			{
 				if (Input.GetMouseButtonDown(i))
 				{
-					if (IsOverGUI())
+					if (IsOverGUI(i))
 						onDownUI.Invoke(i, ClickMap[i]);
 					else
 						onDownScene.Invoke(i, ClickMap[i]);
@@ -204,7 +204,7 @@ namespace Game
 							ClickMap[i].Position = position;
 							ClickMap[i].Delta = Vector2.zero;
 							onDown.Invoke(i, ClickMap[i]);
-							if (IsOverGUI())
+							if (IsOverGUI(fingerId))
 								ClickMap[i].IsOverUI = true;
 							else
 							{
@@ -242,11 +242,12 @@ namespace Game
 				{
 					var touch = Input.GetTouch(i);
 					var phase = touch.phase;
+					var fingerId = touch.fingerId;
 					switch (phase)
 					{
 						case TouchPhase.Began:
 							onDown.Invoke(i, ClickMap[i]);
-							if (IsOverGUI())
+							if (IsOverGUI(fingerId))
 								onDownUI.Invoke(i, ClickMap[i]);
 							else
 								onDownScene.Invoke(i, ClickMap[i]);
@@ -293,20 +294,18 @@ namespace Game
 				return null;
 		}
 
-		public static bool IsOverGUI()
+		public static bool IsOverGUI(int touchId)
 		{
-			////实例化点击事件
-			//PointerEventData eventDataCurrentPosition = new PointerEventData(UnityEngine.EventSystems.EventSystem.current);
-			////将点击位置的屏幕坐标赋值给点击事件
-			//eventDataCurrentPosition.position = new Vector2(position.x, position.y);
+#if UNITY_EDITOR || UNITY_STANDALONE
+			if (EventSystem.current.IsPointerOverGameObject())
 
-			//List<RaycastResult> results = new List<RaycastResult>();
+#else
+			if (EventSystem.current.IsPointerOverGameObject(touchId))
+#endif
+				return true;
 
-			//if (EventSystem.current)
-			//    EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-
-			//return results.Count > 0;
-			return EventSystem.current.IsPointerOverGameObject();
+			else
+					return false;
 		}
 	}
 }

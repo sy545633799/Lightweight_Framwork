@@ -28,10 +28,12 @@ Material:
     - _Cull: 2
     - _DstBlend: 0
     - _Mode: 0
+    - _PlayerStrength: 0.5
+    - _PushRadius: 0.5
     - _ShadowFade: 0.59
     - _SrcBlend: 1
-    - _TopColorRange: 0.833
+    - _TopColorRange: 0.56
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 0.25520587, g: 0.35849056, b: 0.18431816, a: 1}
-    - _TopColor: {r: 0.40138838, g: 0.41313633, b: 0.41509432, a: 1}
+    - _TopColor: {r: 0.41051087, g: 0.42102394, b: 0.4245283, a: 1}

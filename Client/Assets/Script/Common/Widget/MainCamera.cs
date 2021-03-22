@@ -79,6 +79,8 @@ namespace Game {
 
 	    void Awake()
 		{
+			 GetComponent<Camera>().depthTextureMode = DepthTextureMode.Depth;
+
 			yMaxLimit = yMaxLimit > 80 ? 80 : yMaxLimit;
 	        m_Camera = GetComponent<Camera>();
 			x = targetX;
@@ -89,20 +91,26 @@ namespace Game {
 			Dictionary<int, InputManager.ClickStatus> clickMap = InputManager.ClickMap;
 			InputManager.onDragScene.AddListener((index, status) =>
 			{
-				Vector2 delta;
+				Vector2 delta = Vector2.zero;
 
 #if UNITY_EDITOR || UNITY_STANDALONE
 				if (index != 1) return;
 				delta = status.Delta;
 #else
-				if (Input.touchCount != 2) return;
-				if (index == 0 && clickMap[1].IsDown && !clickMap[1].IsMove)
+				if (Input.touchCount == 1)
 				{
-					delta = clickMap[0].Delta;
+					delta = status.Delta;
 				}
-				else if (index == 1 && clickMap[0].IsDown && !clickMap[0].IsMove)
+				else if (Input.touchCount == 2)
 				{
-					delta = clickMap[1].Delta;
+					if (index == 0 && clickMap[1].IsDown && !clickMap[1].IsMove)
+					{
+						delta = clickMap[0].Delta;
+					}
+					else if (index == 1 && clickMap[0].IsDown && !clickMap[0].IsMove)
+					{
+						delta = clickMap[1].Delta;
+					}
 				}
 				else
 					return;

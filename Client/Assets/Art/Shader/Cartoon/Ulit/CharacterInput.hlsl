@@ -76,17 +76,6 @@ half4 UniversalFragmentCartoon(InputData inputData, half3 albedo, half2 uv, half
 	color.rgb += rimColor * lightAtten;
 #endif
 
-//
-//#ifdef _ADDITIONAL_LIGHTS
-//	uint pixelLightCount = GetAdditionalLightsCount();
-//	for (uint lightIndex = 0u; lightIndex < pixelLightCount; ++lightIndex)
-//	{
-//		Light light = GetAdditionalLight(lightIndex, inputData.positionWS);
-//		half3 attenuatedLightColor = light.color * (light.distanceAttenuation * light.shadowAttenuation);
-//		color += LightingLambert(attenuatedLightColor, light.direction, inputData.normalWS);
-//	}
-//#endif
-
 #ifdef _ADDITIONAL_LIGHTS_VERTEX
 	color += inputData.vertexLighting;
 #endif

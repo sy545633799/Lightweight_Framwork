@@ -10,7 +10,6 @@ v2f CharacterPassVertex(a2v i)
 	UNITY_SETUP_INSTANCE_ID(i);
 	UNITY_TRANSFER_INSTANCE_ID(i, o);
 	UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-
 	CommonInitV2F(i, o);
 	o.texcoord.xy = TRANSFORM_TEX(i.texcoord, _BaseMap);
 

@@ -1,4 +1,4 @@
-Shader "Unlit/Env/Water"
+Shader "Cartoon/Env/Water"
 {
 	Properties
 	{
@@ -87,7 +87,7 @@ Shader "Unlit/Env/Water"
 				o.texcoord2.xy = TRANSFORM_TEX(i.texcoord, _PerlinNoiseMap);
 				o.texcoord2.zw = TRANSFORM_TEX(i.texcoord, _DistortionMap);
 				o.texcoord3 = ComputeScreenPos(o.positionCS);
-
+				o.texcoord3.z = -mul(UNITY_MATRIX_MV, i.positionOS).z;
 				o.fogFactorAndVertexLight.r = ComputeFogFactor(o.positionCS.z);
 #if defined(_ADDITIONAL_LIGHTS_VERTEX) 
 				o.fogFactorAndVertexLight.gba = VertexLighting(positionWS, TransformObjectToWorldDir(i.normalOS));
@@ -108,7 +108,7 @@ Shader "Unlit/Env/Water"
 				float4 color = _DepthGradientShallow;
 				
 				
-				float4 distortionMap = SAMPLE_TEXTURE2D(_DistortionMap, sampler_DistortionMap, i.texcoord2.zw * 20);
+				float4 distortionMap = SAMPLE_TEXTURE2D(_DistortionMap, sampler_DistortionMap, i.texcoord2.zw * 10);
 
 				float surfaceNoiseCutoff = depthDifference * _SurfaceNoiseCutoff;
 				float2 distortSample = (distortionMap.xy * 2 - 1) * _SurfaceDistortionAmount;

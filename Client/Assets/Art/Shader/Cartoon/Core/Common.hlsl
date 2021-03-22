@@ -14,6 +14,9 @@ half _WindStrenth;
 half4 _WindScale;
 //player
 half3 _PlayerPos;
+half _PlayerStrength;
+half _PushRadius;
+TEXTURE2D(_GradientNoiseMap); SAMPLER(sampler_GradientNoiseMap);
 
 struct a2v
 {
@@ -120,12 +123,36 @@ inline half3 LookAtCamera(half3 positionOS)
 
 inline void CommonInitV2F(in a2v i, inout v2f o)
 {
-	o.positionCS = TransformObjectToHClip(i.positionOS.xyz);
+#if !defined(_Use_VERTEXWIND) && !defined(_Use_PLAYERAFFECT)
 	half3 positionWS = TransformObjectToWorld(i.positionOS.xyz);
+	o.positionCS = TransformObjectToHClip(i.positionOS.xyz);
+#else
+	half3 positionWS = mul(UNITY_MATRIX_M, i.positionOS).xyz;
+#if defined(_Use_VERTEXWIND)
+	//计算风吹草动
+	half2 uv = half2(positionWS.x / _WindScale.z + _WindScale.x * _WindSpeed * _Time.x, positionWS.z / _WindScale.w + _WindScale.y * _WindSpeed * _Time.x);
+	half noise = SAMPLE_TEXTURE2D_LOD(_GradientNoiseMap, sampler_GradientNoiseMap, uv * _WindDensity, 1).r;
+	half offsetH = i.texcoord.y * _WindStrenth;
+	half3 offset = noise * half3(-_WindScale.x * offsetH, -offsetH, -_WindScale.y * offsetH);
+	positionWS.xyz += offset;
+#endif
+
+#if defined(_Use_PLAYERAFFECT)
+	//计算人物的影响
+	float dis = distance(_PlayerPos, positionWS);
+	float pushDown = saturate((1 - dis + _PushRadius) * i.texcoord.y * _PlayerStrength);
+	float3 direction = normalize(positionWS.xyz - _PlayerPos.xyz);
+	direction.y *= 0.5;
+	positionWS.xyz += direction * pushDown;
+#endif
+	o.positionCS = mul(UNITY_MATRIX_VP, half4(positionWS, 1));
+#endif
+
+	
 #if defined(REQUIRES_WORLD_SPACE_POS_INTERPOLATOR)
 	o.positionWS = positionWS;
 #endif
-
+	
 #if defined(_NORMALMAP)
 	VertexNormalInputs normalInput = GetVertexNormalInputs(i.normalOS, i.tangentOS);
 	o.normalWS = normalInput.normalWS;

@@ -104,8 +104,8 @@ namespace Game {
 		//在一个物体按下，在释放时鼠标还在物体上的时候调用
 		protected void OnMouseUpAsButton()
 		{
-			if (!InputManager.IsOverGUI())
-				onMouseUpAsButton.Invoke();
+			//if (!InputManager.IsOverGUI(int touchId))
+			//	onMouseUpAsButton.Invoke();
 		}
 
 		public void AddClickListener(UnityAction callback)

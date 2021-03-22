@@ -1,4 +1,4 @@
-﻿Shader "Unlit/Env/WaveGrass"
+﻿Shader "Cartoon/Env/WaveGrass"
 {
 	Properties
 	{
@@ -14,12 +14,6 @@
 		[Header(Color)]
 		[HDR] _TopColor("顶部颜色", Color) = (0.1215686, 0.4671336, 0.509804, 1)
 		_TopColorRange("顶部颜色范围", Range(0, 1)) = 0.2
-
-		[Header(Shadow)]
-		_PushRadius("人物影响范围", Range(0, 1)) = 0.5
-		_PlayerStrength("人物影响强度", Range(0, 1)) = 0.5
-		[Header(Shadow)]
-		_ShadowFade("阴影淡出", Range(0, 1)) = 0.5
 	}
 	SubShader
 	{
@@ -46,7 +40,9 @@
 			#pragma multi_compile_fog
 			#pragma multi_compile_instancing
 
-#define REQUIRES_WORLD_SPACE_POS_INTERPOLATOR 1
+			#define _Use_VERTEXWIND 1
+			#define _Use_PLAYERAFFECT 1
+			#define REQUIRES_WORLD_SPACE_POS_INTERPOLATOR 1
 			#include "../Core/Common.hlsl"
 
 			CBUFFER_START(UnityPerMaterial)
@@ -56,49 +52,16 @@
 			float4 _GradientNoiseMap_ST;
 			half4 _TopColor;
 			half _TopColorRange;
-			
-			half _PlayerStrength;
-			half _PushRadius;
-			//shadow
-			half _ShadowFade;
 			CBUFFER_END
-
-			TEXTURE2D(_GradientNoiseMap); SAMPLER(sampler_GradientNoiseMap);
 
 			v2f vert(a2v i)
 			{
-				v2f o; 
+				v2f o = (v2f)0;
 				UNITY_SETUP_INSTANCE_ID(i);
 				UNITY_TRANSFER_INSTANCE_ID(i, o);
-
-				half3 positionWS = mul(UNITY_MATRIX_M, i.positionOS).xyz;
-				//计算风吹草动
-				half2 uv = half2(positionWS.x / _WindScale.z + _WindScale.x * _WindSpeed * _Time.x, positionWS.z / _WindScale.w + _WindScale.y * _WindSpeed * _Time.x);
-				half noise = SAMPLE_TEXTURE2D_LOD(_GradientNoiseMap, sampler_GradientNoiseMap, uv * _WindDensity, 1).r;
-				half offsetH = i.texcoord.y * _WindStrenth;
-				half3 offset = noise * half3(-_WindScale.x * offsetH, -offsetH, -_WindScale.y * offsetH);
-				positionWS.xyz += offset;
-				//计算人物的影响
-				float dis = distance(_PlayerPos, positionWS);
-				float pushDown = saturate((1 - dis + _PushRadius) * i.texcoord.y * _PlayerStrength);
-				float3 direction = normalize(positionWS.xyz - _PlayerPos.xyz);
-				direction.y *= 0.5;
-				positionWS.xyz += direction * pushDown;				
-				
-				o.positionCS = mul(UNITY_MATRIX_VP, half4(positionWS, 1));
+				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+				CommonInitV2F(i, o);
 				o.texcoord.xy = TRANSFORM_TEX(i.texcoord, _BaseMap);
-
-				o.positionWS = positionWS;
-				o.normalWS = TransformObjectToWorldDir(i.normalOS);
-
-				o.fogFactorAndVertexLight.r = ComputeFogFactor(o.positionCS.z);
-#if defined(_ADDITIONAL_LIGHTS_VERTEX) 
-				o.fogFactorAndVertexLight.gba = VertexLighting(positionWS, TransformObjectToWorldDir(i.normalOS));
-#endif
-
-#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
-				o.shadowCoord = TransformWorldToShadowCoord(positionWS);
-#endif
 				return o;
 			}
 
@@ -118,7 +81,7 @@
 #else
 				Light mainLight = GetMainLight();
 #endif
-				half atten = max(_ShadowFade, mainLight.distanceAttenuation * mainLight.shadowAttenuation);
+				half atten = mainLight.distanceAttenuation * mainLight.shadowAttenuation;
 				color = color * atten * mainLight.color;
 
 #if defined(_ADDITIONAL_LIGHTS_VERTEX)
