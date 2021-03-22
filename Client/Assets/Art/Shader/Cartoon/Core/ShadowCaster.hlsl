@@ -22,12 +22,11 @@ v2f2 vert(a2v i)
 #ifdef _ALPHATEST_ON
 	o.texcoord = TRANSFORM_TEX(i.texcoord.xy, _BaseMap);
 #endif
-	float3 worldPos = TransformObjectToWorld(i.positionOS.xyz);
 
-	
+	float3 positionWS = ApplyVertexTransform(i);
 	Light MainLight = GetMainLight();
 	float3 worldNormal = TransformObjectToWorldNormal(i.normalOS);
-	o.positionCS = TransformWorldToHClip(ApplyShadowBias(worldPos, worldNormal, MainLight.direction));
+	o.positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, worldNormal, MainLight.direction));
 	
 	//urp管线中， opengl的近裁面为-1, 远裁面为1, UNITY_REVERSED_Z为1, 其他平台的近裁面为1, 远裁面为0, UNITY_REVERSED_Z为0
 	//@catlike 用normalbias 修复阴影痤疮时，当渲染定向光的阴影投射器时，近平面尽可能地向前移动。这可以提高深度精度，但是这意味着不在摄像机视线范围内的阴影投射器可以终止在近平面的前面，这会导致它们在不应该被投射时被修剪。

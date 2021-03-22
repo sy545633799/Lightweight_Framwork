@@ -1,4 +1,4 @@
-﻿Shader "Cartoon/Ulit/CharacterSample"
+﻿Shader "Cartoon/Ulit/Plant"
 {
 	Properties
 	{

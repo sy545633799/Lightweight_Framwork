@@ -8,10 +8,13 @@ v2f DepthOnlyVertex(a2v i)
 {
 	v2f o;
 	UNITY_SETUP_INSTANCE_ID(i); 
+
+	half3 positionWS = ApplyVertexTransform(i);
+	o.positionCS = mul(UNITY_MATRIX_VP, float4(positionWS, 1));
 #if defined(_ALPHATEST_ON)
 	o.texcoord.xy = TRANSFORM_TEX(i.texcoord, _BaseMap);
 #endif
-	o.positionCS = TransformObjectToHClip(i.positionOS.xyz);
+
 	return o;
 }
 

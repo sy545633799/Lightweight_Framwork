@@ -121,13 +121,16 @@ inline half3 LookAtCamera(half3 positionOS)
 	return localPos;
 }
 
-inline void CommonInitV2F(in a2v i, inout v2f o)
+inline float3 ApplyVertexTransform(inout a2v i)
 {
-#if !defined(_Use_VERTEXWIND) && !defined(_Use_PLAYERAFFECT)
-	half3 positionWS = TransformObjectToWorld(i.positionOS.xyz);
-	o.positionCS = TransformObjectToHClip(i.positionOS.xyz);
-#else
 	half3 positionWS = mul(UNITY_MATRIX_M, i.positionOS).xyz;
+//#if defined(_AnimSkin)
+//	v.vertex = skin_pos(v);
+//#elif defined(_AnimVertex)
+//	v.vertex.xyz = anim_vert(_AnimInfo[(uint)UNITY_ACCESS_INSTANCED_PROP(_AnimID_arr, _AnimID)], vid);
+//#endif
+
+#if defined(_Use_VERTEXWIND) || defined(_Use_PLAYERAFFECT)
 #if defined(_Use_VERTEXWIND)
 	//计算风吹草动
 	half2 uv = half2(positionWS.x / _WindScale.z + _WindScale.x * _WindSpeed * _Time.x, positionWS.z / _WindScale.w + _WindScale.y * _WindSpeed * _Time.x);
@@ -145,9 +148,15 @@ inline void CommonInitV2F(in a2v i, inout v2f o)
 	direction.y *= 0.5;
 	positionWS.xyz += direction * pushDown;
 #endif
-	o.positionCS = mul(UNITY_MATRIX_VP, half4(positionWS, 1));
+	i.positionOS.xyz = mul(UNITY_MATRIX_I_M, float4(positionWS, 1.0));
 #endif
+	return positionWS;
+}
 
+inline void CommonInitV2F(in a2v i, inout v2f o)
+{
+	half3 positionWS = ApplyVertexTransform(i);
+	o.positionCS = mul(UNITY_MATRIX_VP, float4(positionWS, 1));
 	
 #if defined(REQUIRES_WORLD_SPACE_POS_INTERPOLATOR)
 	o.positionWS = positionWS;
