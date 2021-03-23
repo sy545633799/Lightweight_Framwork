@@ -168,13 +168,13 @@ inline void CommonInitV2F(in a2v i, inout v2f o)
 	real sign = i.tangentOS.w * GetOddNegativeScale();
 	o.tangentWS = half4(normalInput.tangentWS.xyz, sign);
 #else
-	o.normalWS = TransformObjectToWorldDir(i.normalOS);
+	o.normalWS = TransformObjectToWorldNormal(i.normalOS);
 	o.vertexSH = SampleSH(o.normalWS.xyz);
 #endif
 
 	o.fogFactorAndVertexLight.r = ComputeFogFactor(o.positionCS.z);
 #if defined(_ADDITIONAL_LIGHTS_VERTEX) 
-	o.fogFactorAndVertexLight.gba = VertexLighting(positionWS, TransformObjectToWorldDir(i.normalOS));
+	o.fogFactorAndVertexLight.gba = VertexLighting(positionWS, o.normalWS);
 #endif
 
 #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
@@ -187,11 +187,11 @@ inline void CommonInitV2F(in a2v i, inout v2f o)
 		half3 normalTS = SampleNormal(i.texcoord.xy, TEXTURE2D_ARGS(_BumpMap, sampler_BumpMap), _BumpScale); \
 		float sgn = i.tangentWS.w; \
 		float3 bitangent = sgn * cross(i.normalWS.xyz, i.tangentWS.xyz); \
-		float3 normalWS = NormalizeNormalPerPixel(TransformTangentToWorld(normalTS, half3x3(i.tangentWS.xyz, bitangent.xyz, i.normalWS.xyz))); \
+		float3 normalWS = SafeNormalize(TransformTangentToWorld(normalTS, half3x3(i.tangentWS.xyz, bitangent.xyz, i.normalWS.xyz))); \
 		half3 SH = SampleSH(normalWS.xyz);
 #else
 	#define WORLD_NORMAL_POSITION_VIEWDIR(i) \
-		half3 normalWS = NormalizeNormalPerPixel(i.normalWS); \
+		half3 normalWS = SafeNormalize(i.normalWS); \
 		half3 SH = i.vertexSH;
 #endif
 

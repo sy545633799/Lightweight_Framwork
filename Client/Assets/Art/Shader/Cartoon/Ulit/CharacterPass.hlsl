@@ -22,7 +22,7 @@ half4 CharacterPassFragment(v2f i) :SV_TARGET
 	// UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
 	WORLD_NORMAL_POSITION_VIEWDIR(i);
 
-	half3 positionWS = i.positionWS;
+	half3 positionWS = SafeNormalize(i.positionWS);
 	float3 viewDirWS = SafeNormalize(UnityWorldSpaceViewDir(positionWS));
 	InputData inputData = GetInputData(i, positionWS, normalWS, viewDirWS, SH);
 
