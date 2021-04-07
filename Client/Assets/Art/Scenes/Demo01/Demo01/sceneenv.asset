@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 691f953e07c762241a0d58f4e60b9e44, type: 3}
+  m_Name: sceneenv
+  m_EditorClassIdentifier: 
+  lightData:
+    position: {x: 0, y: 0, z: 0}
+    rotation: {x: 50, y: 119.8, z: -0.0000026564717}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    intensity: 0.8
+    bounceIntensity: 1
+    range: 10
+    shadows: 2
+    shadowStrength: 0.829
+    shadowResolution: -1
+    shadowNormalBias: 0.4
+    shadowNearPlane: 0.2
+    renderMode: 0
+    cullingMask: -1
+  lightmapColor: []
+  lightmapDir: []
+  shadowMask: []
+  CameraInfo:
+    Position: {x: -1.8299999, y: 1, z: -0.89}
+    Rotation: {x: 0, y: 187.13162, z: 0}
+    Depth: -1
+    FieldOfView: 60
+    PivotOffset: {x: 0, y: 0, z: 0}
+    FixDistance: 0
+    MinDistance: 0
+    MaxDistance: 0
+    Distance: 0
+    HidePlayerDistance: 0
+    AllowXTilt: 0
+    AllowYTilt: 0
+    YMinLimit: 0
+    YMaxLimit: 0
+    XMinLimit: 0
+    XMaxLimit: 0
+    XSpeed: 0
+    YSpeed: 0
+    TargetX: 0
+    TargetY: 0
+    MinY: 0
+  ambientMode: 0
+  ambientIntensity: 1
+  ambientLight: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  ambientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  ambientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+  ambientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
+  skyBox: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  reflectionMode: 0
+  customReflection: {fileID: 0}
+  reflectionIntensity: 1
+  reflectionBounces: 1
+  fog: 1
+  fogColor: {r: 0.9716981, g: 0.931231, b: 0.5729352, a: 1}
+  fogMode: 3
+  fogStartDistance: 0
+  fogEndDistance: 300
+  haloStrength: 0.5
+  flareFadeSpeed: 3
+  flareStrength: 1

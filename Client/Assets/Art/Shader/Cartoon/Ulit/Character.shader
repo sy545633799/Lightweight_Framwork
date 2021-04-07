@@ -10,8 +10,11 @@
 
 		[Gamma]_Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
 		//diffuse
-		[MainColor] _BaseColor("Color(a通道为是否有积雪)", Color) = (1,1,1,1)
+		[HDR][MainColor] _BaseColor("Color(a通道为是否有积雪)", Color) = (1,1,1,1)
 		[MainTexture] _BaseMap("MainTex", 2D) = "white" {}
+		//bump
+		[NoScaleOffset][Normal]_BumpMap("Normalmap", 2D) = "bump" {}
+		_BumpScale("BumpScale", Range(0, 1)) = 1
 		//mask
 		_MaskMap("Mask r(遮罩阴影) g(未定）b (高光通道)", 2D) = "white" {}
 

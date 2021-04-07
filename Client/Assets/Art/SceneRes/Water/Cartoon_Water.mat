@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Cartoon_Water
+  m_Shader: {fileID: 4800000, guid: 77517921245ac734fb6e031387186c93, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 2800000, guid: ec6f0adef15b52448a82f3f183525d84, type: 3}
+        m_Scale: {x: 10, y: 10}
+        m_Offset: {x: 0, y: 0}
+    - _CausticsTex:
+        m_Texture: {fileID: 2800000, guid: f5609f0d655004243b019f279ae212cc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FoamTex:
+        m_Texture: {fileID: 2800000, guid: 6602013ad6ce68a468ac3b6e6673df0e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _IntersectionNoise:
+        m_Texture: {fileID: 2800000, guid: b8850342fb8b1e846ac3807e35ec1685, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PlanarReflectionLeft:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BumpScale: 0
+    - _BumpTiling: 0.05
+    - _CausticsBrightness: 2
+    - _CausticsDistortion: 0.432
+    - _CausticsOn: 1
+    - _CausticsTiling: 0.5
+    - _ColorThreshold: 0.235
+    - _Depth: 0.84
+    - _DepthExp: 0.05
+    - _DepthScale: 9.4
+    - _DisableDepthTexture: 0
+    - _EdgeFade: 16.4
+    - _FoamSize: 0.01
+    - _FoamSpeed: 0.1
+    - _FoamThreshold: 0.93
+    - _FoamTiling: 0.1
+    - _FoamWaveMask: 0
+    - _FoamWaveMaskExp: 1
+    - _Gloss: 2.42
+    - _HorizonDistance: 8
+    - _IntersectionClipping: 1
+    - _IntersectionFalloff: 0.959
+    - _IntersectionLength: 5
+    - _IntersectionRippleDist: 32
+    - _IntersectionRippleStrength: 1
+    - _IntersectionSource: 0
+    - _IntersectionSpeed: 0.1
+    - _IntersectionStyle: 1
+    - _IntersectionTiling: 0.2
+    - _NormalTiling: 1
+    - _PlanarReflectionsEnabled: 0
+    - _PlanarReflectionsParams: 0
+    - _ReflectionBlur: 0
+    - _ReflectionDistortion: 0.05
+    - _ReflectionFresnel: 5
+    - _ReflectionStrength: 0
+    - _Refract: 0.27
+    - _RefractionOn: 1
+    - _RefractionStrength: 0.1
+    - _ShadowStrength: 1
+    - _SparkleIntensity: 0
+    - _SparkleSize: 0.28
+    - _Specular: 1.11
+    - _SunReflectionDistortion: 0.259
+    - _SunReflectionSize: 0.088
+    - _SunReflectionStrength: 20
+    - _WaterSpeed: 0.35
+    - _WaveCount: 1
+    - _WaveDistance: 0.8
+    - _WaveHeight: 0.25
+    - _WaveNormalStr: 0.5
+    - _WaveSpeed: 2
+    - _WaveSteepness: 0.1
+    - _WaveTint: 0
+    - _WavesOn: 0
+    - _WorldSpaceUV: 1
+    m_Colors:
+    - _AnimationParams: {r: 1, g: 1, b: 1, a: 0}
+    - _BaseColor: {r: 0.33490568, g: 1, b: 0.6096165, a: 0.725}
+    - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FoamScaleAndOffset: {r: 20, g: 20, b: 0.05, a: 0.05}
+    - _HorizonColor: {r: 0.84, g: 1, b: 1, a: 0.15}
+    - _IntersectionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShallowColor: {r: 0.1, g: 0.9, b: 0.89, a: 0.02}
+    - _SlopeParams: {r: 0.5, g: 4, b: 0, a: 0}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TranslucencyParams: {r: 1, g: 4, b: 0, a: 0}
+    - _VertexColorMask: {r: 0, g: 0, b: 0, a: 0}
+    - _WaveDirection: {r: 1, g: 1, b: 1, a: 1}

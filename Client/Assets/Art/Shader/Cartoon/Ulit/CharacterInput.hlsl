@@ -42,8 +42,11 @@ TEXTURE2D(_MaskMap); SAMPLER(sampler_MaskMap);
 half4 UniversalFragmentCartoon(InputData inputData, half3 albedo, half2 uv, half3 emission, half alpha)
 { 
 	half3 color = albedo;  
-
+#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
 	Light mainLight = GetMainLight(inputData.shadowCoord);
+#else
+	Light mainLight = GetMainLight();
+#endif
 	half attenuatedLightColor = (mainLight.distanceAttenuation * mainLight.shadowAttenuation);
 	half lightAtten = (dot(mainLight.direction, inputData.normalWS) * 0.5 + 0.5) * attenuatedLightColor;;
 	lightAtten = (smoothstep(_Rampthreshold - _ShadowRange, _Rampthreshold + _ShadowRange, lightAtten));
