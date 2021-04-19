@@ -18,6 +18,9 @@ namespace Game.Editor {
 		MaterialProperty albedoMap = null;
 		MaterialProperty albedoColor = null;
 		MaterialProperty alphaCutoff = null;
+		//bump
+		MaterialProperty bumpScale = null;
+		MaterialProperty bumpMap = null;
 		//mask
 		MaterialProperty maskMap = null;
 		//outline 
@@ -52,6 +55,9 @@ namespace Game.Editor {
 			albedoMap = FindProperty("_BaseMap", props);
 			albedoColor = FindProperty("_BaseColor", props);
 			alphaCutoff = FindProperty("_Cutoff", props);
+			//bump
+			bumpScale = FindProperty("_BumpScale", props);
+			bumpMap = FindProperty("_BumpMap", props);
 			//mask
 			maskMap = FindProperty("_MaskMap", props);
 			outlineWidth = FindProperty("_OutlineWidth", props);
@@ -107,6 +113,19 @@ namespace Game.Editor {
 						material.EnableKeyword("_MASKMAP");
 					else
 						material.DisableKeyword("_MASKMAP");
+				}
+
+				if (lod == ShaderLOD.Middle || lod == ShaderLOD.High || (lod == ShaderLOD.None && Shader.globalMaximumLOD >= 200))
+				{
+					materialEditor.TexturePropertySingleLine(new GUIContent("法线贴图"), bumpMap);
+					//materialEditor.TextureScaleOffsetProperty(bumpMap);
+					if (bumpMap.textureValue != null)
+					{
+						material.EnableKeyword("_NORMALMAP");
+						materialEditor.ShaderProperty(bumpScale, "法线强度", 1);
+					}
+					else
+						material.DisableKeyword("_NORMALMAP");
 				}
 
 				EditorGUILayout.LabelField("描边", headStyle);
