@@ -46,6 +46,7 @@ half4 TerrainPassFragment(v2f i) : SV_Target
 #if defined(_NORMALMAP)
 		normalTS += UnpackNormalScale(SAMPLE_TEXTURE2D_ARRAY(_Normal, sampler_Normal, uv, indexLayer1), blendTex.r);
 #endif
+
 	}
 	if (blendTex.g > 0)
 	{
@@ -54,6 +55,8 @@ half4 TerrainPassFragment(v2f i) : SV_Target
 #if defined(_NORMALMAP)
 		normalTS += UnpackNormalScale(SAMPLE_TEXTURE2D_ARRAY(_Normal, sampler_Normal, uv, indexLayer2), blendTex.g);
 #endif
+
+
 	}
 	if (blendTex.b > 0)
 	{
@@ -62,9 +65,11 @@ half4 TerrainPassFragment(v2f i) : SV_Target
 #if defined(_NORMALMAP)
 		normalTS += UnpackNormalScale(SAMPLE_TEXTURE2D_ARRAY(_Normal, sampler_Normal, uv, indexLayer3), blendTex.b);
 #endif
+
 	}
 	if (blendTex.a > 0)
 	{
+		//无法解决
 		float2 uv = scaledUV * _UV_STArray[indexLayer4].xy + _UV_STArray[indexLayer4].zw;
 		albedo += blendTex.a * SAMPLE_TEXTURE2D_ARRAY(_Diffuse, sampler_Diffuse, uv, indexLayer4);
 #if defined(_NORMALMAP)

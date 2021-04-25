@@ -61,13 +61,13 @@ half4 ScenePassFragment(v2f i) :SV_TARGET
 #if defined(_USE_PBR)
 #if defined(_METALLICSPECGLOSSMAP)
 	
-	half smoothness = pbr.a * _Smoothness;
+	half smoothness = pbr.g * _Smoothness;
 	half metallic = pbr.r;
-//#if defined(SHADER_API_GLES)
-//	half occlusion = pbr.b;
-//#else
-//	half occlusion = LerpWhiteTo(pbr.b, _OcclusionStrength);
-//#endif
+#if defined(SHADER_API_GLES)
+	half occlusion = pbr.b;
+#else
+	half occlusion = LerpWhiteTo(pbr.b, _OcclusionStrength);
+#endif
 	half occlusion = 1.0;
 #else
 	half smoothness = _Smoothness;
