@@ -77,7 +77,7 @@ namespace Game.Editor
 
 				if (lod == ShaderLOD.High || (lod == ShaderLOD.None && Shader.globalMaximumLOD >= 300))
 				{
-					materialEditor.TexturePropertySingleLine(new GUIContent("Metallic(R), AlphaTest(G), (B未定), Smooth(A)"), metallicMap);
+					materialEditor.TexturePropertySingleLine(new GUIContent("Metallic(R), Smooth(G), AO(B)"), metallicMap);
 					if (metallicMap.textureValue == null)
 					{
 						material.DisableKeyword("_METALLICGLOSSMAP");

@@ -57,6 +57,7 @@ namespace Game.Editor {
 					if (go.name.Contains("mojiazhuang_build_jishi_06"))
 					{
 						Debug.Log(go.transform.position);
+						
 					}
 
 					int id = index++;
@@ -67,7 +68,7 @@ namespace Game.Editor {
 						grassDic[objPath].Add(go);
 					}
 					else
-						Record(go, holder, objPath, id); ;
+						Record(go, holder, objPath, id);
 				}
 			}
 			RecordGrass(grassDic, holder);

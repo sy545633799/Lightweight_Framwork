@@ -43,10 +43,6 @@ namespace Game
     public struct SceneElement
     {
 		public int ID; //ID
-        public int UID
-        {
-            get { return ID; }
-        }
         public int order;//加载优先级
         public int ResId;//路径
         public Vector3 position;//坐标
@@ -83,10 +79,6 @@ namespace Game
 		/// 总资源列表
 		/// </summary>
 		public List<SceneElement> content;
-        /// <summary>
-        /// 资源路径列表
-        /// </summary>
-        public List<string> pathList;
 
         public void Add(SceneElement element)
         {
@@ -109,17 +101,5 @@ namespace Game
             grass.Add(element);
 		}
 
-		public int GetPathIndex(string path)
-        {
-            if (pathList == null)
-            {
-                pathList = new List<string>();
-            }
-            if (!pathList.Contains(path))
-            {
-                pathList.Add(path);
-            }
-            return pathList.IndexOf(path);
-        }
     }
 }

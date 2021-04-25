@@ -15,6 +15,7 @@ namespace Game {
 	{
 		public Texture2D GradientNoise;
 		public Texture2D PerlinNoise;
+		public Texture2D IntersectionNoise;
 		public Texture2D Distortion;
 
 		//风
@@ -37,6 +38,7 @@ namespace Game {
 
 		int gradientNoiseID;
 		int perlinNoiseID;
+		int intersectionNoiseID;
 		int distortionID;
 
 		int windSpeedID;
@@ -52,6 +54,8 @@ namespace Game {
 			Shader.SetGlobalTexture("_GradientNoiseMap", GradientNoise);
 			perlinNoiseID = Shader.PropertyToID("_PerlinNoiseMap");
 			Shader.SetGlobalTexture("_PerlinNoiseMap", PerlinNoise);
+			intersectionNoiseID = Shader.PropertyToID("_IntersectionNoise");
+			Shader.SetGlobalTexture("_IntersectionNoise", IntersectionNoise);
 			distortionID = Shader.PropertyToID("_DistortionMap");
 			Shader.SetGlobalTexture("_DistortionMap", Distortion);
 			windSpeedID = Shader.PropertyToID("_WindSpeed");
@@ -60,6 +64,7 @@ namespace Game {
 			windScaleID = Shader.PropertyToID("_WindScale");
 			playerStrength = Shader.PropertyToID("_PlayerStrength");
 			playerRadius = Shader.PropertyToID("_PlayerRadius");
+
 			SetGlobal();
 		}
 
