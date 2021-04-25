@@ -31,3 +31,13 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+#dll
+*.exp
+*.exp.meta
+*.ilk
+*.ilk.meta
+*.lib
+*.lib.meta
+*.pdb
+*.pdb.meta
