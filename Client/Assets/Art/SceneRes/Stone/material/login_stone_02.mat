@@ -22,11 +22,11 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: login_stone_02
   m_Shader: {fileID: 4800000, guid: 18d76992a3f3e904c83c5968f6d08c53, type: 3}
-  m_ShaderKeywords: _ALPHATEST_ON _NORMALMAP
+  m_ShaderKeywords: _NORMALMAP
   m_LightmapFlags: 6
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
+  m_CustomRenderQueue: 2000
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -115,7 +115,7 @@ Material:
     - _LightIntensity: 1
     - _LightmapSpec: 0
     - _Metallic: 0.256
-    - _Mode: 1
+    - _Mode: 0
     - _NormalScale: 1.03
     - _Occlusion: 0.5
     - _OcclusionStrength: 1
